@@ -25,6 +25,7 @@ using DanielAHill.AspNet.ApiActions.Authorization;
 using DanielAHill.AspNet.ApiActions.Conversion;
 using DanielAHill.AspNet.ApiActions.Execution;
 using DanielAHill.AspNet.ApiActions.Initialization;
+using DanielAHill.AspNet.ApiActions.Introspection;
 using DanielAHill.AspNet.ApiActions.Responses.Construction;
 using DanielAHill.AspNet.ApiActions.Routing;
 using DanielAHill.AspNet.ApiActions.Serialization;
@@ -53,6 +54,9 @@ namespace Microsoft.Extensions.DependencyInjection
 
             // Add Routing
             services.AddRouting();
+
+            // Add Introspection. TODO?: Consider separate registration?
+            services.AddApiActionIntrospection();
             services.AddSingleton(typeof (IApiActionRegistrationProvider), typeof (ApiActionRegistrationProvider));
 
             // Authorization
@@ -90,6 +94,20 @@ namespace Microsoft.Extensions.DependencyInjection
 
             // Record Actions are already added to prevent multiple registrations
             _apiActionsCoreAdded = true;
+        }
+
+        private static void AddApiActionIntrospection(this IServiceCollection services)
+        {
+            services.AddSingleton(typeof (IVersionEdgeProvider), typeof (VersionEdgeProvider));
+            services.AddSingleton(typeof (IApiActionInfoProvider), typeof (ApiActionInfoProvider));
+            
+            var defaultIntrospector = new ApiActionIntrospector();
+            services.AddInstance(typeof (IApiActionSummaryFactory), defaultIntrospector);
+            services.AddInstance(typeof (IApiActionDescriptionFactory), defaultIntrospector);
+            services.AddInstance(typeof (ApiActionResponseInfoFactory), defaultIntrospector);
+            services.AddInstance(typeof (IApiActionRequestMethodsFactory), defaultIntrospector);
+            services.AddInstance(typeof (IApiActionRequestTypeFactory), defaultIntrospector);
+            services.AddInstance(typeof (IApiActionTagFactory), defaultIntrospector);
         }
 
         public static IServiceCollection AddApiActions(this IServiceCollection services, Assembly assembly, string parentNamespace = null, string routePrefix = null)

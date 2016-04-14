@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using DanielAHill.AspNet.ApiActions.Introspection;
 using DanielAHill.AspNet.ApiActions.Routing;
 using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Routing;
@@ -24,7 +25,7 @@ using Microsoft.AspNet.Routing;
 namespace DanielAHill.AspNet.ApiActions
 {
     [AttributeUsage(AttributeTargets.Class)]
-    public class HttpMethodAttribute : Attribute, IKeyedRouteContraint
+    public class HttpMethodAttribute : Attribute, IKeyedRouteContraint, IHasRequestMethods
     {
         private readonly string[] _methods;
 
