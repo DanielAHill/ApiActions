@@ -76,7 +76,7 @@ namespace DanielAHill.AspNet.ApiActions.Swagger
                     }
                 },
                 BasePath = _openApiOptions.ApiRoutePrefix,
-                Paths = _registrations.SelectMany(GetPath).ToList()
+                Paths = _registrations.Select(GetPath).ToArray()
             };
 
             var versionEdges = _versionEdgeProvider.GetVersionEdges(_registrations.Select(r => r.ApiActionType).ToList());
@@ -93,7 +93,7 @@ namespace DanielAHill.AspNet.ApiActions.Swagger
             return Task.FromResult<ApiActionResponse>(new SwaggerApiActionResponse(root));
         }
 
-        private IEnumerable<SwaggerPath> GetPath(IApiActionRegistration registration)
+        private SwaggerPath GetPath(IApiActionRegistration registration)
         {   // TODO: Move registration items to info provider
             var info = _infoProvider.GetInfo(registration.ApiActionType);
 
@@ -109,28 +109,20 @@ namespace DanielAHill.AspNet.ApiActions.Swagger
                 Path = "/" + registration.Route,
                 Item = new SwaggerPathItem()
                 {
-                    
+                    Methods = methods.Select(m => new UnofficialPathItemMethod()
+                    {
+                        Method = m,
+                        Operation = new SwaggerOperation()
+                        {
+                            Description = info.Description,
+                            Tags = info.Tags,
+                            Summary = info.Summary
+                        }
+                    }).ToArray()
                 }
-                //Description = info.Description,
-                //Summary = info.Summary,
-                //Method = method,
-                //Tags = info.Tags
             };
 
-            foreach (var method in methods)
-            {
-
-
-                // TODO: Apply Parameters
-                path.Parameters = new OpenApiParameter[]
-                {
-                    new OpenApiParameter() { Name = "text", Description = "description", In = "query", Required = false }
-                };
-
-                // TODO: Apply Responses
-
-                yield return path;
-            }
+            return path;
         }
     }
 }

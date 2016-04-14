@@ -15,6 +15,7 @@
 #endregion
 
 using System;
+using System.Collections;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -47,7 +48,7 @@ namespace DanielAHill.AspNet.ApiActions.Swagger
 
             var response = httpContext.Response;
             
-            return response.Body.WriteAsync(bytes, 0, bytes.Length);
+            return response.Body.WriteAsync(bytes, 0, bytes.Length, cancellationToken);
         }
 
         private static void Serialize(object item, StringBuilder builder, int recursionsLeft)
@@ -55,6 +56,11 @@ namespace DanielAHill.AspNet.ApiActions.Swagger
             if (item == null)
             {
                 builder.Append("null");
+                return;
+            }
+
+            if (recursionsLeft < 0)
+            {
                 return;
             }
 
@@ -84,11 +90,40 @@ namespace DanielAHill.AspNet.ApiActions.Swagger
                 }
                 return;
             }
+            var addComma = false;
+
+            if (itemTypeDetails.IsCollection)
+            {
+                // TODO: Move logic to new method
+                var enumerator = ((IEnumerable) item).GetEnumerator();
+                builder.Append('[');
+                while (enumerator.MoveNext())
+                {
+                    var currentItem = enumerator.Current;
+
+                    if (currentItem == null)
+                    {
+                        continue;
+                    }
+
+                    if (addComma)
+                    {
+                        builder.Append(',');
+                    }
+                    else
+                    {
+                        addComma = true;
+                    }
+
+                    Serialize(currentItem, builder, recursionsLeft - 1);
+                }
+                builder.Append(']');
+                return;
+            }
 
             builder.Append("{");
 
             // Serialize classes with properties
-            var addComma = false;
             foreach (var reader in propertyReaders)
             {
                 var value = reader.Read(item);
