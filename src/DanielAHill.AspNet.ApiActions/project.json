@@ -1,0 +1,32 @@
+{
+  "authors": [ "Daniel Alan Hill" ],
+  "copyright": "Copyright (c) 2015-2016 Daniel Alan Hill. All rights reserved.",
+  "licenseUrl": "http://www.apache.org/licenses/LICENSE-2.0",
+  "projectUrl": "https://github.com/danielahill/ApiActions",
+  "summary": "API Middleware for AspNet with emphasis on REST-ful capabilities, versioning, performance, and extensibility",
+  "tags": [ "AspNet", "API", "ApiActions" ],
+  "version": "0.1.0",
+  "dependencies": {
+    "DanielAHill.AspNet.ApiActions.Abstractions": "0.1.0",
+    "Microsoft.AspNet.Routing": "1.0.0-rc1-final",
+    "Microsoft.Extensions.DependencyInjection": "1.0.0-rc1-final",
+    "Microsoft.AspNet.Http": "1.0.0-rc1-final",
+    "Newtonsoft.Json": "8.0.3",
+    "DanielAHill.Reflection": "0.1.1604.1305"
+  },
+  "description": "ApiActions",
+  "frameworks": {
+    "dnx451": {
+      "frameworkAssemblies": {
+        "System.ComponentModel.DataAnnotations": "4.0.0.0"
+      },
+      "dependencies": {
+      }
+    },
+    "dotnet5.4": {
+      "dependencies": {
+        "System.ComponentModel.Annotations": "4.0.11-*"
+      }
+    }
+  }
+}
