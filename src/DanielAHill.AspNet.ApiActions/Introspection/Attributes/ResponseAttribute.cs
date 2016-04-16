@@ -15,6 +15,8 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
+using DanielAHill.AspNet.ApiActions.Introspection;
 
 // ReSharper disable once CheckNamespace - Attributes should be in the namespace they target
 namespace DanielAHill.AspNet.ApiActions
@@ -24,9 +26,25 @@ namespace DanielAHill.AspNet.ApiActions
     /// </summary>
     /// <remarks>Information provided may be used by code-gen clients to generate code</remarks>
     /// <seealso cref="System.Attribute" />
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
-    public class ResponseAttribute : Attribute
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
+    public class ResponseAttribute : Attribute, IHasApiActionResponseInfo
     {
+        public IReadOnlyCollection<IApiActionResponseInfo> Responses
+        {
+            get
+            {
+                return new[]
+                {
+                    new ApiActionResponseInfo()
+                    {
+                        StatusCode = StatusCode,
+                        Description = Description,
+                        ResponseData = Type
+                    }
+                };
+            }
+        }
+
         /// <summary>
         /// Gets or sets the Http Status Code.
         /// </summary>

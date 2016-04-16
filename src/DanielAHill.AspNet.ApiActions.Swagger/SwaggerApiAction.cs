@@ -61,21 +61,21 @@ namespace DanielAHill.AspNet.ApiActions.Swagger
 
         public override Task<ApiActionResponse> ExecuteAsync(CancellationToken cancellationToken)
         { 
-            var root = new SwaggerSchema()
+            var root = new SwaggerSchema
             {
-                Info = new SwaggerInfo()
+                Info = new SwaggerInfo
                 {
                     Title = _openApiOptions.Title ?? _hostName + " API",
                     Description = _openApiOptions.Description,
                     TermsOfService = _openApiOptions.TermsOfService,
 
-                    Contact = new SwaggerContact()
+                    Contact = new SwaggerContact
                     {
                         Name = _openApiOptions.ContactName,
                         Email = _openApiOptions.ContactEmail,
                         Url = _openApiOptions.ContactUrl
                     },
-                    License = new SwaggerLicense()
+                    License = new SwaggerLicense
                     {
                         Name = _openApiOptions.LicenseName,
                         Url = _openApiOptions.LicenseUrl
@@ -97,7 +97,6 @@ namespace DanielAHill.AspNet.ApiActions.Swagger
                 root.Info.Version = "1.0";
             }
 
-
             return Task.FromResult<ApiActionResponse>(new SwaggerApiActionResponse(root));
         }
 
@@ -112,25 +111,44 @@ namespace DanielAHill.AspNet.ApiActions.Swagger
                 methods = DefaultMethods;
             }
 
-            var path = new SwaggerPath()
+            var path = new SwaggerPath
             {
                 Path = "/" + registration.Route,
-                Item = new SwaggerPathItem()
+                Item = new SwaggerPathItem
                 {
-                    Methods = new SwaggerObjectCollectionFacade<UnofficialPathItemMethod>(methods.Select(m => new UnofficialPathItemMethod()
+                    Methods = new SwaggerObjectCollectionFacade<UnofficialPathItemMethod>(methods.Select(m => new UnofficialPathItemMethod
                     {
                         Method = m,
-                        Operation = new SwaggerOperation()
+                        Operation = new SwaggerOperation
                         {
                             Description = info.Description,
                             Tags = info.Categories,
-                            Summary = info.Summary
+                            Summary = info.Summary,
+                            Responses = GetResponses(info.Responses)
                         }
                     }))
                 }
             };
 
             return path;
+        }
+
+        private static SwaggerObjectCollectionFacade<UnofficialResponseStatusCode> GetResponses(IApiActionResponseInfo[] responseInfos)
+        {
+            if (responseInfos == null || !responseInfos.Any())
+            {
+                return null;
+            }
+
+            return new SwaggerObjectCollectionFacade<UnofficialResponseStatusCode>(
+                    responseInfos.Select(ri => new UnofficialResponseStatusCode
+                    {
+                        StatusCode = ri.StatusCode,
+                        Response = new SwaggerResponse
+                        {
+                            Description = ri.Description
+                        }
+                    }));
         }
     }
 }

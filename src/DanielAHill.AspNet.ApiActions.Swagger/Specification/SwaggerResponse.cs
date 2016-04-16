@@ -13,18 +13,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 #endregion
-
-using System;
-
-namespace DanielAHill.AspNet.ApiActions.Introspection
+namespace DanielAHill.AspNet.ApiActions.Swagger.Specification
 {
-    public class ApiActionInfo : IApiActionInfo
+    public class SwaggerResponse
     {
-        public string Summary { get; set; }
         public string Description { get; set; }
-        public Type RequestType { get; set; }
-        public string[] Methods { get; set; }
-        public IApiActionResponseInfo[] Responses { get; set; }
-        public string[] Categories { get; set; }
+
+        public object Schema { get; set; }
+
+        public object Ref { get; set; }
     }
 }

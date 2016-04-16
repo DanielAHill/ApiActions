@@ -18,7 +18,7 @@ using System;
 
 namespace DanielAHill.AspNet.ApiActions.Introspection
 {
-    public interface ApiActionResponseInfo
+    public interface IApiActionResponseInfo
     {
         int StatusCode { get; }
         string Description { get; }

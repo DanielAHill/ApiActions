@@ -15,16 +15,22 @@
 #endregion
 
 using System;
+using System.Text;
 
-namespace DanielAHill.AspNet.ApiActions.Introspection
+namespace DanielAHill.AspNet.ApiActions.Swagger.Specification
 {
-    public class ApiActionInfo : IApiActionInfo
+    public class UnofficialResponseStatusCode : ICustomSwaggerSerializable
     {
-        public string Summary { get; set; }
-        public string Description { get; set; }
-        public Type RequestType { get; set; }
-        public string[] Methods { get; set; }
-        public IApiActionResponseInfo[] Responses { get; set; }
-        public string[] Categories { get; set; }
+        public int? StatusCode { get; set; }
+        public SwaggerResponse Response { get; set; }
+
+        public void Serialize(StringBuilder builder, Action<object, StringBuilder, int> serializeChild, int recursionsLeft)
+        {
+            builder.Append('"');
+            builder.Append(StatusCode?.ToString() ?? "default");
+            builder.Append("\":");
+
+            serializeChild(Response, builder, recursionsLeft);
+        }
     }
 }

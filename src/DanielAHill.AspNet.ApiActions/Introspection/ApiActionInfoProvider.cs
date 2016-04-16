@@ -27,12 +27,12 @@ namespace DanielAHill.AspNet.ApiActions.Introspection
         private readonly IApiActionRequestMethodsFactory _requestMethodsFactory;
         private readonly IApiActionRequestTypeFactory _requestTypeFactory;
         private readonly IApiActionCategoryFactory _tagFactory;
-        private readonly ApiActionResponseInfoFactory _responseInfoFactory;
+        private readonly IApiActionResponseInfoFactory _responseInfoFactory;
         private readonly ConcurrentDictionary<Type, IApiActionInfo> _actionInfoCache = new ConcurrentDictionary<Type, IApiActionInfo>();
 
         public ApiActionInfoProvider(IApiActionSummaryFactory summaryFactory, IApiActionDescriptionFactory descriptionFactory, 
             IApiActionRequestMethodsFactory requestMethodsFactory, IApiActionRequestTypeFactory requestTypeFactory, 
-            IApiActionCategoryFactory tagFactory, ApiActionResponseInfoFactory responseInfoFactory)
+            IApiActionCategoryFactory tagFactory, IApiActionResponseInfoFactory responseInfoFactory)
         {
             if (summaryFactory == null) throw new ArgumentNullException(nameof(summaryFactory));
             if (descriptionFactory == null) throw new ArgumentNullException(nameof(descriptionFactory));

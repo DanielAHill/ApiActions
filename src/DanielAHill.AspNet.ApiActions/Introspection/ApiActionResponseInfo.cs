@@ -1,4 +1,4 @@
-#region Copyright
+﻿#region Copyright
 // Copyright (c) 2016 Daniel Alan Hill. All rights reserved.
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,13 +18,10 @@ using System;
 
 namespace DanielAHill.AspNet.ApiActions.Introspection
 {
-    public class ApiActionInfo : IApiActionInfo
+    public class ApiActionResponseInfo : IApiActionResponseInfo
     {
-        public string Summary { get; set; }
+        public int StatusCode { get; set; }
         public string Description { get; set; }
-        public Type RequestType { get; set; }
-        public string[] Methods { get; set; }
-        public IApiActionResponseInfo[] Responses { get; set; }
-        public string[] Categories { get; set; }
+        public Type ResponseData { get; set; }
     }
 }

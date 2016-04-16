@@ -20,6 +20,6 @@ namespace DanielAHill.AspNet.ApiActions.Introspection
 {
     public interface IHasApiActionResponseInfo
     {
-        IReadOnlyCollection<ApiActionResponseInfo> Responses { get; }
+        IReadOnlyCollection<IApiActionResponseInfo> Responses { get; }
     }
 }

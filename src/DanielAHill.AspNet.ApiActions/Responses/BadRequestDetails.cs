@@ -1,4 +1,4 @@
-﻿#region Copyright
+#region Copyright
 // Copyright (c) 2016 Daniel Alan Hill. All rights reserved.
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,15 +14,14 @@
 // limitations under the License.
 #endregion
 
-using System;
+using System.Collections.Generic;
 
-namespace DanielAHill.AspNet.ApiActions.OpenApi
+namespace DanielAHill.AspNet.ApiActions.Responses
 {
-    // TODO: Specify class level
-    /// <summary>
-    /// Does not show API Action in Documentation
-    /// </summary>
-    public class NoDocAttribute : Attribute
+    public class BadRequestDetails
     {
+        public IList<string> Errors { get; set; } 
+
+        public IList<PropertyValidationResult> PropertyErrors { get; set; }
     }
 }

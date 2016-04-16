@@ -18,8 +18,8 @@ using System;
 
 namespace DanielAHill.AspNet.ApiActions.Introspection
 {
-    public interface ApiActionResponseInfoFactory
+    public interface IApiActionResponseInfoFactory
     {
-        ApiActionResponseInfo[] CreateResponses(Type apiActionType);
+        IApiActionResponseInfo[] CreateResponses(Type apiActionType);
     }
 }

@@ -104,7 +104,7 @@ namespace Microsoft.Extensions.DependencyInjection
             var defaultIntrospector = new ApiActionIntrospector();
             services.AddInstance(typeof (IApiActionSummaryFactory), defaultIntrospector);
             services.AddInstance(typeof (IApiActionDescriptionFactory), defaultIntrospector);
-            services.AddInstance(typeof (ApiActionResponseInfoFactory), defaultIntrospector);
+            services.AddInstance(typeof (IApiActionResponseInfoFactory), defaultIntrospector);
             services.AddInstance(typeof (IApiActionRequestMethodsFactory), defaultIntrospector);
             services.AddInstance(typeof (IApiActionRequestTypeFactory), defaultIntrospector);
             services.AddInstance(typeof (IApiActionCategoryFactory), defaultIntrospector);

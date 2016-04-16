@@ -22,7 +22,7 @@ using System.Reflection;
 namespace DanielAHill.AspNet.ApiActions.Introspection
 {
     // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
-    public class ApiActionIntrospector : IApiActionSummaryFactory, IApiActionDescriptionFactory, ApiActionResponseInfoFactory, IApiActionRequestMethodsFactory, IApiActionRequestTypeFactory, IApiActionCategoryFactory
+    public class ApiActionIntrospector : IApiActionSummaryFactory, IApiActionDescriptionFactory, IApiActionResponseInfoFactory, IApiActionRequestMethodsFactory, IApiActionRequestTypeFactory, IApiActionCategoryFactory
     {
         public string CreateSummary(Type apiActionType)
         {
@@ -47,7 +47,7 @@ namespace DanielAHill.AspNet.ApiActions.Introspection
             return GetAttributes<IHasDescription>(apiActionType).Select(a => a.Description).FirstOrDefault(v => v != null);
         }
 
-        public virtual ApiActionResponseInfo[] CreateResponses(Type apiActionType)
+        public virtual IApiActionResponseInfo[] CreateResponses(Type apiActionType)
         {
             if (apiActionType == null) throw new ArgumentNullException(nameof(apiActionType));
             

@@ -187,6 +187,7 @@ namespace DanielAHill.AspNet.ApiActions
             Data = initializationContext.HttpContext.RequestServices.GetRequiredService<IRequestModelFactory>().Create<TRequest>(initializationContext.AbstractModel);
         }
 
+        [Response(400, typeof(BadRequestDetails), "Bad Request - Input Validation Failed")]
         public Task ValidateModelAsync(CancellationToken cancellationToken)
         {
             var modelErrors = new List<ValidationResult>();

@@ -46,11 +46,13 @@ namespace DanielAHill.AspNet.ApiActions.Responses
 
         }
 
-        private static IList<PropertyValidationResult> Convert(IEnumerable<ValidationResult> errors)
+        private static BadRequestDetails Convert(IEnumerable<ValidationResult> errors)
         {
             if (errors == null) throw new ArgumentNullException(nameof(errors));
 
             var convertDictionary = new Dictionary<string, PropertyValidationResult>();
+
+            var globalErrors = new List<string>();
 
             foreach (var error in errors)
             {
@@ -63,11 +65,15 @@ namespace DanielAHill.AspNet.ApiActions.Responses
 
                 if (!hasPropertyErrors)
                 {
-                    Add(string.Empty, error.ErrorMessage, convertDictionary);
+                    globalErrors.Add(error.ErrorMessage);
                 }
             }
 
-            return convertDictionary.Values.ToList();
+            return new BadRequestDetails()
+            {
+                Errors = globalErrors.Any() ? globalErrors : null,
+                PropertyErrors = convertDictionary.Values.Any() ? convertDictionary.Values.ToList() : null
+            };
         }
 
         private static void Add(string memberName, string errorMessage, IDictionary<string, PropertyValidationResult> convertDictionary)
