@@ -22,6 +22,7 @@ using DanielAHill.AspNet.ApiActions;
 
 namespace ApiActionsSandbox.Web.Header
 {
+    [Summary("All Headers")]
     [Description("Returns all HTTP headers provided by client request")]
     [HttpMethod("GET", "POST")]
     [Category("Header Insights")]

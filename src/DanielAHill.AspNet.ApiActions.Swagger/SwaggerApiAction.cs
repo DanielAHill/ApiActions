@@ -15,10 +15,12 @@
 #endregion
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using DanielAHill.AspNet.ApiActions.AbstractModeling.Application;
 using DanielAHill.AspNet.ApiActions.Introspection;
 using DanielAHill.AspNet.ApiActions.Swagger.Specification;
 using DanielAHill.AspNet.ApiActions.Versioning;
@@ -32,6 +34,7 @@ namespace DanielAHill.AspNet.ApiActions.Swagger
         private SwaggerOptions _openApiOptions;
         private ApiActionVersion _version;
         private IReadOnlyCollection<IApiActionRegistration> _registrations;
+        private IEnumerable<IAbstractModelApplicator> _abstractModelApplicators; 
         private IApiActionInfoProvider _infoProvider;
         private IVersionEdgeProvider _versionEdgeProvider;
         private string _hostName;
@@ -50,6 +53,7 @@ namespace DanielAHill.AspNet.ApiActions.Swagger
             _infoProvider = services.GetRequiredService<IApiActionInfoProvider>();
             _versionEdgeProvider = services.GetRequiredService<IVersionEdgeProvider>();
             _hostName = initializationContext.HttpContext.Request.Host.Value;
+            _abstractModelApplicators = services.GetRequiredService<IEnumerable<IAbstractModelApplicator>>();
             return Task.FromResult(true);
         }
 
@@ -76,7 +80,8 @@ namespace DanielAHill.AspNet.ApiActions.Swagger
                     }
                 },
                 BasePath = _openApiOptions.ApiRoutePrefix,
-                Paths = new SwaggerObjectCollectionFacade<SwaggerPath>(_registrations.Select(GetPath))
+                Paths = new SwaggerObjectCollectionFacade<SwaggerPath>(_registrations.Select(GetPath)),
+                Consumes = _abstractModelApplicators.SelectMany(a => a.ContentTypes ?? new string[0]).ToArray()
             };
 
             var versionEdges = _versionEdgeProvider.GetVersionEdges(_registrations.Select(r => r.ApiActionType).ToList());

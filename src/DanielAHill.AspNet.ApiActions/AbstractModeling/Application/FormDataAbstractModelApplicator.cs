@@ -24,6 +24,8 @@ namespace DanielAHill.AspNet.ApiActions.AbstractModeling.Application
 {
     public class FormDataAbstractModelApplicator: IAbstractModelApplicator
     {
+        public string[] ContentTypes { get; } = { "application/x-www-form-urlencoded", "multipart/form-data"};
+
         public bool Handles(IAbstractModelApplicationRequestContext context)
         {
             MediaTypeHeaderValue contentType;

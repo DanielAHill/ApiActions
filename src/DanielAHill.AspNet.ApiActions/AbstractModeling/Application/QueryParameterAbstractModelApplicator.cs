@@ -21,6 +21,8 @@ namespace DanielAHill.AspNet.ApiActions.AbstractModeling.Application
 {
     public class QueryParameterAbstractModelApplicator : IAbstractModelApplicator
     {
+        public string[] ContentTypes { get; } = null;
+
         public bool Handles(IAbstractModelApplicationRequestContext context)
         {
             return true;

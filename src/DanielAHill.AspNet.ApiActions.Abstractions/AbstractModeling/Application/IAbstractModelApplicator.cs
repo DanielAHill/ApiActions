@@ -21,6 +21,14 @@ namespace DanielAHill.AspNet.ApiActions.AbstractModeling.Application
 {
     public interface IAbstractModelApplicator
     {
+        /// <summary>
+        /// Gets the accepted content types that are accepted by applicator. Used for introspection and is not used for determining if an applicator should be used on a particular request.
+        /// </summary>
+        /// <value>
+        /// The content types, may be null
+        /// </value>
+        string[] ContentTypes { get; }
+
         bool Handles(IAbstractModelApplicationRequestContext requestContext);
 
         Task ApplyAsync(IAbstractModelApplicationRequestContext requestContext, AbstractModel abstractModel, CancellationToken cancellationToken);

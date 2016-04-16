@@ -23,6 +23,8 @@ namespace DanielAHill.AspNet.ApiActions.AbstractModeling.Application
 {
     public class JsonAbstractModelApplicator : IAbstractModelApplicator
     {
+        public string[] ContentTypes { get; } = { "application/json" };
+
         public bool Handles(IAbstractModelApplicationRequestContext context)
         {
             return "application/json".Equals(context.ContentType, StringComparison.OrdinalIgnoreCase);
@@ -33,7 +35,7 @@ namespace DanielAHill.AspNet.ApiActions.AbstractModeling.Application
         {
             var reader = new SectionedStreamReader(context.Stream, cancellationToken);
 
-            var section = await reader.ReadSection(ObjectStartChar);
+            var section = await reader.ReadSection(ObjectStartChar).ConfigureAwait(false);
 
             if (!string.IsNullOrEmpty(section))
             {
@@ -42,15 +44,15 @@ namespace DanielAHill.AspNet.ApiActions.AbstractModeling.Application
 
             if (!reader.EndOfStream)
             {
-                await ApplyClass(reader, abstractModel);
+                await ApplyClassAsync(reader, abstractModel).ConfigureAwait(false);
             }
         }
 
-        private static async Task ApplyClass(SectionedStreamReader reader, AbstractModel abstractModel)
+        private static async Task ApplyClassAsync(SectionedStreamReader reader, AbstractModel abstractModel)
         {
             do
             {
-                await ApplyProperty(reader, abstractModel);
+                await ApplyPropertyAsync(reader, abstractModel).ConfigureAwait(false);
 
             } while (!reader.EndOfStream && reader.LastDelimiter != '}');
         }
@@ -59,10 +61,10 @@ namespace DanielAHill.AspNet.ApiActions.AbstractModeling.Application
         private static readonly char[] Quote = {'"'};
         private static readonly char[] Colon = { ':' };
         private static readonly char[] ValueChars = { '"', ',', '[', ']', '{', '}' };
-        private static async Task ApplyProperty(SectionedStreamReader reader, AbstractModel abstractModel)
+        private static async Task ApplyPropertyAsync(SectionedStreamReader reader, AbstractModel abstractModel)
         {
             // Read Property Name
-            var name = await reader.ReadSection(PostPropertyNameChars);
+            var name = await reader.ReadSection(PostPropertyNameChars).ConfigureAwait(false);
 
             if (reader.EndOfStream && string.IsNullOrEmpty(name))
             {   // Natural end of stream
@@ -87,8 +89,8 @@ namespace DanielAHill.AspNet.ApiActions.AbstractModeling.Application
 
             if (reader.LastDelimiter == '"' && string.IsNullOrEmpty(name))
             {
-                name = await reader.ReadSection(Quote, false);
-                await reader.ReadSection(Colon);
+                name = await reader.ReadSection(Quote, false).ConfigureAwait(false);
+                await reader.ReadSection(Colon).ConfigureAwait(false);
             }
 
             if (reader.LastDelimiter != ':')
@@ -99,24 +101,24 @@ namespace DanielAHill.AspNet.ApiActions.AbstractModeling.Application
             var abstractProperty = new AbstractModel(name);
 
             // Read Value
-            await ApplyValue(reader, abstractProperty, false);
+            await ApplyValue(reader, abstractProperty, false).ConfigureAwait(false);
 
             abstractModel.Add(abstractProperty);
         }
 
         private static async Task ApplyValue(SectionedStreamReader reader, AbstractModel abstractModel, bool isArray)
         {
-            var value = await reader.ReadSection(ValueChars);
+            var value = await reader.ReadSection(ValueChars).ConfigureAwait(false);
             
             if (reader.LastDelimiter == '"')
             {
-                value = await reader.ReadSection(Quote, false);
+                value = await reader.ReadSection(Quote, false).ConfigureAwait(false);
             }
             else if (reader.LastDelimiter == '[')
             {
                 do
                 {
-                    await ApplyValue(reader, abstractModel, true);
+                    await ApplyValue(reader, abstractModel, true).ConfigureAwait(false);
                 } while (!reader.EndOfStream && reader.LastDelimiter != ']');
             }
             else if (reader.LastDelimiter == '{')
@@ -129,7 +131,7 @@ namespace DanielAHill.AspNet.ApiActions.AbstractModeling.Application
                     abstractModel.AddValue(workingModel);
                 }
                 
-                await ApplyClass(reader, workingModel);
+                await ApplyClassAsync(reader, workingModel).ConfigureAwait(false);
             }
 
             if (!string.IsNullOrEmpty(value))
