@@ -28,6 +28,8 @@ namespace DanielAHill.AspNet.ApiActions.Serialization
     {
         private const string ContentType = "application/json";
 
+        public string[] ContentTypes { get; } = { ContentType };
+
         public bool Handles(MediaTypeHeaderValue mediaType)
         {
             return "application".Equals(mediaType.Type, StringComparison.OrdinalIgnoreCase)

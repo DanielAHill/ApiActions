@@ -23,6 +23,14 @@ namespace DanielAHill.AspNet.ApiActions.Serialization
 {
     public interface IEdgeSerializer
     {
+        /// <summary>
+        /// Gets the accepted content types that can be returned by the serializer. Used for introspection.
+        /// </summary>
+        /// <value>
+        /// The content types.
+        /// </value>
+        string[] ContentTypes { get; }
+
         bool Handles(MediaTypeHeaderValue mediaType);
         Task SerializeAsync(object value, HttpResponse response, CancellationToken cancellationToken);
     }
