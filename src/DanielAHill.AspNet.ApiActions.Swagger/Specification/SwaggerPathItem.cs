@@ -13,13 +13,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 #endregion
+
+using System;
+using System.Text;
+
 namespace DanielAHill.AspNet.ApiActions.Swagger.Specification
 {
     /// <summary>
     /// Describes the operations available on a single path. A Path Item may be empty, due to ACL constraints. The path itself is still exposed to the documentation viewer but they will not know which operations and parameters are available
     /// </summary>
     /// <remarks>http://swagger.io/specification/#pathItemObject</remarks>
-    public class SwaggerPathItem
+    public class SwaggerPathItem: ICustomSwaggerSerializable
     {
         /// <summary>
         /// Allows for an external definition of this path item. The referenced structure MUST be in the format of a Path Item Object. If there are conflicts between the referenced definition and this Path Item's definition, the behavior is undefined.
@@ -29,8 +33,45 @@ namespace DanielAHill.AspNet.ApiActions.Swagger.Specification
         /// </value>
         public string Ref { get; set; }
 
-        public UnofficialPathItemMethod[] Methods { get; set; }
+        public SwaggerObjectCollectionFacade<UnofficialPathItemMethod> Methods { get; set; }
 
         public object Parameters { get; set; }
+
+        public void Serialize(StringBuilder builder, Action<object, StringBuilder, int> serializeChild, int recursionsLeft)
+        {
+            builder.Append('{');
+
+            if (Ref != null)
+            {
+                builder.Append("\"$ref\":");
+                serializeChild(Ref, builder, recursionsLeft);
+                builder.Append(',');
+            }
+
+            if (Parameters != null)
+            {
+                builder.Append("\"parameters\":");
+                serializeChild(Parameters, builder, recursionsLeft);
+                builder.Append(',');
+            }
+
+            var writeComma = false;
+
+            foreach (var method in Methods)
+            {
+                if (writeComma)
+                {
+                    builder.Append(',');
+                }
+                else
+                {
+                    writeComma = true;
+                }
+
+                serializeChild(method, builder, recursionsLeft);
+            }
+
+            builder.Append('}');
+        }
     }
 }

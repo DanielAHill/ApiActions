@@ -76,7 +76,7 @@ namespace DanielAHill.AspNet.ApiActions.Swagger
                     }
                 },
                 BasePath = _openApiOptions.ApiRoutePrefix,
-                Paths = _registrations.Select(GetPath).ToArray()
+                Paths = new SwaggerObjectCollectionFacade<SwaggerPath>(_registrations.Select(GetPath))
             };
 
             var versionEdges = _versionEdgeProvider.GetVersionEdges(_registrations.Select(r => r.ApiActionType).ToList());
@@ -109,7 +109,7 @@ namespace DanielAHill.AspNet.ApiActions.Swagger
                 Path = "/" + registration.Route,
                 Item = new SwaggerPathItem()
                 {
-                    Methods = methods.Select(m => new UnofficialPathItemMethod()
+                    Methods = new SwaggerObjectCollectionFacade<UnofficialPathItemMethod>(methods.Select(m => new UnofficialPathItemMethod()
                     {
                         Method = m,
                         Operation = new SwaggerOperation()
@@ -118,7 +118,7 @@ namespace DanielAHill.AspNet.ApiActions.Swagger
                             Tags = info.Tags,
                             Summary = info.Summary
                         }
-                    }).ToArray()
+                    }))
                 }
             };
 

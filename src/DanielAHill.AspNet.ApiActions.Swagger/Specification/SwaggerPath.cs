@@ -14,13 +14,16 @@
 // limitations under the License.
 #endregion
 
+using System;
+using System.Text;
+
 namespace DanielAHill.AspNet.ApiActions.Swagger.Specification
 {
     /// <summary>
     /// 
     /// </summary>
     /// <remarks>http://swagger.io/specification/#pathsObject</remarks>
-    public class SwaggerPath
+    public class SwaggerPath: ICustomSwaggerSerializable
     {
         /// <summary>
         /// Gets or sets the relative path to an individual endpoint. The field name MUST begin with a slash. The path is appended to the basePath in order to construct the full URL. Path templating is allowed.
@@ -31,5 +34,15 @@ namespace DanielAHill.AspNet.ApiActions.Swagger.Specification
         public string Path { get; set; }
 
         public SwaggerPathItem Item { get; set; }
+
+
+        public void Serialize(StringBuilder builder, Action<object, StringBuilder, int> serializeChild, int recursionsLeft)
+        {
+            builder.Append('"');
+            builder.Append(Path);
+            builder.Append("\":");
+
+            serializeChild(Item, builder, recursionsLeft);
+        }
     }
 }

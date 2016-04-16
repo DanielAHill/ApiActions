@@ -56,7 +56,7 @@ namespace DanielAHill.AspNet.ApiActions.Swagger.Specification
         /// <summary>
         /// Required. The available paths and operations for the API.
         /// </summary>
-        public SwaggerPath[] Paths { get; set; }
+        public SwaggerObjectCollectionFacade<SwaggerPath> Paths { get; set; }
 
         /// <summary>
         /// An object to hold data types produced and consumed by operations.

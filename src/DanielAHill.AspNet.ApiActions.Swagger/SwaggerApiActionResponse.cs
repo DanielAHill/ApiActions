@@ -82,6 +82,10 @@ namespace DanielAHill.AspNet.ApiActions.Swagger
                 {
                     builder.Append(item);
                 }
+                else if (item is bool)
+                {
+                    builder.Append(((bool)item).ToString().ToLowerInvariant());
+                }
                 else
                 {
                     builder.Append('"');

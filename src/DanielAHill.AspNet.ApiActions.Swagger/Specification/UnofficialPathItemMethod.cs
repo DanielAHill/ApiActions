@@ -13,11 +13,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 #endregion
+
+using System;
+using System.Text;
+
 namespace DanielAHill.AspNet.ApiActions.Swagger.Specification
 {
-    public class UnofficialPathItemMethod
+    public class UnofficialPathItemMethod : ICustomSwaggerSerializable
     {
         public string Method { get; set; }
         public SwaggerOperation Operation { get; set; }
+
+        public void Serialize(StringBuilder builder, Action<object, StringBuilder, int> serializeChild, int recursionsLeft)
+        {
+            builder.Append('"');
+            builder.Append(Method?.ToLowerInvariant());
+            builder.Append("\":");
+
+            serializeChild(Operation, builder, recursionsLeft);
+        }
     }
 }
