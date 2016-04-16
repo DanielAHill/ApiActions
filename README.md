@@ -63,7 +63,7 @@ Create a folder called `Hello` at the base of your web project. Inside this fold
     
 Run the web project and navigate to **/hello** using your web browser. That's it. You've created your first, albiet very simple, API Action!
 
-The url in the example above is specified by the namespace. The class name irrelevant for url routing purposes but can be very helpful to developers when creating different API Actions for different HTTP verbs (use HttpPost, HttpPut, etc). Change the namespace to `(YourProjectName).Api.Hello` and the new url will be **/api/hello**. More information on routing can be found in the [full documentation section on routing](Routing.md).
+The url in the example above is specified by the namespace. The class name irrelevant for url routing purposes but can be very helpful to developers when creating different API Actions for different HTTP verbs (use HttpPost, HttpPut, etc). Change the namespace to `(YourProjectName).Api.Hello` and the new url will be **/api/hello**.
 
 ### Accepting Data
 Create a folder called `Reply` at the base of your web project. Inside this folder, create a new class called `ReplyWithTime` with the following code, replacing *(YourWebProjectName)* with the name of your web project.
