@@ -26,13 +26,13 @@ namespace DanielAHill.AspNet.ApiActions.Introspection
         private readonly IApiActionDescriptionFactory _descriptionFactory;
         private readonly IApiActionRequestMethodsFactory _requestMethodsFactory;
         private readonly IApiActionRequestTypeFactory _requestTypeFactory;
-        private readonly IApiActionTagFactory _tagFactory;
+        private readonly IApiActionCategoryFactory _tagFactory;
         private readonly ApiActionResponseInfoFactory _responseInfoFactory;
         private readonly ConcurrentDictionary<Type, IApiActionInfo> _actionInfoCache = new ConcurrentDictionary<Type, IApiActionInfo>();
 
         public ApiActionInfoProvider(IApiActionSummaryFactory summaryFactory, IApiActionDescriptionFactory descriptionFactory, 
             IApiActionRequestMethodsFactory requestMethodsFactory, IApiActionRequestTypeFactory requestTypeFactory, 
-            IApiActionTagFactory tagFactory, ApiActionResponseInfoFactory responseInfoFactory)
+            IApiActionCategoryFactory tagFactory, ApiActionResponseInfoFactory responseInfoFactory)
         {
             if (summaryFactory == null) throw new ArgumentNullException(nameof(summaryFactory));
             if (descriptionFactory == null) throw new ArgumentNullException(nameof(descriptionFactory));
@@ -65,7 +65,7 @@ namespace DanielAHill.AspNet.ApiActions.Introspection
                 Methods = _requestMethodsFactory.CreateRequestMethods(apiActionType),
                 RequestType = _requestTypeFactory.CreateRequestType(apiActionType),
                 Responses = _responseInfoFactory.CreateResponses(apiActionType),
-                Tags = _tagFactory.CreateTags(apiActionType)
+                Categories = _tagFactory.CreateCategories(apiActionType)
             };
         }
     }

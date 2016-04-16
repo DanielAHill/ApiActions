@@ -14,12 +14,12 @@
 // limitations under the License.
 #endregion
 
-using System;
+using System.Collections.Generic;
 
 namespace DanielAHill.AspNet.ApiActions.Introspection
 {
-    public interface IApiActionTagFactory
+    public interface IHasCategories
     {
-        string[] CreateTags(Type apiActionType);
+        IReadOnlyCollection<string> Tags { get; } 
     }
 }

@@ -45,13 +45,23 @@ namespace DanielAHill.AspNet.ApiActions
         /// <value>The type.</value>
         public Type Type { get; set; }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ResponseAttribute"/> class.
-        /// </summary>
-        /// <param name="statusCode">The HTTP Status Code.</param>
-        public ResponseAttribute(int statusCode)
+        public ResponseAttribute(int statusCode) : this(statusCode, null, null)
+        {
+        }
+
+        public ResponseAttribute(int statusCode, Type type) : this(statusCode, type, null)
+        {
+        }
+
+        public ResponseAttribute(int statusCode, string description) : this(statusCode, null, description)
+        {
+        }
+
+        public ResponseAttribute(int statusCode, Type type, string description)
         {
             StatusCode = statusCode;
+            Type = type;
+            Description = description;
         }
     }
 }

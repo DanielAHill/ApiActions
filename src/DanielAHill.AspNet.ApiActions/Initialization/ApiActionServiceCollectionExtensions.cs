@@ -107,7 +107,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddInstance(typeof (ApiActionResponseInfoFactory), defaultIntrospector);
             services.AddInstance(typeof (IApiActionRequestMethodsFactory), defaultIntrospector);
             services.AddInstance(typeof (IApiActionRequestTypeFactory), defaultIntrospector);
-            services.AddInstance(typeof (IApiActionTagFactory), defaultIntrospector);
+            services.AddInstance(typeof (IApiActionCategoryFactory), defaultIntrospector);
         }
 
         public static IServiceCollection AddApiActions(this IServiceCollection services, Assembly assembly, string parentNamespace = null, string routePrefix = null)

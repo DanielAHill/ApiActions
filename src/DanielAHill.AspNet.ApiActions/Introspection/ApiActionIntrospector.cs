@@ -22,7 +22,7 @@ using System.Reflection;
 namespace DanielAHill.AspNet.ApiActions.Introspection
 {
     // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
-    public class ApiActionIntrospector : IApiActionSummaryFactory, IApiActionDescriptionFactory, ApiActionResponseInfoFactory, IApiActionRequestMethodsFactory, IApiActionRequestTypeFactory, IApiActionTagFactory
+    public class ApiActionIntrospector : IApiActionSummaryFactory, IApiActionDescriptionFactory, ApiActionResponseInfoFactory, IApiActionRequestMethodsFactory, IApiActionRequestTypeFactory, IApiActionCategoryFactory
     {
         public string CreateSummary(Type apiActionType)
         {
@@ -70,9 +70,9 @@ namespace DanielAHill.AspNet.ApiActions.Introspection
             return GetAttributes<IHasRequestType>(apiActionType).Select(a => a.RequestType).FirstOrDefault(v => v != null);
         }
 
-        public virtual string[] CreateTags(Type apiActionType)
+        public virtual string[] CreateCategories(Type apiActionType)
         {
-            return GetAttributes<IHasTags>(apiActionType).SelectMany(a => a.Tags).Distinct().OrderBy(t => t).ToArray();
+            return GetAttributes<IHasCategories>(apiActionType).SelectMany(a => a.Tags).Distinct().OrderBy(t => t).ToArray();
         }
 
         private static T GetAttribute<T>(Type apiActionType)

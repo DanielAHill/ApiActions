@@ -25,6 +25,6 @@ namespace DanielAHill.AspNet.ApiActions.Introspection
         public Type RequestType { get; set; }
         public string[] Methods { get; set; }
         public ApiActionResponseInfo[] Responses { get; set; }
-        public string[] Tags { get; set; }
+        public string[] Categories { get; set; }
     }
 }

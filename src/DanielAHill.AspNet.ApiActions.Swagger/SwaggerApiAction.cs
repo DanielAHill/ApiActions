@@ -115,7 +115,7 @@ namespace DanielAHill.AspNet.ApiActions.Swagger
                         Operation = new SwaggerOperation()
                         {
                             Description = info.Description,
-                            Tags = info.Tags,
+                            Tags = info.Categories,
                             Summary = info.Summary
                         }
                     }))
