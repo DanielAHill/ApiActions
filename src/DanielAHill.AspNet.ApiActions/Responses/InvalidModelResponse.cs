@@ -72,7 +72,7 @@ namespace DanielAHill.AspNet.ApiActions.Responses
             return new BadRequestDetails()
             {
                 Errors = globalErrors.Any() ? globalErrors : null,
-                PropertyErrors = convertDictionary.Values.Any() ? convertDictionary.Values.ToList() : null
+                Inputs = convertDictionary.Values.Any() ? convertDictionary.Values.ToList() : null
             };
         }
 

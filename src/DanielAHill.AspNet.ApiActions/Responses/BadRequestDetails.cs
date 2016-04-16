@@ -22,6 +22,6 @@ namespace DanielAHill.AspNet.ApiActions.Responses
     {
         public IList<string> Errors { get; set; } 
 
-        public IList<PropertyValidationResult> PropertyErrors { get; set; }
+        public IList<PropertyValidationResult> Inputs { get; set; }
     }
 }
