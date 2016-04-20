@@ -27,7 +27,7 @@ namespace ApiActionsSandbox.Web.Time
     [Description("Gets current local and UTC server time")]
     public class Get : ApiAction
     {
-        [Response(401, Description = "1/100 chance of returning unauthorized, you are unlucky", Type = typeof(ResponseModel))]
+        [Response(401, Description = "1/100 chance of returning unauthorized, you are unlucky")]
         public override Task AuthorizeAsync(CancellationToken cancellationToken)
         {
             if (Guid.NewGuid().GetHashCode() % 100 == 0)

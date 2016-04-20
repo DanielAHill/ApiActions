@@ -19,7 +19,7 @@ namespace DanielAHill.AspNet.ApiActions.Swagger.Specification
     {
         public string Description { get; set; }
 
-        public object Schema { get; set; }
+        public SwaggerSchema Schema { get; set; }
 
         public object Ref { get; set; }
     }

@@ -17,9 +17,10 @@
 using System;
 using DanielAHill.AspNet.ApiActions.Introspection;
 
+// ReSharper disable once CheckNamespace
 namespace DanielAHill.AspNet.ApiActions
 {
-    [AttributeUsage(AttributeTargets.Class)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property)]
     public class DescriptionAttribute : Attribute, IHasDescription
     {
         public string Description { get; }

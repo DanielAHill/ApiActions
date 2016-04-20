@@ -20,6 +20,7 @@ using System.Text.RegularExpressions;
 // ReSharper disable once CheckNamespace - Targeting Attributes should be in the namespace of their target
 namespace DanielAHill.AspNet.ApiActions
 {
+    // TODO: Rename to prevent name conflicts with DataAttributes.Url, which is commonly used for request model validation
     [AttributeUsage(AttributeTargets.Class)]
     public class UrlAttribute : Attribute
     {

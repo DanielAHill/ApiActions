@@ -24,6 +24,7 @@ using DanielAHill.AspNet.ApiActions.Introspection;
 using DanielAHill.AspNet.ApiActions.Serialization;
 using DanielAHill.AspNet.ApiActions.Swagger.Specification;
 using DanielAHill.AspNet.ApiActions.Versioning;
+using DanielAHill.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DanielAHill.AspNet.ApiActions.Swagger
@@ -39,7 +40,7 @@ namespace DanielAHill.AspNet.ApiActions.Swagger
         private IApiActionInfoProvider _infoProvider;
         private IVersionEdgeProvider _versionEdgeProvider;
         private string _hostName;
-
+        
         private static readonly string[] DefaultMethods = {"GET"};
 
         protected override Task AppendedInitializeAsync(IApiActionInitializationContext initializationContext, CancellationToken cancellationToken)
@@ -60,8 +61,8 @@ namespace DanielAHill.AspNet.ApiActions.Swagger
         }
 
         public override Task<ApiActionResponse> ExecuteAsync(CancellationToken cancellationToken)
-        { 
-            var root = new SwaggerSchema
+        {
+            var root = new SwaggerBase
             {
                 Info = new SwaggerInfo
                 {
@@ -146,9 +147,36 @@ namespace DanielAHill.AspNet.ApiActions.Swagger
                         StatusCode = ri.StatusCode,
                         Response = new SwaggerResponse
                         {
-                            Description = ri.Description
+                            Description = ri.Description,
+                            Schema = GetSchema(ri.ResponseData)
                         }
                     }));
+        }
+
+        private static SwaggerSchema GetSchema(Type type)
+        {
+            if (type == null)
+            {
+                return null;
+            }
+
+            var typeDetails = type.GetTypeDetails();
+
+            return new SwaggerSchema()
+            {
+                Title = type.Name,
+                Type = SwaggerType.Object,//typeDetails.IsCollection ? SwaggerType.Array : SwaggerType.Object,
+                Properties = new SwaggerObjectCollectionFacade<SwaggerProperty>(typeDetails.PropertyReaders.Select(r => new TypedSwaggerProperty()
+                {
+                    Type = GetSwaggerType(r.PropertyType),
+                    Name = r.Name
+                }))
+            };
+        }
+
+        private static SwaggerType GetSwaggerType(Type type)
+        {
+            return SwaggerType.String;
         }
     }
 }

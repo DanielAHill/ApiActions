@@ -28,9 +28,9 @@ namespace DanielAHill.AspNet.ApiActions.Swagger
 {
     internal class SwaggerApiActionResponse : ApiActionResponse
     {
-        private readonly SwaggerSchema _root;
+        private readonly SwaggerBase _root;
 
-        internal SwaggerApiActionResponse(SwaggerSchema root)
+        internal SwaggerApiActionResponse(SwaggerBase root)
         {
 #if DEBUG
             if (root == null) throw new ArgumentNullException(nameof(root));
