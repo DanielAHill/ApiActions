@@ -15,12 +15,10 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using DanielAHill.AspNet.ApiActions.Introspection;
-using DanielAHill.AspNet.ApiActions.Introspection.Attributes;
 using DanielAHill.AspNet.ApiActions.Swagger.Creation;
 using DanielAHill.AspNet.ApiActions.Swagger.Specification;
 using DanielAHill.AspNet.ApiActions.Versioning;
@@ -79,15 +77,26 @@ namespace DanielAHill.AspNet.ApiActions.Swagger
                         Email = _options.ContactEmail,
                         Url = _options.ContactUrl
                     },
+
                     License = new SwaggerLicense
                     {
                         Name = _options.LicenseName,
                         Url = _options.LicenseUrl
                     },
+
                     Version = version.ToString()
                 },
+
+                ExternalDocs = new SwaggerExternalDocumentation()
+                {
+                    Description = _options.ExternalDocumentationDescription,
+                    Url = _options.ExternalDocumentationUrl
+                },
+
                 BasePath = _options.ApiRoutePrefix,
+
                 Paths = new SwaggerObjectCollectionFacade<SwaggerPath>(_pathFactory.GetPaths(_registrationProvider.Get(version))),
+
                 //Consumes = _abstractModelApplicators.SelectMany(a => a.ContentTypes ?? new string[0]).ToArray(),
                 //Produces = _edgeSerializers.SelectMany(a => a.ContentTypes ?? new string[0]).ToArray()
             };

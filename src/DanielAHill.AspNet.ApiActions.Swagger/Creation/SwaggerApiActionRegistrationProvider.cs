@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using DanielAHill.AspNet.ApiActions.Versioning;
 
 namespace DanielAHill.AspNet.ApiActions.Swagger.Creation
@@ -37,6 +38,11 @@ namespace DanielAHill.AspNet.ApiActions.Swagger.Creation
             
             foreach (var reg in registrations)
             {
+                if (reg.ApiActionType.GetTypeInfo().GetCustomAttributes(true).OfType<NoDocAttribute>().Any(a => a.HideFromDocumentation))
+                {
+                    continue;
+                }
+
                 walkingArray[0] = reg.ApiActionType;
                 var edges = versionEdgeProvider.GetVersionEdges(walkingArray);
 

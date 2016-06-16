@@ -13,6 +13,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 #endregion
+
+using DanielAHill.AspNet.ApiActions.Swagger.Specification;
+
 namespace DanielAHill.AspNet.ApiActions.Swagger
 {
     public class SwaggerOptions
@@ -37,6 +40,9 @@ namespace DanielAHill.AspNet.ApiActions.Swagger
         public string LicenseUrl { get; set; } = "https://www.google.com/webhp?q=unknown+license";
 
         #endregion
+
+        public string ExternalDocumentationDescription { get; set; }
+        public string ExternalDocumentationUrl { get; set; }
 
         public string[] DefaultMethods { get; set; } = new string[] { "GET" };
     }

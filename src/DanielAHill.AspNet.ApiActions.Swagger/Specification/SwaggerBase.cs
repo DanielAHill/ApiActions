@@ -65,7 +65,7 @@ namespace DanielAHill.AspNet.ApiActions.Swagger.Specification
 
         /// <summary>
         /// An object to hold parameters that can be used across operations. This property does not define global parameters for all operations.
-        /// </summary>
+        /// </summary>s
         public object Parameters { get; set; }
 
         /// <summary>
@@ -91,6 +91,6 @@ namespace DanielAHill.AspNet.ApiActions.Swagger.Specification
         /// <summary>
         /// Additional external documentation.
         /// </summary>
-        public object ExternalDocs { get; set; }
+        public SwaggerExternalDocumentation ExternalDocs { get; set; }
     }
 }
