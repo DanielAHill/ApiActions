@@ -14,8 +14,6 @@
 // limitations under the License.
 #endregion
 
-using DanielAHill.AspNet.ApiActions.Swagger.Specification;
-
 namespace DanielAHill.AspNet.ApiActions.Swagger
 {
     public class SwaggerOptions

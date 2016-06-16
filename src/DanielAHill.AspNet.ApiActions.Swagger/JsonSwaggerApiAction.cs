@@ -15,14 +15,15 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using DanielAHill.AspNet.ApiActions.Introspection;
+using DanielAHill.AspNet.ApiActions.AbstractModeling.Application;
+using DanielAHill.AspNet.ApiActions.Serialization;
 using DanielAHill.AspNet.ApiActions.Swagger.Creation;
 using DanielAHill.AspNet.ApiActions.Swagger.Specification;
 using DanielAHill.AspNet.ApiActions.Versioning;
-using DanielAHill.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.OptionsModel;
 
@@ -35,17 +36,23 @@ namespace DanielAHill.AspNet.ApiActions.Swagger
     {
         private readonly ISwaggerPathFactory _pathFactory;
         private readonly ISwaggerApiActionRegistrationProvider _registrationProvider;
-        private readonly IVersionEdgeProvider _versionEdgeProvider;
+        private readonly IEnumerable<IAbstractModelApplicator> _abstractModelApplicators;
+        private readonly IEnumerable<IEdgeSerializer> _edgeSerializers;
         private readonly SwaggerOptions _options;
 
         private ApiActionVersion _defaultVersion;
         private string _hostName;
 
-        public JsonSwaggerApiAction(ISwaggerPathFactory pathFactory, IOptions<SwaggerOptions> optionsAccessor, ISwaggerApiActionRegistrationProvider registrationProvider, IVersionEdgeProvider versionEdgeProvider)
+        public JsonSwaggerApiAction(ISwaggerPathFactory pathFactory, 
+            IOptions<SwaggerOptions> optionsAccessor, 
+            ISwaggerApiActionRegistrationProvider registrationProvider, 
+            IEnumerable<IAbstractModelApplicator> abstractModelApplicators,
+            IEnumerable<IEdgeSerializer> edgeSerializers)
         {
             _pathFactory = pathFactory;
             _registrationProvider = registrationProvider;
-            _versionEdgeProvider = versionEdgeProvider;
+            _abstractModelApplicators = abstractModelApplicators;
+            _edgeSerializers = edgeSerializers;
             _options = optionsAccessor.Value;
         }
 
@@ -97,102 +104,11 @@ namespace DanielAHill.AspNet.ApiActions.Swagger
 
                 Paths = new SwaggerObjectCollectionFacade<SwaggerPath>(_pathFactory.GetPaths(_registrationProvider.Get(version))),
 
-                //Consumes = _abstractModelApplicators.SelectMany(a => a.ContentTypes ?? new string[0]).ToArray(),
-                //Produces = _edgeSerializers.SelectMany(a => a.ContentTypes ?? new string[0]).ToArray()
+                Consumes = _abstractModelApplicators.SelectMany(a => a.ContentTypes ?? new string[0]).ToArray(),
+                Produces = _edgeSerializers.SelectMany(a => a.ContentTypes ?? new string[0]).ToArray()
             };
 
             return Task.FromResult<ApiActionResponse>(new SwaggerApiActionResponse(root));
-        }
-
-        private static SwaggerObjectCollectionFacade<UnofficialResponseStatusCode> GetResponses(IApiActionResponseInfo[] responseInfos)
-        {
-            if (responseInfos == null || !responseInfos.Any())
-            {
-                return null;
-            }
-
-            return new SwaggerObjectCollectionFacade<UnofficialResponseStatusCode>(
-                    responseInfos.Select(ri => new UnofficialResponseStatusCode
-                    {
-                        StatusCode = ri.StatusCode,
-                        Response = new SwaggerResponse
-                        {
-                            Description = ri.Description,
-                            Schema = GetSchema(ri.ResponseData)
-                        }
-                    }));
-        }
-
-        private static SwaggerSchema GetSchema(Type type)
-        {
-            if (type == null)
-            {
-                return null;
-            }
-
-            var typeDetails = type.GetTypeDetails();
-
-            return new SwaggerSchema()
-            {
-                Title = type.Name,
-                Type = GetSwaggerType(typeDetails),
-                Properties = new SwaggerObjectCollectionFacade<SwaggerProperty>(typeDetails.PropertyReaders.Select(GetSwaggerProperty))
-            };
-        }
-
-        private static SwaggerProperty GetSwaggerProperty(IPropertyReader propertyReader)
-        {
-#if DEBUG
-            if (propertyReader == null) throw new ArgumentNullException(nameof(propertyReader));
-#endif
-            var typeDetails = propertyReader.PropertyType.GetTypeDetails();
-            var swaggerType = GetSwaggerType(typeDetails);
-
-            if (swaggerType.HasValue)
-            {
-                return new TypedSwaggerProperty()
-                {
-                    Type = swaggerType.Value,
-                    Name = propertyReader.Name
-                };
-            }
-
-            throw new NotImplementedException();
-        }
-
-        private static SwaggerType? GetSwaggerType(ITypeDetails typeDetails)
-        {
-            if (typeDetails.IsCollection)
-            {
-                return SwaggerType.Array;
-            }
-
-            if (!typeDetails.IsValue)
-            {
-                return null;
-            }
-
-            // TODO: Add Is Type or Nullable of Type helper in Reflection Helper Library
-            if (typeDetails.Type == typeof (bool) || typeDetails.Type == typeof (bool?))
-            {
-                return null;
-            }
-
-            // TODO: Add Is One of Types in Reflection Helper Library
-            if (typeDetails.Type == typeof (int) 
-                || typeDetails.Type == typeof (int?)
-                || typeDetails.Type == typeof(uint)
-                || typeDetails.Type == typeof(uint?))
-            {
-                return SwaggerType.Integer;
-            }
-
-            if (typeDetails.IsNumeric)
-            {
-                return SwaggerType.Number;
-            }
-            
-            return SwaggerType.String;
         }
 
         public class Request

@@ -16,10 +16,10 @@
 
 using System;
 using System.Collections;
-using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
 using DanielAHill.AspNet.ApiActions.Serialization;
 using DanielAHill.AspNet.ApiActions.Swagger.Specification;
 using Microsoft.AspNet.Http;
