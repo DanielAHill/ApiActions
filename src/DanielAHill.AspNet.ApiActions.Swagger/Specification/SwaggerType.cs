@@ -3,7 +3,9 @@ namespace DanielAHill.AspNet.ApiActions.Swagger.Specification
     public enum SwaggerType
     {
         Array,
-        Object,
+        Boolean,
+        Integer,
+        Number,
         String
     }
 }

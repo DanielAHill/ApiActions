@@ -12,7 +12,7 @@
     "Microsoft.Extensions.DependencyInjection": "1.0.0-rc1-final",
     "Microsoft.AspNet.Http": "1.0.0-rc1-final",
     "Newtonsoft.Json": "8.0.3",
-    "DanielAHill.Reflection": "0.1.1604.1305"
+    "DanielAHill.Reflection": "0.1.1604.2701"
   },
   "description": "ApiActions",
   "frameworks": {

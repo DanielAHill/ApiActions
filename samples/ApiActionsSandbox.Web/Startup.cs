@@ -15,7 +15,6 @@
 #endregion
 
 using System.Reflection;
-using DanielAHill.AspNet.ApiActions.Swagger;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,7 +26,8 @@ namespace ApiActionsSandbox.Web
         public void ConfigureServices(IServiceCollection services)
         {
             // Add Web actions for web assembly
-            services.AddApiActions(typeof (Startup).GetTypeInfo().Assembly);
+            services.AddApiActions(typeof (Startup).GetTypeInfo().Assembly)
+                    .AddSwaggerApiActions();
         }
 
         public void Configure(IApplicationBuilder app)
@@ -38,7 +38,6 @@ namespace ApiActionsSandbox.Web
 
             // Register Web Action Middleware
             app.UseApiActions();
-            app.UseSwagger();
         }
 
         public static void Main(string[] args) => WebApplication.Run<Startup>(args);

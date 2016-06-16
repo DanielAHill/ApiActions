@@ -38,7 +38,13 @@ namespace DanielAHill.AspNet.ApiActions
 
         public virtual string GetUrl(string actionNamespace)
         {
-            return NamespaceRegex.Replace(Url, actionNamespace);
+            var url = NamespaceRegex.Replace(Url, actionNamespace);
+            if (url.StartsWith("/"))
+            {
+                url = url.Substring(1);
+            }
+
+            return url;
         }
     }
 }

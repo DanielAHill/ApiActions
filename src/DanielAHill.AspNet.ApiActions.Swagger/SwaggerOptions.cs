@@ -21,7 +21,7 @@ namespace DanielAHill.AspNet.ApiActions.Swagger
         public string RequestUrl { get; set; } = "swagger.json";
         public string ApiRoutePrefix { get; set; } = null;
         public string HostName { get; set; } = null;
-        public bool IncludeVersionsAsExtenalDocuments { get; set; } = true;
+        public bool IncludeVersionsAsExternalDocuments { get; set; } = true;
         #endregion
 
         #region Swagger Info
@@ -37,5 +37,7 @@ namespace DanielAHill.AspNet.ApiActions.Swagger
         public string LicenseUrl { get; set; } = "https://www.google.com/webhp?q=unknown+license";
 
         #endregion
+
+        public string[] DefaultMethods { get; set; } = new string[] { "GET" };
     }
 }

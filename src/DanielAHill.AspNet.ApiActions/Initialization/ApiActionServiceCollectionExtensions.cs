@@ -118,6 +118,7 @@ namespace Microsoft.Extensions.DependencyInjection
             AddApiActionsCore(services);
 
             var preparedNamespace = (parentNamespace ?? assembly.GetName().Name) + ".";
+            var preparedParentNamespace = preparedNamespace.Substring(0, preparedNamespace.Length - 1);
             var preparedRoutePrefix = routePrefix == null ? string.Empty : routePrefix + "/";
 
             var types = assembly.GetTypes()
@@ -125,7 +126,8 @@ namespace Microsoft.Extensions.DependencyInjection
                 {
                     var ti = t.GetTypeInfo();
 
-                    if (ti.Namespace == null || !ti.Namespace.StartsWith(preparedNamespace, StringComparison.OrdinalIgnoreCase))
+                    if (ti.Namespace == null || 
+                        (!ti.Namespace.StartsWith(preparedNamespace, StringComparison.OrdinalIgnoreCase)) && !ti.Namespace.Equals(preparedParentNamespace))
                     {
                         return false;
                     }
@@ -143,9 +145,16 @@ namespace Microsoft.Extensions.DependencyInjection
 
                 services.AddTransient(type);
 
-                var namespaceSection = typeInfo.FullName.Substring(0, typeInfo.FullName.Length - typeInfo.Name.Length - 1)
-                    .Substring(preparedNamespace.Length)
-                    .Replace('.', '/');
+                var namespaceSection = typeInfo.FullName.Substring(0, typeInfo.FullName.Length - typeInfo.Name.Length - 1);
+
+                if (namespaceSection.Length > preparedNamespace.Length)
+                {
+                    namespaceSection = namespaceSection.Substring(preparedNamespace.Length).Replace('.', '/');
+                }
+                else
+                {
+                    namespaceSection = string.Empty;
+                }
 
                 var routes = typeInfo.GetCustomAttributes<UrlAttribute>()
                     .Select(ta => ta.GetUrl(namespaceSection))
