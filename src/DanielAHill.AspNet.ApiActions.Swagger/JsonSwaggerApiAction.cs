@@ -19,9 +19,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using DanielAHill.AspNet.ApiActions.AbstractModeling.Application;
 using DanielAHill.AspNet.ApiActions.Introspection;
-using DanielAHill.AspNet.ApiActions.Serialization;
+using DanielAHill.AspNet.ApiActions.Introspection.Attributes;
 using DanielAHill.AspNet.ApiActions.Swagger.Creation;
 using DanielAHill.AspNet.ApiActions.Swagger.Specification;
 using DanielAHill.AspNet.ApiActions.Versioning;
@@ -31,22 +30,24 @@ using Microsoft.Extensions.OptionsModel;
 
 namespace DanielAHill.AspNet.ApiActions.Swagger
 {
-    //[NoDoc]
     [Get]
+    [NoDoc]
     [UrlSuffix(@"swagger.json")]
-    public class JsonSwaggerApiAction : ApiAction
+    public class JsonSwaggerApiAction : ApiAction<JsonSwaggerApiAction.Request>
     {
         private readonly ISwaggerPathFactory _pathFactory;
-        private readonly IReadOnlyCollection<IApiActionRegistration> _registrations;
+        private readonly ISwaggerApiActionRegistrationProvider _registrationProvider;
+        private readonly IVersionEdgeProvider _versionEdgeProvider;
         private readonly SwaggerOptions _options;
 
-        private ApiActionVersion _version;
+        private ApiActionVersion _defaultVersion;
         private string _hostName;
 
-        public JsonSwaggerApiAction(ISwaggerPathFactory pathFactory, IOptions<SwaggerOptions> optionsAccessor, IEnumerable<IApiActionRegistration> registrations)
+        public JsonSwaggerApiAction(ISwaggerPathFactory pathFactory, IOptions<SwaggerOptions> optionsAccessor, ISwaggerApiActionRegistrationProvider registrationProvider, IVersionEdgeProvider versionEdgeProvider)
         {
             _pathFactory = pathFactory;
-            _registrations = registrations.ToList();
+            _registrationProvider = registrationProvider;
+            _versionEdgeProvider = versionEdgeProvider;
             _options = optionsAccessor.Value;
         }
 
@@ -55,13 +56,15 @@ namespace DanielAHill.AspNet.ApiActions.Swagger
             if (initializationContext == null) throw new ArgumentNullException(nameof(initializationContext));
 
             var services = initializationContext.HttpContext.RequestServices;
-            _version = services.GetRequiredService<IRequestVersionProvider>().Get(initializationContext.HttpContext, initializationContext.RouteValues);
+            _defaultVersion = services.GetRequiredService<IRequestVersionProvider>().Get(initializationContext.HttpContext, initializationContext.RouteValues);
             _hostName = initializationContext.HttpContext.Request.Host.Value;
             return Task.FromResult(true);
         }
         
         public override Task<ApiActionResponse> ExecuteAsync(CancellationToken cancellationToken)
         {
+            var version = Data.Version ?? _defaultVersion;
+
             var root = new SwaggerBase
             {
                 Info = new SwaggerInfo
@@ -80,23 +83,14 @@ namespace DanielAHill.AspNet.ApiActions.Swagger
                     {
                         Name = _options.LicenseName,
                         Url = _options.LicenseUrl
-                    }
+                    },
+                    Version = version.ToString()
                 },
                 BasePath = _options.ApiRoutePrefix,
-                Paths = new SwaggerObjectCollectionFacade<SwaggerPath>(_pathFactory.GetPaths(_registrations)),
+                Paths = new SwaggerObjectCollectionFacade<SwaggerPath>(_pathFactory.GetPaths(_registrationProvider.Get(version))),
                 //Consumes = _abstractModelApplicators.SelectMany(a => a.ContentTypes ?? new string[0]).ToArray(),
                 //Produces = _edgeSerializers.SelectMany(a => a.ContentTypes ?? new string[0]).ToArray()
             };
-
-            //var versionEdges = _versionEdgeProvider.GetVersionEdges(_registrations.Select(r => r.ApiActionType).ToList());
-            //if (versionEdges != null && _version != null && versionEdges.Any())
-            //{
-            //    root.Info.Version = (_version > versionEdges.Max() ? versionEdges.Max() : _version).ToString();
-            //}
-            //else
-            //{
-            //    root.Info.Version = "1.0";
-            //}
 
             return Task.FromResult<ApiActionResponse>(new SwaggerApiActionResponse(root));
         }
@@ -190,6 +184,11 @@ namespace DanielAHill.AspNet.ApiActions.Swagger
             }
             
             return SwaggerType.String;
+        }
+
+        public class Request
+        {
+            public ApiActionVersion Version { get; set; }
         }
     }
 }

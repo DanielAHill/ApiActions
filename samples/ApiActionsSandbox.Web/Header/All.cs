@@ -26,6 +26,7 @@ namespace ApiActionsSandbox.Web.Header
     [Description("Returns all HTTP headers provided by client request")]
     [HttpMethod("GET", "POST")]
     [Category(ApiCategories.Headers)]
+    [VersionRange("0.5", "2.5.1")]
     public class All : ApiAction
     {
         [Response(200, typeof(Dictionary<string, string>), "Dictionary of request headers")] 

@@ -88,6 +88,7 @@ namespace Microsoft.Extensions.DependencyInjection
             // Type Converters
             services.AddSingleton(typeof (IConverterDelegateProvider), typeof (ConverterDelegateProvider));
             services.AddSingleton(typeof (ITypeConverter), typeof (FormFileToStreamConverter));
+            services.AddSingleton(typeof (ITypeConverter), typeof (FromStringToApiActionVersionConverter));
 
             // Response Generation
             services.AddSingleton(typeof (IApiActionResponseAbstractFactory), typeof (ApiActionResponseAbstractFactory));

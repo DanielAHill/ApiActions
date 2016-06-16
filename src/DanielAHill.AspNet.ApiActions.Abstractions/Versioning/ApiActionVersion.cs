@@ -19,7 +19,7 @@ using System.Linq;
 
 namespace DanielAHill.AspNet.ApiActions.Versioning
 {
-    public class ApiActionVersion : IEquatable<ApiActionVersion>
+    public class ApiActionVersion : IEquatable<ApiActionVersion>, IComparable<ApiActionVersion>
     {
         private readonly int[] _parts;
 
@@ -57,6 +57,25 @@ namespace DanielAHill.AspNet.ApiActions.Versioning
         public override int GetHashCode()
         {
             return _parts?.GetHashCode() ?? 0;
+        }
+
+        #endregion
+
+        #region Comparible
+
+        public int CompareTo(ApiActionVersion other)
+        {
+            if (this.Equals(other))
+            {
+                return 0;
+            }
+
+            if (this < other)
+            {
+                return -1;
+            }
+
+            return 1;
         }
 
         #endregion

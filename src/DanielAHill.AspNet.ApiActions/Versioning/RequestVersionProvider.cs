@@ -24,19 +24,24 @@ namespace DanielAHill.AspNet.ApiActions.Versioning
 {
     public class RequestVersionProvider : IRequestVersionProvider
     {
-        private static readonly ApiActionVersion DefaultVersion = new ApiActionVersion(int.MaxValue);
         private const string RequestCacheKey = "_RequestApiActionVersion";
-
+        
         private readonly IRequestVersionParser[] _versionParsers;
-        private readonly ApiActionVersion _configuredDefaultVersion;
+        private readonly ApiActionVersion _defaultVersion;
 
-        public RequestVersionProvider(IEnumerable<IRequestVersionParser> versionParsers, IOptions<ApiActionConfiguration> configurationAccessor)
+        public RequestVersionProvider(IEnumerable<IRequestVersionParser> versionParsers, IOptions<ApiActionConfiguration> configurationAccessor, IVersionEdgeProvider versionEdgeProvider, IApiActionRegistrationProvider apiActionRegistrationProvider)
         {
             if (versionParsers == null) throw new ArgumentNullException(nameof(versionParsers));
             if (configurationAccessor == null) throw new ArgumentNullException(nameof(configurationAccessor));
+            if (versionEdgeProvider == null) throw new ArgumentNullException(nameof(versionEdgeProvider));
+            if (apiActionRegistrationProvider == null) throw new ArgumentNullException(nameof(apiActionRegistrationProvider));
 
             _versionParsers = versionParsers.ToArray();
-            ApiActionVersion.TryParse(configurationAccessor.Value.DefaultRequestVersion, out _configuredDefaultVersion);
+            if (!ApiActionVersion.TryParse(configurationAccessor.Value.DefaultRequestVersion, out _defaultVersion))
+            {
+                _defaultVersion = versionEdgeProvider.GetVersionEdges(apiActionRegistrationProvider.Registrations.Select(r => r.ApiActionType).ToList()).OrderByDescending(v => v).FirstOrDefault()
+                                    ?? new ApiActionVersion(1, 0);
+            }
         }
 
         public ApiActionVersion Get(HttpContext context, IDictionary<string, object> routeValues)
@@ -64,7 +69,7 @@ namespace DanielAHill.AspNet.ApiActions.Versioning
                 if (version == null)
                 {
                     // If version not found, use configuration provided value, then default
-                    version = _configuredDefaultVersion ?? DefaultVersion;
+                    version = _defaultVersion;
                 }
 
                 context.Items[RequestCacheKey] = version;

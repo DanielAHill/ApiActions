@@ -35,6 +35,7 @@ namespace Microsoft.Extensions.DependencyInjection
             if (services == null) throw new ArgumentNullException(nameof(services));
 
             services.AddSingleton(typeof(ISwaggerPathFactory), typeof(SwaggerPathFactory));
+            services.AddSingleton(typeof(ISwaggerApiActionRegistrationProvider), typeof(SwaggerApiActionRegistrationProvider));
 
             return services.AddApiActions(typeof(SwaggerServiceCollectionExtensions).GetTypeInfo().Assembly, null, routePrefix);
         }

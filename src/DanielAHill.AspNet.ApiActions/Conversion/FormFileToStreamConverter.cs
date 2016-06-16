@@ -17,6 +17,7 @@
 using System;
 using System.IO;
 using System.Reflection;
+using DanielAHill.AspNet.ApiActions.Versioning;
 using Microsoft.AspNet.Http;
 
 namespace DanielAHill.AspNet.ApiActions.Conversion
@@ -35,6 +36,28 @@ namespace DanielAHill.AspNet.ApiActions.Conversion
         public object Convert(object source, Type destinationType)
         {
             return ((IFormFile) source).OpenReadStream();
+        }
+    }
+
+    public class FromStringToApiActionVersionConverter: ITypeConverter
+    {
+        private static readonly TypeInfo StringTypeInfo = typeof(string).GetTypeInfo();
+        private static readonly TypeInfo ApiActionVersionTypeInfo = typeof(ApiActionVersion).GetTypeInfo();
+
+        public bool CanConvert(Type sourceType, Type destinationType)
+        {
+            return destinationType.GetTypeInfo().IsAssignableFrom(ApiActionVersionTypeInfo)
+                && StringTypeInfo.IsAssignableFrom(sourceType.GetTypeInfo());
+        }
+
+        public object Convert(object source, Type destinationType)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            return ApiActionVersion.Parse(source.ToString());
         }
     }
 }
