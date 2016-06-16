@@ -28,11 +28,13 @@ namespace DanielAHill.AspNet.ApiActions.Introspection
         private readonly IApiActionRequestTypeFactory _requestTypeFactory;
         private readonly IApiActionCategoryFactory _tagFactory;
         private readonly IApiActionResponseInfoFactory _responseInfoFactory;
+        private readonly IApiActionDeprecationFactory _deprecationFactory;
         private readonly ConcurrentDictionary<Type, IApiActionInfo> _actionInfoCache = new ConcurrentDictionary<Type, IApiActionInfo>();
 
         public ApiActionInfoProvider(IApiActionSummaryFactory summaryFactory, IApiActionDescriptionFactory descriptionFactory, 
             IApiActionRequestMethodsFactory requestMethodsFactory, IApiActionRequestTypeFactory requestTypeFactory, 
-            IApiActionCategoryFactory tagFactory, IApiActionResponseInfoFactory responseInfoFactory)
+            IApiActionCategoryFactory tagFactory, IApiActionResponseInfoFactory responseInfoFactory,
+            IApiActionDeprecationFactory deprecationFactory)
         {
             if (summaryFactory == null) throw new ArgumentNullException(nameof(summaryFactory));
             if (descriptionFactory == null) throw new ArgumentNullException(nameof(descriptionFactory));
@@ -40,12 +42,14 @@ namespace DanielAHill.AspNet.ApiActions.Introspection
             if (requestTypeFactory == null) throw new ArgumentNullException(nameof(requestTypeFactory));
             if (tagFactory == null) throw new ArgumentNullException(nameof(tagFactory));
             if (responseInfoFactory == null) throw new ArgumentNullException(nameof(responseInfoFactory));
+            if (deprecationFactory == null) throw new ArgumentNullException(nameof(deprecationFactory));
             _summaryFactory = summaryFactory;
             _descriptionFactory = descriptionFactory;
             _requestMethodsFactory = requestMethodsFactory;
             _requestTypeFactory = requestTypeFactory;
             _tagFactory = tagFactory;
             _responseInfoFactory = responseInfoFactory;
+            _deprecationFactory = deprecationFactory;
         }
 
         public IApiActionInfo GetInfo(Type apiActionType)
@@ -65,7 +69,8 @@ namespace DanielAHill.AspNet.ApiActions.Introspection
                 Methods = _requestMethodsFactory.CreateRequestMethods(apiActionType),
                 RequestType = _requestTypeFactory.CreateRequestType(apiActionType),
                 Responses = _responseInfoFactory.CreateResponses(apiActionType),
-                Categories = _tagFactory.CreateCategories(apiActionType)
+                Categories = _tagFactory.CreateCategories(apiActionType),
+                IsDeprecated = _deprecationFactory.CreateIsDeprecated(apiActionType)
             };
         }
     }

@@ -18,11 +18,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using DanielAHill.AspNet.ApiActions.Versioning;
 
 namespace DanielAHill.AspNet.ApiActions.Introspection
 {
     // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
-    public class ApiActionIntrospector : IApiActionSummaryFactory, IApiActionDescriptionFactory, IApiActionResponseInfoFactory, IApiActionRequestMethodsFactory, IApiActionRequestTypeFactory, IApiActionCategoryFactory
+    public class ApiActionIntrospector : IApiActionSummaryFactory, IApiActionDescriptionFactory, IApiActionResponseInfoFactory, IApiActionRequestMethodsFactory, IApiActionRequestTypeFactory, IApiActionCategoryFactory, IApiActionDeprecationFactory
     {
         public string CreateSummary(Type apiActionType)
         {
@@ -68,6 +69,19 @@ namespace DanielAHill.AspNet.ApiActions.Introspection
         {
             if (apiActionType == null) throw new ArgumentNullException(nameof(apiActionType));
             return GetAttributes<IHasRequestType>(apiActionType).Select(a => a.RequestType).FirstOrDefault(v => v != null);
+        }
+
+        public virtual bool CreateIsDeprecated(Type apiActionType)
+        {
+            if (apiActionType == null) throw new ArgumentNullException(nameof(apiActionType));
+            if (GetAttributes<ObsoleteAttribute>(apiActionType).Any())
+            {
+                // Explicitly marked as obsolete
+                return true;
+            }
+
+            // If ending version is specified, then deprecation has been detected
+            return (GetAttributes<IVersionEdgeFactory>(apiActionType).SelectMany(f => f.GetVersionEdges()).Distinct().Count() > 1);
         }
 
         public virtual string[] CreateCategories(Type apiActionType)

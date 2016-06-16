@@ -67,6 +67,7 @@ namespace DanielAHill.AspNet.ApiActions.Swagger.Creation
                             Description = info.Description,
                             Tags = info.Categories,
                             Summary = info.Summary,
+                            Deprecated = info.IsDeprecated
                             //Responses = GetResponses(info.Responses)
                         }
                     }))

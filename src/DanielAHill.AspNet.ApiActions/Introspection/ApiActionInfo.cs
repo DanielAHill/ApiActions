@@ -26,5 +26,6 @@ namespace DanielAHill.AspNet.ApiActions.Introspection
         public string[] Methods { get; set; }
         public IApiActionResponseInfo[] Responses { get; set; }
         public string[] Categories { get; set; }
+        public bool IsDeprecated { get; set; }
     }
 }
