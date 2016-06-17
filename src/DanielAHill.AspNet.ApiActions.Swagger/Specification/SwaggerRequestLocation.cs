@@ -13,20 +13,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 #endregion
-
-using System.Text;
-
 namespace DanielAHill.AspNet.ApiActions.Swagger.Specification
 {
-    public class TypedSwaggerProperty : SwaggerProperty
+    public enum SwaggerRequestLocation
     {
-        public SwaggerType Type { get; set; }
-
-        protected override void SerializeInner(StringBuilder builder)
-        {
-            builder.Append("\"type\":\"");
-            builder.Append(Type.ToString().ToLowerInvariant());
-            builder.Append('"');
-        }
+        body,
+        path,
+        query,
+        header,
+        formData
     }
 }

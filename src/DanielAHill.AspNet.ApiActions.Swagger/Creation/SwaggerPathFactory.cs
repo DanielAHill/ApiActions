@@ -27,15 +27,24 @@ namespace DanielAHill.AspNet.ApiActions.Swagger.Creation
     {
         private readonly IApiActionInfoProvider _infoProvider;
         private readonly ISwaggerResponseFactory _responseFactory;
+        private readonly ISwaggerDefinitionNameProvider _definitionNameProvider;
+        private readonly ISwaggerSchemaFactory _schemaFactory;
         private readonly string[] _defaultMethods;
 
-        public SwaggerPathFactory(IApiActionInfoProvider infoProvider, IOptions<SwaggerOptions> optionsAccessor, ISwaggerResponseFactory responseFactory)
+        public SwaggerPathFactory(IApiActionInfoProvider infoProvider, IOptions<SwaggerOptions> optionsAccessor, 
+            ISwaggerResponseFactory responseFactory, 
+            ISwaggerDefinitionNameProvider definitionNameProvider,
+            ISwaggerSchemaFactory schemaFactory)
         {
             if (infoProvider == null) throw new ArgumentNullException(nameof(infoProvider));
             if (optionsAccessor == null) throw new ArgumentNullException(nameof(optionsAccessor));
             if (responseFactory == null) throw new ArgumentNullException(nameof(responseFactory));
+            if (definitionNameProvider == null) throw new ArgumentNullException(nameof(definitionNameProvider));
+            if (schemaFactory == null) throw new ArgumentNullException(nameof(schemaFactory));
             _infoProvider = infoProvider;
             _responseFactory = responseFactory;
+            _definitionNameProvider = definitionNameProvider;
+            _schemaFactory = schemaFactory;
 
             var options = optionsAccessor.Value;
             _defaultMethods = options.DefaultMethods ?? new [] {"GET"};
@@ -74,11 +83,50 @@ namespace DanielAHill.AspNet.ApiActions.Swagger.Creation
                             Deprecated = info.IsDeprecated,
                             Responses = new SwaggerObjectCollectionFacade<SwaggerResponse>(_responseFactory.Create(info.Responses))
                         }
-                    }))
+                    })),
+                    Parameters = GetParameters(registration, info)
                 }
             };
 
             return path;
+        }
+
+        private SwaggerParameter[] GetParameters(IApiActionRegistration registration, IApiActionInfo info)
+        {
+            // TODO: Move this method to factory
+
+            if (info.RequestType == null)
+            {
+                return null;
+            }
+
+            var parameters = new List<SwaggerParameter>();
+
+            var supportsBody = info.Methods.Any(m => !"GET".Equals(m, StringComparison.OrdinalIgnoreCase));
+
+            var propertyDetails = info.RequestType.GetTypeDetails().PropertyWriters;
+
+            foreach (var property in propertyDetails)
+            {
+                var parameter = new SwaggerParameter()
+                {
+                    Name = property.Name,
+                    Schema = _schemaFactory.Create(property.PropertyType, property.PropertyType.GetTypeDetails().PropertyWriters)
+                };
+
+                // Check for url
+                
+                // Check for file
+
+                // Check for body
+
+                // Set as Query Parameter
+                parameter.In = SwaggerRequestLocation.query;
+
+                parameters.Add(parameter);
+            }
+
+            return parameters.Count > 0 ? parameters.ToArray() : null;
         }
     }
 }

@@ -180,7 +180,7 @@ namespace DanielAHill.AspNet.ApiActions
         where TRequest : class, new()
     {
         protected TRequest Data { get; private set; }
-        
+
         protected internal override void InternalInitialize(IApiActionInitializationContext initializationContext)
         {
             base.InternalInitialize(initializationContext);

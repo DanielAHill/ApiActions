@@ -68,7 +68,22 @@ namespace DanielAHill.AspNet.ApiActions.Introspection
         public virtual Type CreateRequestType(Type apiActionType)
         {
             if (apiActionType == null) throw new ArgumentNullException(nameof(apiActionType));
-            return GetAttributes<IHasRequestType>(apiActionType).Select(a => a.RequestType).FirstOrDefault(v => v != null);
+
+            var walkingType = apiActionType;
+
+            while (walkingType != null)
+            {
+                if (walkingType.GenericTypeArguments != null
+                    && walkingType.GenericTypeArguments.Length == 1
+                    && walkingType.GetGenericTypeDefinition() == typeof (ApiAction<>))
+                {
+                    return walkingType.GenericTypeArguments[0];
+                }
+
+                walkingType = walkingType.GetTypeInfo().BaseType;
+            }
+
+            return null;
         }
 
         public virtual bool CreateIsDeprecated(Type apiActionType)

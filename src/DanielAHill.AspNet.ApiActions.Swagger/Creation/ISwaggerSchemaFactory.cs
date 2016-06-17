@@ -14,19 +14,16 @@
 // limitations under the License.
 #endregion
 
-using System.Text;
+using System;
+using System.Collections.Generic;
+using DanielAHill.AspNet.ApiActions.Swagger.Specification;
+using DanielAHill.Reflection;
 
-namespace DanielAHill.AspNet.ApiActions.Swagger.Specification
+namespace DanielAHill.AspNet.ApiActions.Swagger.Creation
 {
-    public class TypedSwaggerProperty : SwaggerProperty
+    public interface ISwaggerSchemaFactory
     {
-        public SwaggerType Type { get; set; }
-
-        protected override void SerializeInner(StringBuilder builder)
-        {
-            builder.Append("\"type\":\"");
-            builder.Append(Type.ToString().ToLowerInvariant());
-            builder.Append('"');
-        }
+        SwaggerSchema Create(Type type, IEnumerable<IPropertyDetails> propertyDetails);
+        SwaggerSchema Create(Type type, IEnumerable<IPropertyDetails> propertyDetails, Queue<Type> typeQueue);
     }
 }

@@ -1,4 +1,4 @@
-#region Copyright
+﻿#region Copyright
 // Copyright (c) 2016 Daniel Alan Hill. All rights reserved.
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,11 +15,15 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
+using DanielAHill.AspNet.ApiActions.Swagger.Specification;
+using DanielAHill.Reflection;
 
-namespace DanielAHill.AspNet.ApiActions.Introspection
+namespace DanielAHill.AspNet.ApiActions.Swagger.Creation
 {
-    public interface IHasRequestType
+    public interface ISwaggerPropertyFactory
     {
-        Type RequestType { get; }
+        SwaggerProperty Create(IPropertyDetails propertyDetails);
+        SwaggerProperty Create(IPropertyDetails propertyDetails, Queue<Type> typeQueue);
     }
 }

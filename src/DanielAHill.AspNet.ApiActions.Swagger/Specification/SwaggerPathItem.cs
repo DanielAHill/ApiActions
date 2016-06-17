@@ -35,7 +35,7 @@ namespace DanielAHill.AspNet.ApiActions.Swagger.Specification
 
         public SwaggerObjectCollectionFacade<UnofficialPathItemMethod> Methods { get; set; }
 
-        public object Parameters { get; set; }
+        public SwaggerParameter[] Parameters { get; set; }
 
         public void SerializeJson(StringBuilder builder, Action<object, StringBuilder, int> serializeChild, int recursionsLeft)
         {
