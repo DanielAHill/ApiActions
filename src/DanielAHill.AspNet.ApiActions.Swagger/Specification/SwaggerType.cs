@@ -21,6 +21,7 @@ namespace DanielAHill.AspNet.ApiActions.Swagger.Specification
         Boolean,
         Integer,
         Number,
-        String
+        String,
+        Object
     }
 }

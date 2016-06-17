@@ -19,10 +19,10 @@ using System.Collections;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Linq;
 using DanielAHill.AspNet.ApiActions.Serialization;
 using DanielAHill.AspNet.ApiActions.Swagger.Specification;
 using Microsoft.AspNet.Http;
+using System.Linq;
 
 namespace DanielAHill.AspNet.ApiActions.Swagger
 {
@@ -65,10 +65,10 @@ namespace DanielAHill.AspNet.ApiActions.Swagger
             }
 
             // Perform custom serialization, if supported
-            var customSerializable = item as ICustomSwaggerSerializable;
+            var customSerializable = item as ICustomSwaggerJsonSerializable;
             if (customSerializable != null)
             {
-                customSerializable.Serialize(builder, Serialize, recursionsLeft - 1);
+                customSerializable.SerializeJson(builder, Serialize, recursionsLeft - 1);
                 return;
             }
 

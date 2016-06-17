@@ -13,10 +13,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 #endregion
-namespace ApiActionsSandbox.Web
+
+using System;
+using System.Text;
+
+namespace DanielAHill.AspNet.ApiActions.Swagger.Specification
 {
-    internal static class ApiCategories
+    public class SwaggerDefinition :ICustomSwaggerJsonSerializable
     {
-        internal const string Headers = "Headers";
+        public string Name { get; set; }
+        public SwaggerSchema Schema { get; set; }
+
+        public void SerializeJson(StringBuilder builder, Action<object, StringBuilder, int> serializeChild, int recursionsLeft)
+        {
+            builder.Append('"');
+            builder.Append(Name);
+            builder.Append("\":");
+            serializeChild(Schema, builder, recursionsLeft);
+        }
     }
 }

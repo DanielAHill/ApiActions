@@ -23,7 +23,7 @@ namespace DanielAHill.AspNet.ApiActions.Swagger.Specification
     /// 
     /// </summary>
     /// <remarks>http://swagger.io/specification/#pathsObject</remarks>
-    public class SwaggerPath: ICustomSwaggerSerializable
+    public class SwaggerPath: ICustomSwaggerJsonSerializable
     {
         /// <summary>
         /// Gets or sets the relative path to an individual endpoint. The field name MUST begin with a slash. The path is appended to the basePath in order to construct the full URL. Path templating is allowed.
@@ -36,7 +36,7 @@ namespace DanielAHill.AspNet.ApiActions.Swagger.Specification
         public SwaggerPathItem Item { get; set; }
 
 
-        public void Serialize(StringBuilder builder, Action<object, StringBuilder, int> serializeChild, int recursionsLeft)
+        public void SerializeJson(StringBuilder builder, Action<object, StringBuilder, int> serializeChild, int recursionsLeft)
         {
             builder.Append('"');
             builder.Append(Path);

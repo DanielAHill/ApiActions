@@ -38,6 +38,7 @@ namespace DanielAHill.AspNet.ApiActions.Swagger
         private readonly ISwaggerApiActionRegistrationProvider _registrationProvider;
         private readonly IEnumerable<IAbstractModelApplicator> _abstractModelApplicators;
         private readonly IEnumerable<IEdgeSerializer> _edgeSerializers;
+        private readonly ISwaggerDefinitionsFactory _swaggerDefinitionsFactory;
         private readonly SwaggerOptions _options;
 
         private ApiActionVersion _defaultVersion;
@@ -47,12 +48,14 @@ namespace DanielAHill.AspNet.ApiActions.Swagger
             IOptions<SwaggerOptions> optionsAccessor, 
             ISwaggerApiActionRegistrationProvider registrationProvider, 
             IEnumerable<IAbstractModelApplicator> abstractModelApplicators,
-            IEnumerable<IEdgeSerializer> edgeSerializers)
+            IEnumerable<IEdgeSerializer> edgeSerializers,
+            ISwaggerDefinitionsFactory swaggerDefinitionsFactory)
         {
             _pathFactory = pathFactory;
             _registrationProvider = registrationProvider;
             _abstractModelApplicators = abstractModelApplicators;
             _edgeSerializers = edgeSerializers;
+            _swaggerDefinitionsFactory = swaggerDefinitionsFactory;
             _options = optionsAccessor.Value;
         }
 
@@ -69,6 +72,8 @@ namespace DanielAHill.AspNet.ApiActions.Swagger
         public override Task<ApiActionResponse> ExecuteAsync(CancellationToken cancellationToken)
         {
             var version = Data.Version ?? _defaultVersion;
+
+            var versionMatchedApiActions = _registrationProvider.Get(version);
 
             var root = new SwaggerBase
             {
@@ -94,19 +99,23 @@ namespace DanielAHill.AspNet.ApiActions.Swagger
                     Version = version.ToString()
                 },
 
-                ExternalDocs = new SwaggerExternalDocumentation()
+                BasePath = _options.ApiRoutePrefix,
+
+                Paths = new SwaggerObjectCollectionFacade<SwaggerPath>(_pathFactory.GetPaths(versionMatchedApiActions)),
+
+                Consumes = _abstractModelApplicators.SelectMany(a => a.ContentTypes ?? new string[0]).ToArray(),
+                Produces = _edgeSerializers.SelectMany(a => a.ContentTypes ?? new string[0]).ToArray(),
+                Definitions =  new SwaggerObjectCollectionFacade<SwaggerDefinition>(_swaggerDefinitionsFactory.Create(versionMatchedApiActions))
+            };
+
+            if (_options.ExternalDocumentationDescription != null || _options.ExternalDocumentationUrl != null)
+            {
+                root.ExternalDocs = new SwaggerExternalDocumentation()
                 {
                     Description = _options.ExternalDocumentationDescription,
                     Url = _options.ExternalDocumentationUrl
-                },
-
-                BasePath = _options.ApiRoutePrefix,
-
-                Paths = new SwaggerObjectCollectionFacade<SwaggerPath>(_pathFactory.GetPaths(_registrationProvider.Get(version))),
-
-                Consumes = _abstractModelApplicators.SelectMany(a => a.ContentTypes ?? new string[0]).ToArray(),
-                Produces = _edgeSerializers.SelectMany(a => a.ContentTypes ?? new string[0]).ToArray()
-            };
+                };
+            }
 
             return Task.FromResult<ApiActionResponse>(new SwaggerApiActionResponse(root));
         }

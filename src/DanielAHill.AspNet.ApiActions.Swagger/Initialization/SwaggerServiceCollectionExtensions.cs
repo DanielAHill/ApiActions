@@ -36,7 +36,9 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddSingleton(typeof(ISwaggerPathFactory), typeof(SwaggerPathFactory));
             services.AddSingleton(typeof(ISwaggerApiActionRegistrationProvider), typeof(SwaggerApiActionRegistrationProvider));
-
+            services.AddSingleton(typeof(ISwaggerDefinitionsFactory), typeof(SwaggerDefinitionsFactory));
+            services.AddSingleton(typeof(ISwaggerTypeConverter), typeof(SwaggerTypeConverter));
+            
             return services.AddApiActions(typeof(SwaggerServiceCollectionExtensions).GetTypeInfo().Assembly, null, routePrefix);
         }
     }

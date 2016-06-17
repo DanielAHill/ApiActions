@@ -19,11 +19,11 @@ using System.Text;
 
 namespace DanielAHill.AspNet.ApiActions.Swagger.Specification
 {
-    public abstract class SwaggerProperty : ICustomSwaggerSerializable
+    public abstract class SwaggerProperty : ICustomSwaggerJsonSerializable
     {
         public string Name { get; set; }
 
-        public void Serialize(StringBuilder builder, Action<object, StringBuilder, int> serializeChild, int recursionsLeft)
+        public void SerializeJson(StringBuilder builder, Action<object, StringBuilder, int> serializeChild, int recursionsLeft)
         {
             builder.Append('"');
             builder.Append(Name);

@@ -15,12 +15,12 @@
 #endregion
 
 using System;
-using System.Text;
+using DanielAHill.AspNet.ApiActions.Swagger.Specification;
 
-namespace DanielAHill.AspNet.ApiActions.Swagger
+namespace DanielAHill.AspNet.ApiActions.Swagger.Creation
 {
-    internal interface ICustomSwaggerSerializable
+    public interface ISwaggerTypeConverter
     {
-        void Serialize(StringBuilder builder, Action<object, StringBuilder, int> serializeChild, int recursionsLeft);
+        SwaggerType GetSwaggerType(Type type);
     }
 }

@@ -23,7 +23,7 @@ namespace DanielAHill.AspNet.ApiActions.Swagger.Specification
     /// Describes the operations available on a single path. A Path Item may be empty, due to ACL constraints. The path itself is still exposed to the documentation viewer but they will not know which operations and parameters are available
     /// </summary>
     /// <remarks>http://swagger.io/specification/#pathItemObject</remarks>
-    public class SwaggerPathItem: ICustomSwaggerSerializable
+    public class SwaggerPathItem: ICustomSwaggerJsonSerializable
     {
         /// <summary>
         /// Allows for an external definition of this path item. The referenced structure MUST be in the format of a Path Item Object. If there are conflicts between the referenced definition and this Path Item's definition, the behavior is undefined.
@@ -37,7 +37,7 @@ namespace DanielAHill.AspNet.ApiActions.Swagger.Specification
 
         public object Parameters { get; set; }
 
-        public void Serialize(StringBuilder builder, Action<object, StringBuilder, int> serializeChild, int recursionsLeft)
+        public void SerializeJson(StringBuilder builder, Action<object, StringBuilder, int> serializeChild, int recursionsLeft)
         {
             builder.Append('{');
 

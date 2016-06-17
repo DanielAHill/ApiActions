@@ -19,12 +19,12 @@ using System.Text;
 
 namespace DanielAHill.AspNet.ApiActions.Swagger.Specification
 {
-    public class UnofficialPathItemMethod : ICustomSwaggerSerializable
+    public class UnofficialPathItemMethod : ICustomSwaggerJsonSerializable
     {
         public string Method { get; set; }
         public SwaggerOperation Operation { get; set; }
 
-        public void Serialize(StringBuilder builder, Action<object, StringBuilder, int> serializeChild, int recursionsLeft)
+        public void SerializeJson(StringBuilder builder, Action<object, StringBuilder, int> serializeChild, int recursionsLeft)
         {
             builder.Append('"');
             builder.Append(Method?.ToLowerInvariant());

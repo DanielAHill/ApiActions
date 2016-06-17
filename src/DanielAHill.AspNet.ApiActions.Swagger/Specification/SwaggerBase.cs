@@ -61,7 +61,7 @@ namespace DanielAHill.AspNet.ApiActions.Swagger.Specification
         /// <summary>
         /// An object to hold data types produced and consumed by operations.
         /// </summary>
-        public object Definitions { get; set; }
+        public SwaggerObjectCollectionFacade<SwaggerDefinition> Definitions { get; set; }
 
         /// <summary>
         /// An object to hold parameters that can be used across operations. This property does not define global parameters for all operations.

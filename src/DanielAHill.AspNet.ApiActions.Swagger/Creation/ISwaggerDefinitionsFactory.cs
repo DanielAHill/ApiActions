@@ -13,10 +13,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 #endregion
-namespace ApiActionsSandbox.Web
+
+using System.Collections.Generic;
+using DanielAHill.AspNet.ApiActions.Swagger.Specification;
+
+namespace DanielAHill.AspNet.ApiActions.Swagger.Creation
 {
-    internal static class ApiCategories
+    public interface ISwaggerDefinitionsFactory
     {
-        internal const string Headers = "Headers";
+        IReadOnlyCollection<SwaggerDefinition> Create(IReadOnlyCollection<IApiActionRegistration> registrations);
     }
 }

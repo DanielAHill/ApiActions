@@ -19,12 +19,12 @@ using System.Text;
 
 namespace DanielAHill.AspNet.ApiActions.Swagger.Specification
 {
-    public class UnofficialResponseStatusCode : ICustomSwaggerSerializable
+    public class UnofficialResponseStatusCode : ICustomSwaggerJsonSerializable
     {
         public int? StatusCode { get; set; }
         public SwaggerResponse Response { get; set; }
 
-        public void Serialize(StringBuilder builder, Action<object, StringBuilder, int> serializeChild, int recursionsLeft)
+        public void SerializeJson(StringBuilder builder, Action<object, StringBuilder, int> serializeChild, int recursionsLeft)
         {
             builder.Append('"');
             builder.Append(StatusCode?.ToString() ?? "default");

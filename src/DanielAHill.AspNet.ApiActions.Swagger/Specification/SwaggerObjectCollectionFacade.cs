@@ -22,7 +22,7 @@ using System.Text;
 
 namespace DanielAHill.AspNet.ApiActions.Swagger.Specification
 {
-    public class SwaggerObjectCollectionFacade<T> : ICollection<T>, ICustomSwaggerSerializable
+    public class SwaggerObjectCollectionFacade<T> : ICollection<T>, ICustomSwaggerJsonSerializable
     {
         private readonly IList<T> _items;
 
@@ -74,7 +74,7 @@ namespace DanielAHill.AspNet.ApiActions.Swagger.Specification
             return _items.Remove(item);
         }
 
-        public void Serialize(StringBuilder builder, Action<object, StringBuilder, int> serializeChild, int recursionsLeft)
+        public void SerializeJson(StringBuilder builder, Action<object, StringBuilder, int> serializeChild, int recursionsLeft)
         {
             var writeComma = false;
 
