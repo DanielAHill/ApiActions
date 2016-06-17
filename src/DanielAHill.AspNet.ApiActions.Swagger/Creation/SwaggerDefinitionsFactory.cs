@@ -27,13 +27,16 @@ namespace DanielAHill.AspNet.ApiActions.Swagger.Creation
     {
         private readonly IApiActionResponseInfoFactory _responseInfoFactory;
         private readonly ISwaggerTypeConverter _swaggerTypeConverter;
+        private readonly ISwaggerDefinitionNameProvider _definitionNameProvider;
 
-        public SwaggerDefinitionsFactory(IApiActionResponseInfoFactory responseInfoFactory, ISwaggerTypeConverter swaggerTypeConverter)
+        public SwaggerDefinitionsFactory(IApiActionResponseInfoFactory responseInfoFactory, ISwaggerTypeConverter swaggerTypeConverter, ISwaggerDefinitionNameProvider definitionNameProvider)
         {
             if (responseInfoFactory == null) throw new ArgumentNullException(nameof(responseInfoFactory));
             if (swaggerTypeConverter == null) throw new ArgumentNullException(nameof(swaggerTypeConverter));
+            if (definitionNameProvider == null) throw new ArgumentNullException(nameof(definitionNameProvider));
             _responseInfoFactory = responseInfoFactory;
             _swaggerTypeConverter = swaggerTypeConverter;
+            _definitionNameProvider = definitionNameProvider;
         }
 
         public IReadOnlyCollection<SwaggerDefinition> Create(IReadOnlyCollection<IApiActionRegistration> registrations)
@@ -44,7 +47,7 @@ namespace DanielAHill.AspNet.ApiActions.Swagger.Creation
             while (typeQueue.Count > 0)
             {
                 var type = typeQueue.Dequeue();
-                var name = GetTypeDefinitionName(type);
+                var name = _definitionNameProvider.GetDefinitionName(type);
 
                 if (!resultsLookup.ContainsKey(name))
                 {
@@ -91,19 +94,10 @@ namespace DanielAHill.AspNet.ApiActions.Swagger.Creation
             if (swaggerType == SwaggerType.Object)
             {
                 typeQueue.Enqueue(propertyReader.PropertyType);
-                return new ReferencedSwaggerProperty() { Name = propertyReader.Name, Reference = GetTypeDefinitionName(propertyReader.PropertyType)};
+                return new ReferencedSwaggerProperty() { Name = propertyReader.Name, Reference = _definitionNameProvider.GetDefinitionName(propertyReader.PropertyType)};
             }
 
             return new TypedSwaggerProperty() {Name = propertyReader.Name, Type = swaggerType};
-        }
-
-        private string GetTypeDefinitionName(Type type)
-        {
-#if DEBUG
-            if (type == null) throw new ArgumentNullException(nameof(type));
-#endif
-            // TODO: Inject interface for behavior
-            return type.FullName;
         }
     }
 }

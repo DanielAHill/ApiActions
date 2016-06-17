@@ -26,12 +26,16 @@ namespace DanielAHill.AspNet.ApiActions.Swagger.Creation
     public class SwaggerPathFactory : ISwaggerPathFactory
     {
         private readonly IApiActionInfoProvider _infoProvider;
+        private readonly ISwaggerResponseFactory _responseFactory;
         private readonly string[] _defaultMethods;
 
-        public SwaggerPathFactory(IApiActionInfoProvider infoProvider, IOptions<SwaggerOptions> optionsAccessor)
+        public SwaggerPathFactory(IApiActionInfoProvider infoProvider, IOptions<SwaggerOptions> optionsAccessor, ISwaggerResponseFactory responseFactory)
         {
             if (infoProvider == null) throw new ArgumentNullException(nameof(infoProvider));
+            if (optionsAccessor == null) throw new ArgumentNullException(nameof(optionsAccessor));
+            if (responseFactory == null) throw new ArgumentNullException(nameof(responseFactory));
             _infoProvider = infoProvider;
+            _responseFactory = responseFactory;
 
             var options = optionsAccessor.Value;
             _defaultMethods = options.DefaultMethods ?? new [] {"GET"};
@@ -67,8 +71,8 @@ namespace DanielAHill.AspNet.ApiActions.Swagger.Creation
                             Description = info.Description,
                             Tags = info.Categories,
                             Summary = info.Summary,
-                            Deprecated = info.IsDeprecated
-                            //Responses = GetResponses(info.Responses)
+                            Deprecated = info.IsDeprecated,
+                            Responses = new SwaggerObjectCollectionFacade<SwaggerResponse>(_responseFactory.Create(info.Responses))
                         }
                     }))
                 }

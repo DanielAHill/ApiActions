@@ -13,14 +13,36 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 #endregion
+
+using System;
+using System.Text;
+
 namespace DanielAHill.AspNet.ApiActions.Swagger.Specification
 {
-    public class SwaggerResponse
+    public class SwaggerResponse : ICustomSwaggerJsonSerializable
     {
+        public string Code { get; set; }
+
         public string Description { get; set; }
 
-        public SwaggerSchema Schema { get; set; }
+        public SwaggerReferenceLink Reference { get; set; }
 
-        public object Ref { get; set; }
+        public void SerializeJson(StringBuilder builder, Action<object, StringBuilder, int> serializeChild, int recursionsLeft)
+        {
+            builder.Append('"');
+            builder.Append(Code);
+            builder.Append("\":{");
+
+            if (!string.IsNullOrWhiteSpace(Description))
+            {
+                builder.Append("\"description\":\"");
+                builder.AppendJsonDelimited(Description);
+                builder.Append("\",");
+            }
+
+            builder.Append("\"schema\":");
+            serializeChild(Reference, builder, recursionsLeft - 1);
+            builder.Append("}");
+        }
     }
 }

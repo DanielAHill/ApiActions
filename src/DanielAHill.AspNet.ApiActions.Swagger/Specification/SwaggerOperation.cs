@@ -93,7 +93,7 @@ namespace DanielAHill.AspNet.ApiActions.Swagger.Specification
         /// <value>
         /// The responses.
         /// </value>
-        public SwaggerObjectCollectionFacade<UnofficialResponseStatusCode> Responses { get; set; }
+        public SwaggerObjectCollectionFacade<SwaggerResponse> Responses { get; set; }
 
         /// <summary>
         /// The transfer protocol(s) for the operation. Values MUST be from the list: "http", "https", "ws", "wss". The value overrides the Swagger Object schemes definition.
