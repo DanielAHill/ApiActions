@@ -19,7 +19,7 @@ using DanielAHill.AspNet.ApiActions.Swagger.Specification;
 
 namespace DanielAHill.AspNet.ApiActions.Swagger.Creation
 {
-    public class SwaggerTypeConverter : ISwaggerTypeConverter
+    public class SwaggerTypeProvider : ISwaggerTypeProvider
     {
         public virtual SwaggerType GetSwaggerType(Type type)
         {
@@ -46,17 +46,35 @@ namespace DanielAHill.AspNet.ApiActions.Swagger.Creation
                 return SwaggerType.Boolean;
             }
 
-            if (typeDetails.IsValue)
-            {
-                return SwaggerType.String;
-            }
-
             if (typeDetails.IsCollection)
             {
                 return SwaggerType.Array;
             }
 
+            if (typeDetails.IsValue)
+            {
+                return SwaggerType.String;
+            }
+
             return SwaggerType.Object;
+        }
+
+        public Type GetTypeToDocument(Type type)
+        {
+            var typeDetails = type.GetTypeDetails();
+
+            if (!typeDetails.IsCollection)
+            {
+                return type;
+            }
+
+            var elementType = type.GetElementType();
+            if (elementType == null && type.GenericTypeArguments != null && type.GenericTypeArguments.Length == 1)
+            {
+                elementType = type.GenericTypeArguments[0];
+            }
+
+            return elementType ?? type;
         }
     }
 }

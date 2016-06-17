@@ -20,10 +20,19 @@ namespace DanielAHill.AspNet.ApiActions.Swagger.Creation
 {
     public class SwaggerDefinitionNameProvider : ISwaggerDefinitionNameProvider
     {
+        private readonly ISwaggerTypeProvider _typeProvider;
+
+        public SwaggerDefinitionNameProvider(ISwaggerTypeProvider typeProvider)
+        {
+            if (typeProvider == null) throw new ArgumentNullException(nameof(typeProvider));
+            _typeProvider = typeProvider;
+        }
+
         public string GetDefinitionName(Type type)
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
-            return type.FullName;
+            
+            return _typeProvider.GetTypeToDocument(type).FullName;
         }
     }
 }

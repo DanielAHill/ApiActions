@@ -19,8 +19,10 @@ using DanielAHill.AspNet.ApiActions.Swagger.Specification;
 
 namespace DanielAHill.AspNet.ApiActions.Swagger.Creation
 {
-    public interface ISwaggerTypeConverter
+    public interface ISwaggerTypeProvider
     {
         SwaggerType GetSwaggerType(Type type);
+
+        Type GetTypeToDocument(Type type);
     }
 }

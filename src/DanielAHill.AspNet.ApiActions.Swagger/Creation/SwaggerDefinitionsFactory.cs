@@ -26,10 +26,10 @@ namespace DanielAHill.AspNet.ApiActions.Swagger.Creation
     public class SwaggerDefinitionsFactory : ISwaggerDefinitionsFactory
     {
         private readonly IApiActionResponseInfoFactory _responseInfoFactory;
-        private readonly ISwaggerTypeConverter _swaggerTypeConverter;
+        private readonly ISwaggerTypeProvider _swaggerTypeConverter;
         private readonly ISwaggerDefinitionNameProvider _definitionNameProvider;
 
-        public SwaggerDefinitionsFactory(IApiActionResponseInfoFactory responseInfoFactory, ISwaggerTypeConverter swaggerTypeConverter, ISwaggerDefinitionNameProvider definitionNameProvider)
+        public SwaggerDefinitionsFactory(IApiActionResponseInfoFactory responseInfoFactory, ISwaggerTypeProvider swaggerTypeConverter, ISwaggerDefinitionNameProvider definitionNameProvider)
         {
             if (responseInfoFactory == null) throw new ArgumentNullException(nameof(responseInfoFactory));
             if (swaggerTypeConverter == null) throw new ArgumentNullException(nameof(swaggerTypeConverter));
@@ -95,6 +95,19 @@ namespace DanielAHill.AspNet.ApiActions.Swagger.Creation
             {
                 typeQueue.Enqueue(propertyReader.PropertyType);
                 return new ReferencedSwaggerProperty() { Name = propertyReader.Name, Reference = _definitionNameProvider.GetDefinitionName(propertyReader.PropertyType)};
+            }
+
+            if (swaggerType == SwaggerType.Array)
+            {
+                var propertyType = _swaggerTypeConverter.GetTypeToDocument(propertyReader.PropertyType);
+
+                typeQueue.Enqueue(propertyType);
+
+                return new ArraySwaggerProperty()
+                {
+                    Name = propertyReader.Name,
+                    Reference = _definitionNameProvider.GetDefinitionName(propertyType)
+                };
             }
 
             return new TypedSwaggerProperty() {Name = propertyReader.Name, Type = swaggerType};

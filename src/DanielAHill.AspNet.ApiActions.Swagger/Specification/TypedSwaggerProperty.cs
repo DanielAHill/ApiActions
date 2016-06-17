@@ -41,4 +41,16 @@ namespace DanielAHill.AspNet.ApiActions.Swagger.Specification
             builder.Append('"');
         }
     }
+
+    public class ArraySwaggerProperty : SwaggerProperty
+    {
+        public string Reference { get; set;}
+
+        protected override void SerializeInner(StringBuilder builder)
+        {
+            builder.Append("\"type\":\"array\",\"items\":{\"$ref\":\"#/definitions/");
+            builder.Append(Reference);
+            builder.Append("\"}");
+        }
+    }
 }
