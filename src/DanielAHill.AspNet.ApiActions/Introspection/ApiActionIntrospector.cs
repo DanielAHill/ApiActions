@@ -101,7 +101,7 @@ namespace DanielAHill.AspNet.ApiActions.Introspection
 
         public virtual string[] CreateCategories(Type apiActionType)
         {
-            return GetAttributes<IHasCategories>(apiActionType).SelectMany(a => a.Tags).Distinct().OrderBy(t => t).ToArray();
+            return GetAttributes<IHasCategories>(apiActionType).SelectMany(a => a.Categories).Distinct().OrderBy(t => t).ToArray();
         }
 
         private static T GetAttribute<T>(Type apiActionType)

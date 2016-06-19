@@ -20,6 +20,6 @@ namespace DanielAHill.AspNet.ApiActions.Introspection
 {
     public interface IHasCategories
     {
-        IReadOnlyCollection<string> Tags { get; } 
+        IReadOnlyCollection<string> Categories { get; } 
     }
 }

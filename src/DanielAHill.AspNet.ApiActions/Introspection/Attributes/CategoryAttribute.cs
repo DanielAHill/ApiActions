@@ -24,11 +24,12 @@ namespace DanielAHill.AspNet.ApiActions
     [AttributeUsage(AttributeTargets.Class)]
     public class CategoryAttribute: Attribute, IHasCategories
     {
-        public IReadOnlyCollection<string> Tags { get; }
+        public IReadOnlyCollection<string> Categories { get; }
 
-        public CategoryAttribute(params string[] tags)
+        public CategoryAttribute(params string[] categories)
         {
-            Tags = tags;
+            if (categories == null) throw new ArgumentNullException(nameof(categories));
+            Categories = categories;
         }
     }
 }
