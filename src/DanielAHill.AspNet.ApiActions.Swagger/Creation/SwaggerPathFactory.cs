@@ -53,7 +53,7 @@ namespace DanielAHill.AspNet.ApiActions.Swagger.Creation
         public IEnumerable<SwaggerPath> GetPaths(IReadOnlyCollection<IApiActionRegistration> registrations)
         {
             if (registrations == null) throw new ArgumentNullException(nameof(registrations));
-            return registrations.Select(GetPath);
+            return CombinePaths(registrations.Select(GetPath));
         }
 
         protected virtual SwaggerPath GetPath(IApiActionRegistration registration)
@@ -127,6 +127,48 @@ namespace DanielAHill.AspNet.ApiActions.Swagger.Creation
             }
 
             return parameters.Count > 0 ? parameters.ToArray() : null;
+        }
+
+        private static IEnumerable<SwaggerPath> CombinePaths(IEnumerable<SwaggerPath> paths)
+        {
+            // Combine duplicate path urls (Swagger 2.0 doesn't support duplicate path urls)
+            var combineDictionary = new Dictionary<string, SwaggerPath>();
+
+            foreach (var path in paths)
+            {
+                SwaggerPath existingPath;
+                if (combineDictionary.TryGetValue(path.Path, out existingPath))
+                {   // Duplicate Detected
+                    Combine(existingPath, path);
+                }
+                else
+                {   // Not a Duplicate
+                    combineDictionary.Add(path.Path, path);
+                }
+            }
+
+            return combineDictionary.Values;
+        }
+
+        /// <summary>
+        /// Attempts to combine two Swagger Paths, as best as possible.
+        /// </summary>
+        /// <param name="destination">The destination.</param>
+        /// <param name="source">The source.</param>
+        /// <remarks>Swagger 2.0 does not support multiple paths with the same url. This may result in incorrect specifications for ApiActions with the same url.</remarks>
+        private static void Combine(SwaggerPath destination, SwaggerPath source)
+        {
+            var duplicateDictionary = destination.Item.Methods.ToDictionary(i => i.Method, i => i);
+
+            foreach (var method in source.Item.Methods)
+            {
+                if (!duplicateDictionary.ContainsKey(method.Method))
+                {
+                    duplicateDictionary.Add(method.Method, method);
+                }
+            }
+
+            destination.Item.Methods = new SwaggerObjectCollectionFacade<UnofficialPathItemMethod>(duplicateDictionary.Values);
         }
     }
 }
