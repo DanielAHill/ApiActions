@@ -24,7 +24,7 @@ using Newtonsoft.Json;
 
 namespace DanielAHill.AspNet.ApiActions.Serialization
 {
-    public class NewtonsoftJsonEdgeSerializer : IEdgeSerializer
+    public class JsonEdgeSerializer : IEdgeSerializer
     {
         private const string ContentType = "application/json";
 

@@ -30,7 +30,7 @@ namespace DanielAHill.AspNet.ApiActions
         /// <value>
         /// The response to send the client
         /// </value>
-        ApiActionResponse Response { get; }
+        ApiActionResponse ActionResponse { get; }
 
         Task InitializeAsync(IApiActionInitializationContext initializationContext, CancellationToken cancellationToken);
         Task AuthorizeAsync(CancellationToken cancellationToken);

@@ -1,0 +1,40 @@
+{
+  "dependencies": {
+    "ApiActions.TodoMvc.Domain": "1.0.0-*",
+    "DanielAHill.AspNet.ApiActions": "1.0.0-alpha-*",
+    "DanielAHill.AspNet.ApiActions.Swagger": "1.0.0-alpha-*",
+    "Microsoft.AspNet.Cors":"6.0.0-rc1-final",
+    "Microsoft.AspNet.IISPlatformHandler": "1.0.0-rc1-final",
+    "Microsoft.AspNet.Server.Kestrel": "1.0.0-rc1-final",
+    "Microsoft.AspNet.StaticFiles": "1.0.0-rc1-final"
+  },
+  "tools": {
+    "Microsoft.AspNetCore.Server.IISIntegration.Tools": {
+      "version": "1.0.0-preview1-final",
+      "imports": "portable-net45+win8+dnxcore50"
+    }
+  },
+  "frameworks": {
+    "dnx451": { },
+    "dotnet5.4": { }
+  },
+  "buildOptions": {
+    "emitEntryPoint": true,
+    "preserveCompilationContext": true
+  },
+  "runtimeOptions": {
+    "gcServer": true
+  },
+  "publishOptions": {
+    "include": [
+      "wwwroot",
+      "web.config"
+    ]
+  },
+  "scripts": {
+    "postpublish": [ "dotnet publish-iis --publish-folder %publish:OutputPath% --framework %publish:FullTargetFramework%" ]
+  },
+  "commands": {
+    "web": "Microsoft.AspNet.Server.Kestrel"
+  }
+}

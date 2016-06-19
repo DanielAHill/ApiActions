@@ -28,7 +28,7 @@ namespace ApiActionsSandbox.Web.Echo
     {
         public override Task<ApiActionResponse> ExecuteAsync(CancellationToken cancellationToken)
         {
-            return Respond(new
+            return Response(new
             {
                 YourText = Data.Text,
                 Length = Data.Text.Length

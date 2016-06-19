@@ -79,7 +79,7 @@ namespace Microsoft.Extensions.DependencyInjection
             // Edge Serialization
             services.AddSingleton(typeof (IEdgeDeserializer), typeof (EdgeDeserializer));
             services.AddSingleton(typeof (IEdgeSerializerProvider), typeof (EdgeSerializerProvider));
-            services.AddSingleton(typeof (IEdgeSerializer), typeof (NewtonsoftJsonEdgeSerializer));
+            services.AddSingleton(typeof (IEdgeSerializer), typeof (JsonEdgeSerializer));
 
             // Versioning
             services.AddSingleton(typeof (IRequestVersionProvider), typeof (RequestVersionProvider));

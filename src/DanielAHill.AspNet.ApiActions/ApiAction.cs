@@ -45,7 +45,7 @@ namespace DanielAHill.AspNet.ApiActions
         /// <value>
         /// The response to send the client
         /// </value>
-        public ApiActionResponse Response { get; protected set; }
+        public ApiActionResponse ActionResponse { get; protected set; }
 
         private IAuthFilterProvider _apiActionAuthorizationProvider;
         private HttpContext _httpContext;
@@ -87,7 +87,7 @@ namespace DanielAHill.AspNet.ApiActions
             }
 
             var results = await Task.WhenAll(authorizationAttributes.Select(a => a.AuthorizeAsync(_httpContext, AbstractModel, cancellationToken))).ConfigureAwait(false);
-            Response = Response ?? results.FirstOrDefault(r => r != null);
+            ActionResponse = ActionResponse ?? results.FirstOrDefault(r => r != null);
         }
         #endregion
 
@@ -111,22 +111,22 @@ namespace DanielAHill.AspNet.ApiActions
 
         #region Response Helpers
 
-        protected ApiActionResponse Respond()
+        protected ApiActionResponse Response()
         {
-            return Respond(NoContentResponse.Singleton);
+            return Response(NoContentResponse.Singleton);
         }
 
-        protected ApiActionResponse Respond(HttpStatusCode statusCode)
+        protected ApiActionResponse Response(HttpStatusCode statusCode)
         {
-            return Respond(new StatusCodeResponse(statusCode));
+            return Response(new StatusCodeResponse(statusCode));
         }
 
-        protected ApiActionResponse Respond(int statusCode)
+        protected ApiActionResponse Response(int statusCode)
         {
-            return Respond(new StatusCodeResponse(statusCode));
+            return Response(new StatusCodeResponse(statusCode));
         }
 
-        protected ApiActionResponse Respond<T>(T data)
+        protected ApiActionResponse Response<T>(T data)
         {
             var response = _responseAbstractFactory.Create(typeof(T))?.Create(data, typeof(T));
 
@@ -135,16 +135,16 @@ namespace DanielAHill.AspNet.ApiActions
                 throw new InvalidOperationException($"No responses could be generated for type {typeof(T)}. Please explicitly state inherited type using generic parameter or register custom IApiActionResponseFactory into dependency injection.");
             }
 
-            return Respond(response);
+            return Response(response);
         }
 
-        protected ApiActionResponse Respond<T>(HttpStatusCode statusCode, T data)
+        protected ApiActionResponse Response<T>(HttpStatusCode statusCode, T data)
         {
-            return Respond<T>((int) statusCode, data);
+            return Response<T>((int) statusCode, data);
         }
 
         // ReSharper disable once MemberCanBePrivate.Global
-        protected ApiActionResponse Respond<T>(int statusCode, T data)
+        protected ApiActionResponse Response<T>(int statusCode, T data)
         {
             var response = _responseAbstractFactory.Create(typeof(T))?.Create(statusCode, data, typeof (T));
 
@@ -153,23 +153,23 @@ namespace DanielAHill.AspNet.ApiActions
                 throw new InvalidOperationException($"No responses could be generated for type {typeof (T)}. Please explicitly state inherited type using generic parameter or register custom IApiActionResponseFactory into dependency injection.");
             }
 
-            return Respond(response);
+            return Response(response);
         }
 
-        protected ApiActionResponse Respond(Stream data, string contentType)
+        protected ApiActionResponse Response(Stream data, string contentType)
         {
-            return Respond(new StreamResponse(data, contentType));
+            return Response(new StreamResponse(data, contentType));
         }
 
         protected ApiActionResponse Respond(int statusCode, Stream data, string contentType)
         {
-            return Respond(new StreamResponse(statusCode, data, contentType));
+            return Response(new StreamResponse(statusCode, data, contentType));
         }
 
         // ReSharper disable once MemberCanBePrivate.Global
-        protected ApiActionResponse Respond(ApiActionResponse response)
+        protected ApiActionResponse Response(ApiActionResponse response)
         {
-            Response = response;
+            ActionResponse = response;
             return response;
         }
 
@@ -196,7 +196,7 @@ namespace DanielAHill.AspNet.ApiActions
                 return Task.FromResult(true);
             }
 
-            Respond(modelErrors);
+            Response(modelErrors);
 
             return Task.FromResult(false);
         }

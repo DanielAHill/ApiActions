@@ -32,7 +32,7 @@ namespace ApiActionsSandbox.Web.Time
         {
             if (Guid.NewGuid().GetHashCode() % 100 == 0)
             {
-                return Respond(HttpStatusCode.Unauthorized);
+                return Response(HttpStatusCode.Unauthorized);
             }
 
             return Task.FromResult(true);
@@ -41,7 +41,7 @@ namespace ApiActionsSandbox.Web.Time
         [Response(200, Type = typeof(ResponseModel))]
         public override Task<ApiActionResponse> ExecuteAsync(CancellationToken cancellationToken)
         {
-            return Respond(new ResponseModel { Utc = DateTime.UtcNow, Local = DateTime.Now});
+            return Response(new ResponseModel { Utc = DateTime.UtcNow, Local = DateTime.Now});
         }
 
         private class ResponseModel

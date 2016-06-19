@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{A0F8276B-9A98-4DF7-B988-B0DC7CACF7ED}"
 EndProject
@@ -25,6 +25,10 @@ EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "DanielAHill.AspNet.ApiActions.UnitTests", "test\DanielAHill.AspNet.ApiActions.UnitTests\DanielAHill.AspNet.ApiActions.UnitTests.xproj", "{91042B7E-C8EE-432D-A0C2-940954DB5CBB}"
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "DanielAHill.AspNet.ApiActions.Swagger", "src\DanielAHill.AspNet.ApiActions.Swagger\DanielAHill.AspNet.ApiActions.Swagger.xproj", "{69611B47-C93C-4CE8-A694-B0DFFDF1EFFF}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ApiActions.TodoMvc.Web", "samples\ApiActions.TodoMvc.Web\ApiActions.TodoMvc.Web.xproj", "{F0E737BD-2A38-4488-81BA-F6C03696A790}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ApiActions.TodoMvc.Domain", "samples\ApiActions.TodoMvc.Domain\ApiActions.TodoMvc.Domain.xproj", "{7045643A-777A-466A-9603-7704D3D0389D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -60,6 +64,14 @@ Global
 		{69611B47-C93C-4CE8-A694-B0DFFDF1EFFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{69611B47-C93C-4CE8-A694-B0DFFDF1EFFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{69611B47-C93C-4CE8-A694-B0DFFDF1EFFF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0E737BD-2A38-4488-81BA-F6C03696A790}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0E737BD-2A38-4488-81BA-F6C03696A790}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0E737BD-2A38-4488-81BA-F6C03696A790}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0E737BD-2A38-4488-81BA-F6C03696A790}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7045643A-777A-466A-9603-7704D3D0389D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7045643A-777A-466A-9603-7704D3D0389D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7045643A-777A-466A-9603-7704D3D0389D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7045643A-777A-466A-9603-7704D3D0389D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -72,5 +84,7 @@ Global
 		{65204B8D-93A1-4A12-919E-D473A2458CD5} = {7314D962-9479-46E3-987A-1B5A77EBE069}
 		{91042B7E-C8EE-432D-A0C2-940954DB5CBB} = {7314D962-9479-46E3-987A-1B5A77EBE069}
 		{69611B47-C93C-4CE8-A694-B0DFFDF1EFFF} = {D5ADB894-50B3-437A-8C23-168B902E9DFC}
+		{F0E737BD-2A38-4488-81BA-F6C03696A790} = {A0F8276B-9A98-4DF7-B988-B0DC7CACF7ED}
+		{7045643A-777A-466A-9603-7704D3D0389D} = {A0F8276B-9A98-4DF7-B988-B0DC7CACF7ED}
 	EndGlobalSection
 EndGlobal

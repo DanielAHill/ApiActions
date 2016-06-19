@@ -58,16 +58,16 @@ namespace DanielAHill.AspNet.ApiActions.Execution
                 await _preExecutionTasks[x](apiAction, cancellationToken).ConfigureAwait(false);
 
                 cancellationToken.ThrowIfCancellationRequested();
-                if (apiAction.Response != null)
+                if (apiAction.ActionResponse != null)
                 {
-                    return apiAction.Response;
+                    return apiAction.ActionResponse;
                 }
             }
 
             // ExecuteAsync
-            var response = await apiAction.ExecuteAsync(cancellationToken).ConfigureAwait(false) ?? apiAction.Response;
+            var response = await apiAction.ExecuteAsync(cancellationToken).ConfigureAwait(false) ?? apiAction.ActionResponse;
             cancellationToken.ThrowIfCancellationRequested();
-            return response ?? apiAction.Response ?? NoContentResponse.Singleton;
+            return response ?? apiAction.ActionResponse ?? NoContentResponse.Singleton;
         }
     }
 }
