@@ -9,6 +9,7 @@ namespace ApiActions.TodoMvc.Web.Todo
 {
     [Delete]
     [UrlSuffix("{Id:int}")]
+    [Category("TodoMVC Backend Implementation")]
     public class DeleteSingle : ApiAction<DeleteSingle.Request>
     {
         private readonly ITodoRepository _todoRepository;

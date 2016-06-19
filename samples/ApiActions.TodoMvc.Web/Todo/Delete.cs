@@ -7,6 +7,7 @@ using DanielAHill.AspNet.ApiActions;
 namespace ApiActions.TodoMvc.Web.Todo
 {
     [Delete]
+    [Category("TodoMVC Backend Implementation")]
     public class Delete : ApiAction
     {
         private readonly ITodoRepository _todoRepository;

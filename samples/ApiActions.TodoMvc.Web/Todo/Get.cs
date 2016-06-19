@@ -7,7 +7,7 @@ using ApiActions.TodoMvc.Domain;
 namespace ApiActions.TodoMvc.Web.Todo
 {
     [Get]
-    [Category()]
+    [Category("TodoMVC Backend Implementation")]
     public class Get : ApiAction
     {
         private readonly ITodoRepository _todoRepository;

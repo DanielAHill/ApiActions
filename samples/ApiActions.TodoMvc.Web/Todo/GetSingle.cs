@@ -9,6 +9,7 @@ namespace ApiActions.TodoMvc.Web.Todo
 {
     [Get]
     [UrlSuffix("{Id:int}")]
+    [Category("TodoMVC Backend Implementation")]
     public class GetSingle : ApiAction<GetSingle.Request>
     {
         private readonly ITodoRepository _todoRepository;

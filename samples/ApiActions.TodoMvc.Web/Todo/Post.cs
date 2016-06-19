@@ -7,6 +7,7 @@ using DanielAHill.AspNet.ApiActions;
 namespace ApiActions.TodoMvc.Web.Todo
 {
     [Post]
+    [Category("TodoMVC Backend Implementation")]
     public class Post : ApiAction<TodoEntry>
     {
         private readonly ITodoRepository _todoRepository;

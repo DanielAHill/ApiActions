@@ -9,6 +9,7 @@ namespace ApiActions.TodoMvc.Web.Todo
 {
     [Patch]
     [UrlSuffix("{Id:int}")]
+    [Category("TodoMVC Backend Implementation")]
     public class PatchSingle : ApiAction<TodoEntry>
     {
         private readonly ITodoRepository _todoRepository;
