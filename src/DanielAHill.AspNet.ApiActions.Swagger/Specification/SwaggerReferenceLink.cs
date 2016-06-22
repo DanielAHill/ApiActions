@@ -13,7 +13,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 #endregion
-
 using System;
 using System.Text;
 
@@ -23,7 +22,7 @@ namespace DanielAHill.AspNet.ApiActions.Swagger.Specification
     {
         public string Link { get; set; }
 
-        public void SerializeJson(StringBuilder builder, Action<object, StringBuilder, int> serializeChild, int recursionsLeft)
+        public virtual void SerializeJson(StringBuilder builder, Action<object, StringBuilder, int> serializeChild, int recursionsLeft)
         {
             builder.Append("{\"$ref\":\"");
             builder.Append(Link);

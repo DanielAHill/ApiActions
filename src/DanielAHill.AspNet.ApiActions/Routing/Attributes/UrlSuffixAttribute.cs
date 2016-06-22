@@ -13,7 +13,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 #endregion
-
 using System;
 
 // ReSharper disable once CheckNamespace - Targeting Attributes should be in the namespace of their target

@@ -13,7 +13,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 #endregion
-
 using Microsoft.AspNet.Routing;
 
 namespace DanielAHill.AspNet.ApiActions.Serialization

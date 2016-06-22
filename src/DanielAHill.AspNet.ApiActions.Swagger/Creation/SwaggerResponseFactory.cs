@@ -13,7 +13,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 #endregion
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,12 +33,35 @@ namespace DanielAHill.AspNet.ApiActions.Swagger.Creation
 
         public IEnumerable<SwaggerResponse> Create(IEnumerable<IApiActionResponseInfo> responseInfos)
         {
-            return responseInfos.Select(ri => new SwaggerResponse()
+            return responseInfos.Select(Create).ToList();
+        }
+
+        private SwaggerResponse Create(IApiActionResponseInfo responseInfo)
+        {
+            var response = new SwaggerResponse()
             {
-                Code = ri.StatusCode.ToString(),
-                Description = ri.Description,
-                Reference = ri.ResponseData == null ? null : new SwaggerReferenceLink() { Link = "#/definitions/" + _definitionNameProvider.GetDefinitionName(ri.ResponseData) }
-            }).ToList();
+                Code = responseInfo.StatusCode.ToString(),
+                Description = responseInfo.Description,
+            };
+
+            if (responseInfo.ResponseData == null)
+            {
+                return response;
+            }
+
+            var typeDetails = responseInfo.ResponseData.GetTypeDetails();
+            var link = "#/definitions/" + _definitionNameProvider.GetDefinitionName(responseInfo.ResponseData);
+
+            if (typeDetails.IsCollection)
+            {
+                response.Reference = new SwaggerSchemaReferenceLink() { Type = SwaggerType.Array, Link = link };
+            }
+            else
+            {
+                response.Reference = new SwaggerReferenceLink { Link = link }; ;
+            }
+
+            return response;
         }
     }
 }

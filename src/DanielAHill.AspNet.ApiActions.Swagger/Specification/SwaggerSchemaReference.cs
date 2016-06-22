@@ -14,11 +14,21 @@
 // limitations under the License.
 #endregion
 using System;
+using System.Text;
 
-namespace DanielAHill.AspNet.ApiActions.Introspection
+namespace DanielAHill.AspNet.ApiActions.Swagger.Specification
 {
-    public interface IApiActionInfoProvider
+    public class SwaggerSchemaReferenceLink : SwaggerReferenceLink
     {
-        IApiActionInfo GetInfo(Type apiActionType);
+        public SwaggerType Type { get; set; }
+
+        public override void SerializeJson(StringBuilder builder, Action<object, StringBuilder, int> serializeChild, int recursionsLeft)
+        {
+            builder.Append("{\"type\":\"");
+            builder.Append(Type.ToString().ToLowerInvariant());
+            builder.Append("\",\"items\":");
+            base.SerializeJson(builder, serializeChild, recursionsLeft);
+            builder.Append("}");
+        }
     }
 }
