@@ -27,20 +27,23 @@ namespace DanielAHill.AspNet.ApiActions.Swagger.Creation
         private readonly IApiActionResponseInfoFactory _responseInfoFactory;
         private readonly ISwaggerSchemaFactory _schemaFactory;
         private readonly ISwaggerDefinitionNameProvider _definitionNameProvider;
+        private readonly ISwaggerTypeProvider _typeProvider;
 
-        public SwaggerDefinitionsFactory(IApiActionResponseInfoFactory responseInfoFactory, ISwaggerSchemaFactory schemaFactory, ISwaggerDefinitionNameProvider definitionNameProvider)
+        public SwaggerDefinitionsFactory(IApiActionResponseInfoFactory responseInfoFactory, ISwaggerSchemaFactory schemaFactory, ISwaggerDefinitionNameProvider definitionNameProvider, ISwaggerTypeProvider typeProvider)
         {
             if (responseInfoFactory == null) throw new ArgumentNullException(nameof(responseInfoFactory));
             if (schemaFactory == null) throw new ArgumentNullException(nameof(schemaFactory));
             if (definitionNameProvider == null) throw new ArgumentNullException(nameof(definitionNameProvider));
+            if (typeProvider == null) throw new ArgumentNullException(nameof(typeProvider));
             _responseInfoFactory = responseInfoFactory;
             _schemaFactory = schemaFactory;
             _definitionNameProvider = definitionNameProvider;
+            _typeProvider = typeProvider;
         }
 
         public IReadOnlyCollection<SwaggerDefinition> Create(IReadOnlyCollection<IApiActionRegistration> registrations)
         {
-            var typeQueue = new Queue<Type>(registrations.SelectMany(r => _responseInfoFactory.CreateResponses(r.ApiActionType)).Select(ri => ri.ResponseData).Where(t => t != null));
+            var typeQueue = new Queue<Type>(registrations.SelectMany(r => _responseInfoFactory.CreateResponses(r.ApiActionType)).Select(ri => ri.ResponseData).Where(t => t != null).Select(t => _typeProvider.GetTypeToDocument(t)));
             var resultsLookup = new Dictionary<string, SwaggerDefinition>();
 
             while (typeQueue.Count > 0)
