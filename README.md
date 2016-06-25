@@ -104,7 +104,7 @@ The second significant difference is the lack of the `HttpGet` attribute. This r
 The API Actions library is a very robust, extensible, and powerful framework. It gives developers complete control over url routes, data inputs, input/output serialization, authorization, versioning, and more. The full, updated, documentation can be found online at https://danielahill.gitbooks.io/apiactions/, including a downloadable PDF and formats for common e-book readers.
 
 ## License
-Copyright (c)2015-2016 Daniel Alan Hill. All rights reserved.
+Copyright (c)2015-2016 Daniel A Hill. All rights reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
