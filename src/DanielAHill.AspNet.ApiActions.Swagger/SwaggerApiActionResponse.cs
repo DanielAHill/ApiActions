@@ -22,6 +22,7 @@ using System.Threading.Tasks;
 using DanielAHill.AspNet.ApiActions.Serialization;
 using DanielAHill.AspNet.ApiActions.Swagger.Specification;
 using Microsoft.AspNet.Http;
+using System.Linq;
 
 namespace DanielAHill.AspNet.ApiActions.Swagger
 {

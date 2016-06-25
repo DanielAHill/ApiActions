@@ -118,12 +118,12 @@ namespace DanielAHill.AspNet.ApiActions
 
         protected ApiActionResponse Response(HttpStatusCode statusCode)
         {
-            return Response(new StatusCodeResponse(statusCode));
+            return Response((ApiActionResponse)new StatusCodeResponse(statusCode));
         }
 
         protected ApiActionResponse Response(int statusCode)
         {
-            return Response(new StatusCodeResponse(statusCode));
+            return Response((ApiActionResponse)new StatusCodeResponse(statusCode));
         }
 
         protected ApiActionResponse Response<T>(T data)

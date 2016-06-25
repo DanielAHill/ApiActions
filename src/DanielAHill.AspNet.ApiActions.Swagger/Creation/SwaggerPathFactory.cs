@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using DanielAHill.AspNet.ApiActions.Introspection;
 using DanielAHill.AspNet.ApiActions.Swagger.Specification;
 using Microsoft.Extensions.OptionsModel;
@@ -30,6 +31,8 @@ namespace DanielAHill.AspNet.ApiActions.Swagger.Creation
         private readonly ISwaggerDefinitionNameProvider _definitionNameProvider;
         private readonly ISwaggerSchemaFactory _schemaFactory;
         private readonly string[] _defaultMethods;
+
+        private static readonly Regex RouteParameterRegex = new Regex(@"{(?<name>\w+)(:\w+)?}", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
 
         public SwaggerPathFactory(IApiActionInfoProvider infoProvider, IOptions<SwaggerOptions> optionsAccessor, 
             ISwaggerResponseFactory responseFactory, 
@@ -69,7 +72,7 @@ namespace DanielAHill.AspNet.ApiActions.Swagger.Creation
 
             var path = new SwaggerPath
             {
-                Path = "/" + registration.Route,
+                Path = "/" + RemoveTypesFromRoute(registration.Route),
                 Item = new SwaggerPathItem
                 {
                     Methods = new SwaggerObjectCollectionFacade<UnofficialPathItemMethod>(methods.Select(m => new UnofficialPathItemMethod
@@ -93,6 +96,14 @@ namespace DanielAHill.AspNet.ApiActions.Swagger.Creation
 
         private SwaggerParameter[] GetParameters(IApiActionRegistration registration, IApiActionInfo info)
         {
+            if (registration == null) throw new ArgumentNullException(nameof(registration));
+            if (info == null) throw new ArgumentNullException(nameof(info));
+
+            if (registration.Route == null)
+            {
+                throw new InvalidOperationException("Registration must have a route");
+            }
+            
             // TODO: Move this method to factory
 
             if (info.RequestType == null)
@@ -106,22 +117,38 @@ namespace DanielAHill.AspNet.ApiActions.Swagger.Creation
 
             var propertyDetails = info.RequestType.GetTypeDetails().PropertyWriters;
 
+            var routeParameterNames = GetRouteParameterNames(registration.Route);
+
             foreach (var property in propertyDetails)
             {
                 var parameter = new SwaggerParameter()
                 {
                     Name = property.Name,
-                    Schema = _schemaFactory.Create(property.PropertyType, property.PropertyType.GetTypeDetails().PropertyWriters)
+                    Schema = _schemaFactory.Create(property.PropertyType, property.PropertyType.GetTypeDetails().PropertyWriters),
+                    // TODO: Add Description
+                    // TODO: Add Required
                 };
 
                 // Check for url
-                
+                if (routeParameterNames.Contains(property.Name.ToLowerInvariant()))
+                {
+                    parameter.In = SwaggerRequestLocation.path;
+                    parameter.Required = true; // All Route Parameters are Required
+                }
+                else
+
                 // Check for file
 
                 // Check for body
-
-                // Set as Query Parameter
-                parameter.In = SwaggerRequestLocation.query;
+                //if (supportsBody)
+                //{
+                //    parameter.In = SwaggerRequestLocation.body;
+                //}
+                //else
+                {
+                    // Set as Query Parameter
+                    parameter.In = SwaggerRequestLocation.query;
+                }
 
                 parameters.Add(parameter);
             }
@@ -169,6 +196,20 @@ namespace DanielAHill.AspNet.ApiActions.Swagger.Creation
             }
 
             destination.Item.Methods = new SwaggerObjectCollectionFacade<UnofficialPathItemMethod>(duplicateDictionary.Values);
+        }
+
+        private static IReadOnlyCollection<string> GetRouteParameterNames(string route)
+        {
+            if (route == null) throw new ArgumentNullException(nameof(route));
+
+            return RouteParameterRegex.Matches(route).OfType<Match>().Select(m => m.Groups["name"].Value.ToLowerInvariant()).ToList();
+        }
+
+        private static string RemoveTypesFromRoute(string route)
+        {
+            if (route == null) throw new ArgumentNullException(nameof(route));
+
+            return RouteParameterRegex.Replace(route, m => string.Concat("{", m.Groups["name"].Value, "}"));
         }
     }
 }

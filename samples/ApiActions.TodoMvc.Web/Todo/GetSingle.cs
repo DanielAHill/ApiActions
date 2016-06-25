@@ -53,6 +53,7 @@ namespace ApiActions.TodoMvc.Web.Todo
         public class Request
         {
             [Required]
+            [Description("Todo Identifier")]
             public int Id { get; set; }
         }
     }
