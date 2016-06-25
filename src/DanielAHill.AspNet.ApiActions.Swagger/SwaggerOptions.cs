@@ -26,15 +26,15 @@ namespace DanielAHill.AspNet.ApiActions.Swagger
 
         #region Swagger Info
         public string Title { get; set; }
-        public string Description { get; set; } = "This is a description of the API";
-        public string TermsOfService { get; set; } = "This is the Terms of Service";
+        public string Description { get; set; }
+        public string TermsOfService { get; set; }
 
-        public string ContactName { get; set; } = "Contact Name";
-        public string ContactEmail { get; set; } = "insert@e.mail";
-        public string ContactUrl { get; set; } = "http://www.google.com/webhp?q=contact+info";
+        public string ContactName { get; set; }
+        public string ContactEmail { get; set; }
+        public string ContactUrl { get; set; }
 
-        public string LicenseName { get; set; } = "Unknown License";
-        public string LicenseUrl { get; set; } = "https://www.google.com/webhp?q=unknown+license";
+        public string LicenseName { get; set; }
+        public string LicenseUrl { get; set; }
 
         #endregion
 
