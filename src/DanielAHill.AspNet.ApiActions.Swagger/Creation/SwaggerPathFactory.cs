@@ -16,10 +16,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+// ReSharper disable once RedundantUsingDirective
+using System.Reflection;
 using DanielAHill.AspNet.ApiActions.Introspection;
 using DanielAHill.AspNet.ApiActions.Swagger.Specification;
+using Microsoft.AspNet.Http;
 using Microsoft.Extensions.OptionsModel;
 
 namespace DanielAHill.AspNet.ApiActions.Swagger.Creation
@@ -111,14 +115,15 @@ namespace DanielAHill.AspNet.ApiActions.Swagger.Creation
                 return null;
             }
 
-            var parameters = new List<SwaggerParameter>();
-
-            var supportsBody = info.Methods.Any(m => !"GET".Equals(m, StringComparison.OrdinalIgnoreCase));
-
             var propertyDetails = info.RequestType.GetTypeDetails().PropertyWriters;
 
             var routeParameterNames = GetRouteParameterNames(registration.Route);
 
+            var routeParameters = new List<SwaggerParameter>();
+            var nonRouteParameters = new List<SwaggerParameter>(propertyDetails.Count);
+
+            var includesFile = false;
+            
             foreach (var property in propertyDetails)
             {
                 var parameter = new SwaggerParameter()
@@ -134,26 +139,44 @@ namespace DanielAHill.AspNet.ApiActions.Swagger.Creation
                 {
                     parameter.In = SwaggerRequestLocation.path;
                     parameter.Required = true; // All Route Parameters are Required
+                    routeParameters.Add(parameter);
+                    continue;
                 }
-                else
-
+                
                 // Check for file
-
-                // Check for body
-                //if (supportsBody)
-                //{
-                //    parameter.In = SwaggerRequestLocation.body;
-                //}
-                //else
+                if (!includesFile && (typeof (IFormFile).IsAssignableFrom(property.PropertyType) || typeof(Stream).IsAssignableFrom(property.PropertyType)))
                 {
-                    // Set as Query Parameter
-                    parameter.In = SwaggerRequestLocation.query;
+                    includesFile = true;
                 }
 
-                parameters.Add(parameter);
+                nonRouteParameters.Add(parameter);
             }
 
-            return parameters.Count > 0 ? parameters.ToArray() : null;
+            var supportsBody = !info.Methods.Any(m => "GET".Equals(m, StringComparison.OrdinalIgnoreCase));
+
+            if (!includesFile && supportsBody)
+            {
+                //if (routeParameterNames.Count == 0)
+                {
+                    return new []
+                    {
+                        new SwaggerParameter() { Name="Body", In = SwaggerRequestLocation.body, Required = true, SchemaLink = new SwaggerReferenceLink() { Link = "#/definitions/" + _definitionNameProvider.GetDefinitionName(info.RequestType) } }
+                    };
+                }
+
+                //throw new NotImplementedException();
+            }
+            else
+            {
+                var location = includesFile ? SwaggerRequestLocation.formData : SwaggerRequestLocation.query;
+                foreach (var param in nonRouteParameters)
+                {
+                    param.In = location;
+                }
+            }
+
+            var parameters = nonRouteParameters.Concat(routeParameters).ToArray();
+            return parameters.Length > 0 ? parameters : null;
         }
 
         private static IEnumerable<SwaggerPath> CombinePaths(IEnumerable<SwaggerPath> paths)
@@ -192,6 +215,16 @@ namespace DanielAHill.AspNet.ApiActions.Swagger.Creation
                 if (!duplicateDictionary.ContainsKey(method.Method))
                 {
                     duplicateDictionary.Add(method.Method, method);
+                }
+            }
+
+            destination.Item.Parameters = (destination.Item.Parameters ?? new SwaggerParameter[0]).Union(source.Item.Parameters ?? new SwaggerParameter[0]).ToArray();
+
+            foreach (var param in destination.Item.Parameters)
+            {
+                if (param.In != SwaggerRequestLocation.path)
+                {
+                    param.Required = false;
                 }
             }
 

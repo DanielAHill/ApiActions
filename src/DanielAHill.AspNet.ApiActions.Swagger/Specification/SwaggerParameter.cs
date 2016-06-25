@@ -13,14 +13,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 #endregion
+
+using System;
+
 namespace DanielAHill.AspNet.ApiActions.Swagger.Specification
 {
-    public class SwaggerParameter
+    public class SwaggerParameter : IEquatable<SwaggerParameter>
     {
         public string Name { get; set; }
         public SwaggerRequestLocation In { get; set; }
         public string Description { get; set; }
         public bool Required { get; set; }
         public SwaggerSchema Schema { get; set; }
+
+        public SwaggerReferenceLink SchemaLink { get; set; }
+        public bool Equals(SwaggerParameter other)
+        {
+            return other != null && Name.Equals(other.Name, StringComparison.OrdinalIgnoreCase);
+        }
+
+        public override int GetHashCode()
+        {
+            return Name?.ToLowerInvariant().GetHashCode() ?? 0;
+        }
     }
 }
