@@ -1,0 +1,37 @@
+﻿#region Copyright
+// Copyright (c) 2016 Daniel A Hill. All rights reserved.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+#endregion
+
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Net.Http.Headers;
+
+namespace DanielAHill.AspNetCore.ApiActions.Serialization
+{
+    public interface IEdgeSerializer
+    {
+        /// <summary>
+        /// Gets the accepted content types that can be returned by the serializer. Used for introspection.
+        /// </summary>
+        /// <value>
+        /// The content types.
+        /// </value>
+        string[] ContentTypes { get; }
+
+        bool Handles(MediaTypeHeaderValue mediaType);
+        Task SerializeAsync(object value, HttpResponse response, CancellationToken cancellationToken);
+    }
+}

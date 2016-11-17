@@ -1,23 +1,5 @@
-﻿################################################################################
-# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
-################################################################################
-
-/.vs
+*.suo
 *.user
-/artifacts/bin/DanielAHill.AspNet.WebActions/Debug
-/artifacts/bin/DanielAHill.AspNet.WebActions/Release
-/samples/artifacts/bin/WebActionsSandbox.Web/Debug
-/src/DanielAHill.AspNet.WebActions.Abstractions/project.lock.json
-/packages
-project.lock.json
-/artifacts/bin/DanielAHill.AspNet.ApiActions/Debug
-/artifacts/bin/DanielAHill.AspNet.ApiActions/Release
-/artifacts/bin/DanielAHill.AspNet.ApiActions.Abstractions/Debug
-/artifacts/bin/DanielAHill.AspNet.ApiActions.Abstractions/Release
-/DanielAHill.AspNet.ApiActions.sln.log
-/artifacts
-/packages
-/test/DanielAHill.AspNet.ApiActions.UnitTests/testresults.xml
-/test/DanielAHill.AspNet.ApiActions.Abstractions.UnitTests/testresults.xml
-/DanielAHill.AspNet.ApiActions.sln.GhostDoc.xml
-/samples/ApiActionsSandbox.Web/Properties/PublishProfiles
+*.lock.json
+obj
+bin

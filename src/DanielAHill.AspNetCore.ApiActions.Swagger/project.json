@@ -1,0 +1,33 @@
+{
+  "title": "Api Actions - Swagger",
+  "authors": [ "Daniel A Hill" ],
+  "copyright": "Copyright (c) 2015-2016 Daniel A Hill. All rights reserved.",
+
+  "version": "0.1.0-*",
+
+  "dependencies": {
+    "DanielAHill.AspNetCore.ApiActions": "0.1.0",
+    "DanielAHill.AspNetCore.ApiActions.Abstractions": "0.1.0",
+    "NETStandard.Library": "1.6.0",
+    "Microsoft.AspNetCore.Routing": "1.0.1",
+    "Microsoft.Extensions.DependencyInjection": "1.0.0",
+    "Microsoft.AspNetCore.Http": "1.0.0"
+  },
+
+  "frameworks": {
+    "netstandard1.6": {
+      "imports": "dnxcore50"
+    }
+  },
+
+  "packOptions": {
+    "licenseUrl": "http://www.apache.org/licenses/LICENSE-2.0",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/danielahill/ApiActions"
+    },
+    "projectUrl": "http://www.apiactions.net",
+    "summary": "Swagger 2.0 Auto Documentation for ApiActions",
+    "tags": [ "aspnet", "aspnetcore", "apiactions", "openapi", "swagger", "swagger2", "codegen" ]
+  }
+}

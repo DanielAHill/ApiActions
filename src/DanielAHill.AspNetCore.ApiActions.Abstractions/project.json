@@ -1,0 +1,27 @@
+﻿{
+  "title": "Api Actions Abractions",
+  "authors": [ "Daniel A Hill" ],
+  "copyright": "Copyright (c) 2015-2016 Daniel A Hill. All rights reserved.",
+  "dependencies": {
+    "NETStandard.Library": "1.6.0",
+    "Microsoft.AspNetCore.Routing": "1.0.1",
+    "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0",
+    "Microsoft.AspNetCore.Http.Abstractions": "1.0.0"
+  },
+  "frameworks": {
+    "netstandard1.6": {
+      "imports": "dnxcore50"
+    }
+  },
+  "packOptions": {
+    "licenseUrl": "http://www.apache.org/licenses/LICENSE-2.0",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/danielahill/ApiActions"
+    },
+    "projectUrl": "http://www.apiactions.net",
+    "summary": "API Middleware for AspNet with emphasis on REST-ful capabilities, versioning, performance, and extensibility",
+    "tags": [ "aspnet", "aspnetcore", "api", "apiactions" ]
+  },
+  "version": "0.1.0-*"
+}
