@@ -1,4 +1,4 @@
-#DanielAHill.AspNet.ApiActions
+#ApiActions
 API Middleware for AspNet with emphasis on REST-ful capabilities, versioning, performance, and extensibility.
 
 ## Build Status
@@ -46,7 +46,7 @@ Create a folder called `Hello` at the base of your web project. Inside this fold
 
     using System.Threading;
     using System.Threading.Tasks;
-    using DanielAHill.AspNet.ApiActions;
+    using DanielAHill.AspNetCore.ApiActions;
 
     [HttpGet]
     namespace (YourWebProjectName).Hello
@@ -70,7 +70,7 @@ Create a folder called `Reply` at the base of your web project. Inside this fold
 
     using System.Threading;
     using System.Threading.Tasks;
-    using DanielAHill.AspNet.ApiActions;
+    using DanielAHill.AspNetCore.ApiActions;
 
     namespace (YourWebProjectName).Reply
     {
