@@ -25,8 +25,8 @@ namespace ApiActions.Sample.Swagger.Api.Time
 {
     [Post]
     [Summary("Displays information about requested time zone")]
-    [DanielAHill.AspNetCore.ApiActions.Description("Demonstrates how to validate request data, following basic validation of format by overriding the ValidateModelDataAsync method.")]
-    [DanielAHill.AspNetCore.ApiActions.Category(SwaggerCategories.Validation)]
+    [Description("Demonstrates how to validate request data, following basic validation of format by overriding the ValidateModelDataAsync method.")]
+    [Category(SwaggerCategories.Validation)]
     public class Post : ApiAction<Post.RequestModel>
     {
         private TimeZoneInfo _timeZone;
@@ -41,7 +41,7 @@ namespace ApiActions.Sample.Swagger.Api.Time
 
             if (_timeZone == null)
             {
-                Response(new ValidationResult[]
+                Response(new []
                 {
                     new ValidationResult($"Time Zone Not Found. Try: {TimeZoneInfo.Local.Id}",
                         new[] {"TimeZone"})

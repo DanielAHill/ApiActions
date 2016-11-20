@@ -6,12 +6,12 @@
     "NETStandard.Library": "1.6.1",
     "Newtonsoft.Json": "9.0.1",
     "DanielAHill.AspNetCore.ApiActions.Abstractions": "0.0.0.1-dev",
-    "DanielAHill.Reflection": "0.1.1611.2002",
     "System.ComponentModel.Annotations": "4.3.0",
     "System.ComponentModel.TypeConverter": "4.3.0",
     "Microsoft.AspNetCore.Http": "1.1.0",
     "Microsoft.AspNetCore.Routing": "1.1.0",
-    "Microsoft.Extensions.DependencyInjection": "1.1.0"
+    "Microsoft.Extensions.DependencyInjection": "1.1.0",
+    "DanielAHill.Reflection": "0.1.1611.2003"
   },
   "frameworks": {
     "netstandard1.6": {},
