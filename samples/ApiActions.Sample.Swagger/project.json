@@ -1,8 +1,8 @@
 ﻿{
   "dependencies": {
-    "DanielAHill.AspNetCore.ApiActions": "0.1.0-*",
-    "DanielAHill.AspNetCore.ApiActions.Abstractions": "0.1.0-*",
-    "DanielAHill.AspNetCore.ApiActions.Swagger": "0.1.0-*",
+    "DanielAHill.AspNetCore.ApiActions": "0.0.0.1-dev",
+    "DanielAHill.AspNetCore.ApiActions.Abstractions": "0.0.0.1-dev",
+    "DanielAHill.AspNetCore.ApiActions.Swagger": "0.0.0.1-dev",
     "Microsoft.AspNetCore.Diagnostics": "1.1.0",
     "Microsoft.AspNetCore.Server.IISIntegration": "1.1.0",
     "Microsoft.AspNetCore.Server.Kestrel": "1.1.0",

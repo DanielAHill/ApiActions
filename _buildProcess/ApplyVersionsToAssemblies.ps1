@@ -16,7 +16,7 @@
 
 # Regular expression pattern to find the version in the build number 
 # and then apply it to the assemblies
-$VersionRegex = '"version"\W*:\W*".+?"'
+$VersionRegex = '"0\.0\.0\.1-dev"'
 
 # If this script is not running on a build server, remind user to 
 # set environment variables so that this script can be debugged
@@ -53,7 +53,7 @@ if (-not $Env:BUILD_BUILDNUMBER)
 Write-Host "BUILD_BUILDNUMBER: $Env:BUILD_BUILDNUMBER"
 
 # Get version data
-$RegExReplace = '"version": "' + $Env:BUILD_BUILDNUMBER + '"'
+$RegExReplace = '"' + $Env:BUILD_BUILDNUMBER + '"'
 Write-Host $RegExReplace
 
 # Apply the version to the assembly property files

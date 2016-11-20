@@ -2,12 +2,10 @@
   "title": "Api Actions - Swagger",
   "authors": [ "Daniel A Hill" ],
   "copyright": "Copyright (c) 2015-2016 Daniel A Hill. All rights reserved.",
-
-  "version": "0.1.0-*",
-
+  "version": "0.0.0.1-dev",
   "dependencies": {
-    "DanielAHill.AspNetCore.ApiActions": "0.1.0",
-    "DanielAHill.AspNetCore.ApiActions.Abstractions": "0.1.0",
+    "DanielAHill.AspNetCore.ApiActions": "0.0.0.1-dev",
+    "DanielAHill.AspNetCore.ApiActions.Abstractions": "0.0.0.1-dev",
     "NETStandard.Library": "1.6.1",
     "Microsoft.AspNetCore.Http": "1.1.0",
     "Microsoft.AspNetCore.Routing": "1.1.0",
