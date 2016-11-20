@@ -15,6 +15,7 @@
 #endregion
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using DanielAHill.AspNetCore.ApiActions.Versioning;
@@ -100,7 +101,9 @@ namespace DanielAHill.AspNetCore.ApiActions.Introspection
 
         public virtual string[] CreateCategories(Type apiActionType)
         {
-            return GetAttributes<IHasCategories>(apiActionType).SelectMany(a => a.Categories).Distinct().OrderBy(t => t).ToArray();
+            return GetAttributes<IHasCategories>(apiActionType).SelectMany(a => a.Categories)
+                .Concat(GetAttributes<CategoryAttribute>(apiActionType).Select(a => a.Category))
+                .Distinct().OrderBy(t => t).ToArray();
         }
 
         private static T GetAttribute<T>(Type apiActionType)
