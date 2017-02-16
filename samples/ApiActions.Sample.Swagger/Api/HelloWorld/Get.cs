@@ -15,6 +15,7 @@
 #endregion
 
 using System.ComponentModel;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using DanielAHill.AspNetCore.ApiActions;
@@ -29,7 +30,19 @@ namespace ApiActions.Sample.Swagger.Api.HelloWorld
     {
         public override Task<ApiActionResponse> ExecuteAsync(CancellationToken cancellationToken)
         {
-            return Response(new {Hello = "World"});
+            var sBuilder = new StringBuilder();
+
+            for (var x = 0; x < 1000; x++)
+            {
+                sBuilder.Append(x);
+                sBuilder.Append(@"\r\n");
+            }
+
+            return Response(new
+            {
+                Hello = "World",
+                Numbers = sBuilder.ToString()
+            });
         }
     }
 }

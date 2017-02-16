@@ -44,9 +44,9 @@ namespace DanielAHill.AspNetCore.ApiActions.Swagger
             Serialize(_root, builder, 50);
 
             var bytes = Encoding.UTF8.GetBytes(builder.ToString());
+            httpContext.Response.ContentLength = bytes.Length;
 
             var response = httpContext.Response;
-            
             return response.Body.WriteAsync(bytes, 0, bytes.Length, cancellationToken);
         }
 
