@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 using DanielAHill.AspNetCore.ApiActions.AbstractModeling.Application;
 using DanielAHill.AspNetCore.ApiActions.Routing;
 using DanielAHill.AspNetCore.ApiActions.Serialization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.DependencyInjection;
@@ -98,9 +99,6 @@ namespace DanielAHill.AspNetCore.ApiActions.Execution
 
                 // Send Response
                 await response.WriteAsync(context.HttpContext, edgeSerializer, cancellationToken);
-                await context.HttpContext.Response.Body.FlushAsync(cancellationToken);
-                //context.IsHandled = true;
-                // TODO: What happened to IsHandled?
             }
             catch (Exception ex)
             {
@@ -114,9 +112,6 @@ namespace DanielAHill.AspNetCore.ApiActions.Execution
                     {
                         // Send Detailed Response
                         await response.WriteAsync(context.HttpContext, edgeSerializer, cancellationToken);
-                        await context.HttpContext.Response.Body.FlushAsync(cancellationToken);
-                        //context.IsHandled = true;
-                        // TODO: What happened to IsHandled?
                     }
                 }
             }

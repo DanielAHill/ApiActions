@@ -54,11 +54,7 @@ namespace DanielAHill.AspNetCore.ApiActions.Serialization
             // Set Content Type
             response.ContentType = ContentType;
 
-            using (var writer = new StreamWriter(response.Body, Encoding.UTF8, 1024, true))
-            {
-                await writer.WriteAsync(JsonConvert.SerializeObject(value));
-                await writer.FlushAsync();
-            }
+            await response.WriteAsync(JsonConvert.SerializeObject(value), Encoding.UTF8, cancellationToken);
         }
     }
 }
