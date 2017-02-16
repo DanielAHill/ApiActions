@@ -45,8 +45,8 @@ namespace DanielAHill.AspNetCore.ApiActions.Responses
             httpContext.Response.StatusCode = _statusCode;
             var sWriter = new StreamWriter(httpContext.Response.Body);
 
-            await sWriter.WriteAsync(_data).ConfigureAwait(false);
-            await sWriter.FlushAsync().ConfigureAwait(false);
+            await sWriter.WriteAsync(_data);
+            await sWriter.FlushAsync();
         }
     }
 }

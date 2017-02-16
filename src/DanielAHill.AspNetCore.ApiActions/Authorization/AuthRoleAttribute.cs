@@ -62,7 +62,7 @@ namespace DanielAHill.AspNetCore.ApiActions.Authorization
 
         public override async Task<ApiActionResponse> AuthorizeAsync(HttpContext context, AbstractModel abstractModel, CancellationToken cancellationToken)
         {
-            var result = await base.AuthorizeAsync(context, abstractModel, cancellationToken).ConfigureAwait(false);
+            var result = await base.AuthorizeAsync(context, abstractModel, cancellationToken);
 
             if (result == null && _roles.Any(r => !context.User.IsInRole(r)))
             {

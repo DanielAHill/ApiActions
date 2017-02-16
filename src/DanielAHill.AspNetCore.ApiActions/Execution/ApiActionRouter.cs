@@ -79,17 +79,17 @@ namespace DanielAHill.AspNetCore.ApiActions.Execution
                 }
 
                 // DeserializeAsync Element
-                var abstractModel = await _edgeDeserializer.DeserializeAsync(new AbstractModelApplicationRequestContextRouteContextWrapper(context), cancellationToken).ConfigureAwait(false);
+                var abstractModel = await _edgeDeserializer.DeserializeAsync(new AbstractModelApplicationRequestContextRouteContextWrapper(context), cancellationToken);
 
                 // InitializeAsync web action
-                await apiAction.InitializeAsync(new ApiActionInitializationContext(context, abstractModel), cancellationToken).ConfigureAwait(false);
+                await apiAction.InitializeAsync(new ApiActionInitializationContext(context, abstractModel), cancellationToken);
 
                 // ExecuteAsync with appropriate executioner
                 var requestModelApiAction = apiAction as IRequestModelApiAction;
                 var executeTask = requestModelApiAction == null
                     ? _apiActionExecutioner.ExecuteAsync(apiAction, cancellationToken)
                     : _requestModelApiActionExecutioner.ExecuteAsync(requestModelApiAction, cancellationToken);
-                var response = await executeTask.ConfigureAwait(false);
+                var response = await executeTask;
 
                 if (response == null)
                 {
@@ -97,8 +97,8 @@ namespace DanielAHill.AspNetCore.ApiActions.Execution
                 }
 
                 // Send Response
-                await response.WriteAsync(context.HttpContext, edgeSerializer, cancellationToken).ConfigureAwait(false);
-                await context.HttpContext.Response.Body.FlushAsync(cancellationToken).ConfigureAwait(false);
+                await response.WriteAsync(context.HttpContext, edgeSerializer, cancellationToken);
+                await context.HttpContext.Response.Body.FlushAsync(cancellationToken);
                 //context.IsHandled = true;
                 // TODO: What happened to IsHandled?
             }
@@ -113,8 +113,8 @@ namespace DanielAHill.AspNetCore.ApiActions.Execution
                     if (response != null)
                     {
                         // Send Detailed Response
-                        await response.WriteAsync(context.HttpContext, edgeSerializer, cancellationToken).ConfigureAwait(false);
-                        await context.HttpContext.Response.Body.FlushAsync(cancellationToken).ConfigureAwait(false);
+                        await response.WriteAsync(context.HttpContext, edgeSerializer, cancellationToken);
+                        await context.HttpContext.Response.Body.FlushAsync(cancellationToken);
                         //context.IsHandled = true;
                         // TODO: What happened to IsHandled?
                     }

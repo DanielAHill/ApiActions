@@ -58,7 +58,7 @@ namespace DanielAHill.AspNetCore.ApiActions.Responses
 
             if (_data != null)
             {
-                await edgeSerializer.SerializeAsync(_data, httpContext.Response, cancellationToken).ConfigureAwait(false);
+                await edgeSerializer.SerializeAsync(_data, httpContext.Response, cancellationToken);
             }
         }
     }

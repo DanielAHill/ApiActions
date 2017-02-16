@@ -86,7 +86,7 @@ namespace DanielAHill.AspNetCore.ApiActions
                 return;
             }
 
-            var results = await Task.WhenAll(authorizationAttributes.Select(a => a.AuthorizeAsync(_httpContext, AbstractModel, cancellationToken))).ConfigureAwait(false);
+            var results = await Task.WhenAll(authorizationAttributes.Select(a => a.AuthorizeAsync(_httpContext, AbstractModel, cancellationToken)));
             ActionResponse = ActionResponse ?? results.FirstOrDefault(r => r != null);
         }
         #endregion

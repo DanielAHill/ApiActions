@@ -40,7 +40,7 @@ namespace DanielAHill.AspNetCore.ApiActions.AbstractModeling.Application
 
         public async Task ApplyAsync(IAbstractModelApplicationRequestContext context, AbstractModel abstractModel, CancellationToken cancellationToken)
         {
-            var formCollection = await new FormFeature(context.Form).ReadFormAsync(cancellationToken).ConfigureAwait(false);
+            var formCollection = await new FormFeature(context.Form).ReadFormAsync(cancellationToken);
 
             foreach (var key in formCollection.Keys)
             {

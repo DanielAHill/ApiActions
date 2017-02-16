@@ -43,7 +43,7 @@ namespace DanielAHill.AspNetCore.ApiActions.Serialization
                 var applicator = _abstractModelApplicators[x];
                 if (applicator.Handles(context))
                 {
-                    await applicator.ApplyAsync(context, abstractModel, cancellationToken).ConfigureAwait(false);
+                    await applicator.ApplyAsync(context, abstractModel, cancellationToken);
                 }
             }
 

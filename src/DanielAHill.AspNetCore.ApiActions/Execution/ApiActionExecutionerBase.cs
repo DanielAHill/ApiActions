@@ -54,7 +54,7 @@ namespace DanielAHill.AspNetCore.ApiActions.Execution
             // ReSharper disable once ForCanBeConvertedToForeach
             for (var x = 0; x < _preExecutionTasks.Length; x++)
             {
-                await _preExecutionTasks[x](apiAction, cancellationToken).ConfigureAwait(false);
+                await _preExecutionTasks[x](apiAction, cancellationToken);
 
                 cancellationToken.ThrowIfCancellationRequested();
                 if (apiAction.ActionResponse != null)
@@ -64,7 +64,7 @@ namespace DanielAHill.AspNetCore.ApiActions.Execution
             }
 
             // ExecuteAsync
-            var response = await apiAction.ExecuteAsync(cancellationToken).ConfigureAwait(false) ?? apiAction.ActionResponse;
+            var response = await apiAction.ExecuteAsync(cancellationToken) ?? apiAction.ActionResponse;
             cancellationToken.ThrowIfCancellationRequested();
             return response ?? apiAction.ActionResponse ?? NoContentResponse.Singleton;
         }
