@@ -14,15 +14,9 @@
 // limitations under the License.
 #endregion
 using System;
-using System.Net;
 using System.Threading.Tasks;
-using DanielAHill.AspNetCore.ApiActions.AbstractModeling.Application;
-using DanielAHill.AspNetCore.ApiActions.Routing;
 using DanielAHill.AspNetCore.ApiActions.Serialization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.Options;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace DanielAHill.AspNetCore.ApiActions.Execution
 {
@@ -32,6 +26,7 @@ namespace DanielAHill.AspNetCore.ApiActions.Execution
         private readonly IRequestModelApiActionExecutioner _requestModelApiActionExecutioner;
         private readonly IEdgeDeserializer _edgeDeserializer;
         private readonly IEdgeSerializerProvider _edgeSerializerProvider;
+        private static readonly Task CompletedTask = Task.FromResult(true);
 
         public ApiActionRouter(IEdgeDeserializer edgeDeserializer,
             IEdgeSerializerProvider edgeSerializerProvider,
@@ -48,73 +43,10 @@ namespace DanielAHill.AspNetCore.ApiActions.Execution
             _requestModelApiActionExecutioner = requestModelApiActionExecutioner;
         }
 
-        public async Task RouteAsync(RouteContext context)
+        public Task RouteAsync(RouteContext context)
         {
-            var cancellationToken = context.HttpContext.RequestAborted;
-
-            var edgeSerializer = _edgeSerializerProvider.Get(context);
-            if (edgeSerializer == null)
-            {   // No Edge Serializer
-                context.HttpContext.Response.StatusCode = (int)HttpStatusCode.UnsupportedMediaType;
-                return;
-            }
-
-            try
-            {
-                var apiActionType = (Type) context.RouteData.DataTokens[RouteDataKeys.ApiActionType];
-
-                // Get ApiAction
-                var apiAction = (IApiAction) context.HttpContext.RequestServices.GetService(apiActionType);
-
-                if (apiAction == null)
-                {
-                    try
-                    {
-                        // TODO: Use refelection to generate compiled anon method to speed up construction
-                        apiAction = (IApiAction)Activator.CreateInstance(apiActionType);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new InvalidOperationException($"Could not instantiate ApiAction {apiActionType}. Ensure action is registered into dependency injection or has a public paramerless constructor.", ex);
-                    }
-                }
-
-                // DeserializeAsync Element
-                var abstractModel = await _edgeDeserializer.DeserializeAsync(new AbstractModelApplicationRequestContextRouteContextWrapper(context), cancellationToken);
-
-                // InitializeAsync web action
-                await apiAction.InitializeAsync(new ApiActionInitializationContext(context, abstractModel), cancellationToken);
-
-                // ExecuteAsync with appropriate executioner
-                var requestModelApiAction = apiAction as IRequestModelApiAction;
-                var executeTask = requestModelApiAction == null
-                    ? _apiActionExecutioner.ExecuteAsync(apiAction, cancellationToken)
-                    : _requestModelApiActionExecutioner.ExecuteAsync(requestModelApiAction, cancellationToken);
-                var response = await executeTask;
-
-                if (response == null)
-                {
-                    throw new InvalidOperationException("Web Action Executioner did not return a result");
-                }
-
-                // Send Response
-                await response.WriteAsync(context.HttpContext, edgeSerializer, cancellationToken);
-            }
-            catch (Exception ex)
-            {
-                var options = context.HttpContext.RequestServices.GetRequiredService<IOptions<ApiActionConfiguration>>().Value;
-
-                if (options.ReturnDetailedServerErrors)
-                {
-                    var response = context.HttpContext.RequestServices.GetRequiredService<IApiActionResponseAbstractFactory>().Create(ex.GetType())?.Create(ex, ex.GetType());
-
-                    if (response != null)
-                    {
-                        // Send Detailed Response
-                        await response.WriteAsync(context.HttpContext, edgeSerializer, cancellationToken);
-                    }
-                }
-            }
+            context.Handler = new ApiActionRouteHandler(_edgeDeserializer, _edgeSerializerProvider, _apiActionExecutioner, _requestModelApiActionExecutioner, context.RouteData).Handle;
+            return CompletedTask;
         }
 
         public VirtualPathData GetVirtualPath(VirtualPathContext context)

@@ -28,16 +28,17 @@ namespace DanielAHill.AspNetCore.ApiActions.Execution
         public IReadOnlyDictionary<string, object> RouteDataTokens { get; }
         public IDictionary<string, object> RouteValues { get; }
 
-        internal ApiActionInitializationContext(RouteContext routeContext, AbstractModel abstractModel)
+        internal ApiActionInitializationContext(HttpContext httpContext, RouteData routeData, AbstractModel abstractModel)
         {
 #if DEBUG
-            if (routeContext == null) throw new ArgumentNullException(nameof(routeContext));
+            if (httpContext == null) throw new ArgumentNullException(nameof(httpContext));
+            if (routeData == null) throw new ArgumentNullException(nameof(routeData));
             if (abstractModel == null) throw new ArgumentNullException(nameof(abstractModel));
 #endif
-            HttpContext = routeContext.HttpContext;
+            HttpContext = httpContext;
             AbstractModel = abstractModel;
-            RouteDataTokens = (IReadOnlyDictionary<string, object>)routeContext.RouteData.DataTokens;
-            RouteValues = routeContext.RouteData.Values;
+            RouteDataTokens = routeData.DataTokens;
+            RouteValues = routeData.Values;
         }
     }
 }

@@ -36,9 +36,9 @@ namespace DanielAHill.AspNetCore.ApiActions.Serialization
             _serializers = serializers.ToArray();
         }
 
-        public IEdgeSerializer Get(RouteContext context)
+        public IEdgeSerializer Get(HttpContext context)
         {
-            return Get(context.HttpContext.Request.GetTypedHeaders().Accept);
+            return Get(context.Request.GetTypedHeaders().Accept);
         }
 
         private IEdgeSerializer Get(IEnumerable<MediaTypeHeaderValue> acceptHeader)

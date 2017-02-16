@@ -13,12 +13,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 #endregion
-using Microsoft.AspNetCore.Routing;
+
+using Microsoft.AspNetCore.Http;
 
 namespace DanielAHill.AspNetCore.ApiActions.Serialization
 {
     public interface IEdgeSerializerProvider
     {
-        IEdgeSerializer Get(RouteContext context);
+        IEdgeSerializer Get(HttpContext context);
     }
 }

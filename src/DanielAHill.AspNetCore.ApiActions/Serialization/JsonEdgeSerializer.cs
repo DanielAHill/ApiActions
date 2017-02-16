@@ -53,10 +53,7 @@ namespace DanielAHill.AspNetCore.ApiActions.Serialization
 
             // Set Content Type
             response.ContentType = ContentType;
-            var serializedValue = JsonConvert.SerializeObject(value);
-            response.ContentLength = serializedValue.Length;
-
-            await response.WriteAsync(serializedValue, Encoding.UTF8, cancellationToken);
+            await response.WriteAsync(JsonConvert.SerializeObject(value), Encoding.UTF8, cancellationToken);
         }
     }
 }

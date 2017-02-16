@@ -25,33 +25,35 @@ namespace DanielAHill.AspNetCore.ApiActions.AbstractModeling.Application
 {
     internal class AbstractModelApplicationRequestContextRouteContextWrapper : IAbstractModelApplicationRequestContext
     {
-        private readonly RouteContext _routeContext;
+        private readonly HttpContext _httpContext;
 
-        public IServiceProvider RequestServices { get { return _routeContext.HttpContext.RequestServices; } }
-        public IDictionary<object, object> Items { get { return _routeContext.HttpContext.Items; } }
-        public RouteData RouteData { get { return _routeContext.RouteData; } }
-        public ClaimsPrincipal User { get { return _routeContext.HttpContext.User; } }
-        public ConnectionInfo Connection { get { return _routeContext.HttpContext.Connection; } }
-        public IFeatureCollection Features { get { return _routeContext.HttpContext.Features; } }
-        public IRequestCookieCollection Cookies { get { return _routeContext.HttpContext.Request.Cookies; } }
-        
-        public Stream Stream { get { return _routeContext.HttpContext.Request.Body; }}
-        public string ContentType { get { return _routeContext.HttpContext.Request.ContentType; }}
+        public IServiceProvider RequestServices => _httpContext.RequestServices;
+        public IDictionary<object, object> Items => _httpContext.Items;
+        public RouteData RouteData { get; }
 
-        public string TraceIdentifier { get { return _routeContext.HttpContext.TraceIdentifier; }}
+        public ClaimsPrincipal User => _httpContext.User;
+        public ConnectionInfo Connection => _httpContext.Connection;
+        public IFeatureCollection Features => _httpContext.Features;
+        public IRequestCookieCollection Cookies => _httpContext.Request.Cookies;
 
-        public IFormCollection Form { get { return _routeContext.HttpContext.Request.Form; }}
+        public Stream Stream => _httpContext.Request.Body;
+        public string ContentType => _httpContext.Request.ContentType;
 
-        public IQueryCollection Query { get { return _routeContext.HttpContext.Request.Query; }}
-        public QueryString QueryString { get { return _routeContext.HttpContext.Request.QueryString; }}
+        public string TraceIdentifier => _httpContext.TraceIdentifier;
 
-        internal AbstractModelApplicationRequestContextRouteContextWrapper(RouteContext routeContext)
+        public IFormCollection Form => _httpContext.Request.Form;
+
+        public IQueryCollection Query => _httpContext.Request.Query;
+        public QueryString QueryString => _httpContext.Request.QueryString;
+
+        internal AbstractModelApplicationRequestContextRouteContextWrapper(HttpContext httpContext, RouteData routeData)
         {
 #if DEBUG
-            if (routeContext == null) throw new ArgumentNullException(nameof(routeContext));
+            if (httpContext == null) throw new ArgumentNullException(nameof(httpContext));
+            if (routeData == null) throw new ArgumentNullException(nameof(routeData));
 #endif
-
-            _routeContext = routeContext;
+            _httpContext = httpContext;
+            RouteData = routeData;
         }
     }
 }
