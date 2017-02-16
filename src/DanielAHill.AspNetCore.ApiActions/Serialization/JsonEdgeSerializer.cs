@@ -15,6 +15,7 @@
 #endregion
 using System;
 using System.IO;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -53,9 +54,11 @@ namespace DanielAHill.AspNetCore.ApiActions.Serialization
             // Set Content Type
             response.ContentType = ContentType;
 
-            var writer = new StreamWriter(response.Body);
-            await writer.WriteAsync(JsonConvert.SerializeObject(value));
-            await writer.FlushAsync();
+            using (var writer = new StreamWriter(response.Body, Encoding.UTF8, 1024, true))
+            {
+                await writer.WriteAsync(JsonConvert.SerializeObject(value));
+                await writer.FlushAsync();
+            }
         }
     }
 }
