@@ -1,5 +1,5 @@
 ﻿{
-  "title": "Api Actions Abractions",
+  "title": "DanielAHill.AspNetCore.ApiActions.Abstractions",
   "authors": [ "Daniel A Hill" ],
   "copyright": "Copyright (c) 2015-2016 Daniel A Hill. All rights reserved.",
   "dependencies": {
