@@ -26,7 +26,7 @@ namespace DanielAHill.AspNetCore.ApiActions.AbstractModeling.Application
 
         public bool Handles(IAbstractModelApplicationRequestContext context)
         {
-            return "application/json".Equals(context.ContentType, StringComparison.OrdinalIgnoreCase);
+            return context.ContentType != null && context.ContentType.StartsWith("application/json", StringComparison.OrdinalIgnoreCase);
         }
 
         private static readonly char[] ObjectStartChar = { '{' };
