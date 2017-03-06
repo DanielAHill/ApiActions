@@ -3,3 +3,4 @@
 *.lock.json
 obj
 bin
+/samples/ApiActions.Sample.Swagger/Properties/PublishProfiles
