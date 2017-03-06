@@ -43,6 +43,10 @@ namespace DanielAHill.AspNetCore.ApiActions.Swagger.Creation
         public IReadOnlyCollection<SwaggerDefinition> Create(IReadOnlyCollection<IApiActionRegistration> registrations)
         {
             var typeQueue = new Queue<Type>(registrations.SelectMany(r => _responseInfoFactory.CreateResponses(r.ApiActionType)).Select(ri => ri.ResponseData).Where(t => t != null).Select(t => _typeProvider.GetTypeToDocument(t)));
+
+            // Add Requests to Queue
+
+
             var resultsLookup = new Dictionary<string, SwaggerDefinition>();
 
             while (typeQueue.Count > 0)

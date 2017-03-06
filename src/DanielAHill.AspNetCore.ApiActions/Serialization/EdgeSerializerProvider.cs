@@ -16,7 +16,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using Microsoft.AspNetCore.Http;
@@ -38,11 +37,14 @@ namespace DanielAHill.AspNetCore.ApiActions.Serialization
 
         public IEdgeSerializer Get(HttpContext context)
         {
-            return Get(context.Request.GetTypedHeaders().Accept);
+            return Get(context.Request.GetTypedHeaders().Accept ?? new MediaTypeHeaderValue[0]);
         }
 
         private IEdgeSerializer Get(IEnumerable<MediaTypeHeaderValue> acceptHeader)
         {
+#if DEBUG
+            if (acceptHeader == null) throw new ArgumentNullException(nameof(acceptHeader));
+#endif
             MediaTypeHeaderValue defaultAccepts;
 
             foreach (var accepts in acceptHeader)
