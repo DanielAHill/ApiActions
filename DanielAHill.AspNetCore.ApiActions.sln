@@ -1,24 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{8BCCB5A9-174A-4E3B-AA31-F028C102F4F0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{967A30ED-BAEB-4A1A-84A4-3C2B02A2CACC}"
-	ProjectSection(SolutionItems) = preProject
-		global.json = global.json
-	EndProjectSection
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "DanielAHill.AspNetCore.ApiActions", "src\DanielAHill.AspNetCore.ApiActions\DanielAHill.AspNetCore.ApiActions.xproj", "{FBDE6845-BB2D-4CCB-A241-69503AA1C81D}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "DanielAHill.AspNetCore.ApiActions.Abstractions", "src\DanielAHill.AspNetCore.ApiActions.Abstractions\DanielAHill.AspNetCore.ApiActions.Abstractions.xproj", "{0BA25C69-F218-414A-A61E-EAF5F490F60A}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "DanielAHill.AspNetCore.ApiActions.Swagger", "src\DanielAHill.AspNetCore.ApiActions.Swagger\DanielAHill.AspNetCore.ApiActions.Swagger.xproj", "{F1A1AA88-9431-48B2-8B8E-839CB03E342F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{A7241889-CB5D-4067-952A-E1271E2DC11F}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ApiActions.Sample.Swagger", "samples\ApiActions.Sample.Swagger\ApiActions.Sample.Swagger.xproj", "{28CC41C1-491E-4230-815D-38698DB8628A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DanielAHill.AspNetCore.ApiActions", "src\DanielAHill.AspNetCore.ApiActions\DanielAHill.AspNetCore.ApiActions.csproj", "{FBDE6845-BB2D-4CCB-A241-69503AA1C81D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DanielAHill.AspNetCore.ApiActions.Abstractions", "src\DanielAHill.AspNetCore.ApiActions.Abstractions\DanielAHill.AspNetCore.ApiActions.Abstractions.csproj", "{0BA25C69-F218-414A-A61E-EAF5F490F60A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DanielAHill.AspNetCore.ApiActions.Swagger", "src\DanielAHill.AspNetCore.ApiActions.Swagger\DanielAHill.AspNetCore.ApiActions.Swagger.csproj", "{F1A1AA88-9431-48B2-8B8E-839CB03E342F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiActions.Sample.Swagger", "samples\ApiActions.Sample.Swagger\ApiActions.Sample.Swagger.csproj", "{28CC41C1-491E-4230-815D-38698DB8628A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
