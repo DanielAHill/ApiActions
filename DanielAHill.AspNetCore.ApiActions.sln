@@ -1,21 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.10
+VisualStudioVersion = 15.0.26823.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{8BCCB5A9-174A-4E3B-AA31-F028C102F4F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DanielAHill.AspNetCore.ApiActions", "src\DanielAHill.AspNetCore.ApiActions\DanielAHill.AspNetCore.ApiActions.csproj", "{99B20D7C-0FAA-4E7F-845F-E0D26BDE19DE}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{967A30ED-BAEB-4A1A-84A4-3C2B02A2CACC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DanielAHill.AspNetCore.ApiActions.Abstractions", "src\DanielAHill.AspNetCore.ApiActions.Abstractions\DanielAHill.AspNetCore.ApiActions.Abstractions.csproj", "{CA5434D1-F8AA-4810-875C-3544AEA3005B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{A7241889-CB5D-4067-952A-E1271E2DC11F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DanielAHill.AspNetCore.ApiActions.Swagger", "src\DanielAHill.AspNetCore.ApiActions.Swagger\DanielAHill.AspNetCore.ApiActions.Swagger.csproj", "{01FE857D-56A7-4E85-9D9F-47CF7C0A8E1E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DanielAHill.AspNetCore.ApiActions", "src\DanielAHill.AspNetCore.ApiActions\DanielAHill.AspNetCore.ApiActions.csproj", "{FBDE6845-BB2D-4CCB-A241-69503AA1C81D}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DanielAHill.AspNetCore.ApiActions.Abstractions", "src\DanielAHill.AspNetCore.ApiActions.Abstractions\DanielAHill.AspNetCore.ApiActions.Abstractions.csproj", "{0BA25C69-F218-414A-A61E-EAF5F490F60A}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DanielAHill.AspNetCore.ApiActions.Swagger", "src\DanielAHill.AspNetCore.ApiActions.Swagger\DanielAHill.AspNetCore.ApiActions.Swagger.csproj", "{F1A1AA88-9431-48B2-8B8E-839CB03E342F}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiActions.Sample.Swagger", "samples\ApiActions.Sample.Swagger\ApiActions.Sample.Swagger.csproj", "{28CC41C1-491E-4230-815D-38698DB8628A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiActions.Sample.Swagger", "samples\ApiActions.Sample.Swagger\ApiActions.Sample.Swagger.csproj", "{B5F81F95-DA41-4A4E-9BCB-9BD685E73177}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,30 +17,27 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{FBDE6845-BB2D-4CCB-A241-69503AA1C81D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FBDE6845-BB2D-4CCB-A241-69503AA1C81D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FBDE6845-BB2D-4CCB-A241-69503AA1C81D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FBDE6845-BB2D-4CCB-A241-69503AA1C81D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0BA25C69-F218-414A-A61E-EAF5F490F60A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0BA25C69-F218-414A-A61E-EAF5F490F60A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0BA25C69-F218-414A-A61E-EAF5F490F60A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0BA25C69-F218-414A-A61E-EAF5F490F60A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F1A1AA88-9431-48B2-8B8E-839CB03E342F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F1A1AA88-9431-48B2-8B8E-839CB03E342F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F1A1AA88-9431-48B2-8B8E-839CB03E342F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F1A1AA88-9431-48B2-8B8E-839CB03E342F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{28CC41C1-491E-4230-815D-38698DB8628A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{28CC41C1-491E-4230-815D-38698DB8628A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{28CC41C1-491E-4230-815D-38698DB8628A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{28CC41C1-491E-4230-815D-38698DB8628A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99B20D7C-0FAA-4E7F-845F-E0D26BDE19DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99B20D7C-0FAA-4E7F-845F-E0D26BDE19DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99B20D7C-0FAA-4E7F-845F-E0D26BDE19DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99B20D7C-0FAA-4E7F-845F-E0D26BDE19DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA5434D1-F8AA-4810-875C-3544AEA3005B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA5434D1-F8AA-4810-875C-3544AEA3005B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA5434D1-F8AA-4810-875C-3544AEA3005B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA5434D1-F8AA-4810-875C-3544AEA3005B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01FE857D-56A7-4E85-9D9F-47CF7C0A8E1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01FE857D-56A7-4E85-9D9F-47CF7C0A8E1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01FE857D-56A7-4E85-9D9F-47CF7C0A8E1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01FE857D-56A7-4E85-9D9F-47CF7C0A8E1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5F81F95-DA41-4A4E-9BCB-9BD685E73177}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5F81F95-DA41-4A4E-9BCB-9BD685E73177}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5F81F95-DA41-4A4E-9BCB-9BD685E73177}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5F81F95-DA41-4A4E-9BCB-9BD685E73177}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{FBDE6845-BB2D-4CCB-A241-69503AA1C81D} = {8BCCB5A9-174A-4E3B-AA31-F028C102F4F0}
-		{0BA25C69-F218-414A-A61E-EAF5F490F60A} = {8BCCB5A9-174A-4E3B-AA31-F028C102F4F0}
-		{F1A1AA88-9431-48B2-8B8E-839CB03E342F} = {8BCCB5A9-174A-4E3B-AA31-F028C102F4F0}
-		{28CC41C1-491E-4230-815D-38698DB8628A} = {A7241889-CB5D-4067-952A-E1271E2DC11F}
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {281FF91E-C279-4E32-A15E-F3F2D2F2A06B}
 	EndGlobalSection
 EndGlobal

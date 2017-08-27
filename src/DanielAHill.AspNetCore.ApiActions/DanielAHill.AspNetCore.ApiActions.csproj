@@ -1,42 +1,30 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Copyright>Copyright (c) 2015-2016 Daniel A Hill. All rights reserved.</Copyright>
-    <AssemblyTitle>DanielAHill.AspNetCore.ApiActions</AssemblyTitle>
-    <VersionPrefix>0.0.0.1-dev</VersionPrefix>
-    <Authors>Daniel A Hill</Authors>
-    <TargetFrameworks>netstandard1.6;net451</TargetFrameworks>
-    <AssemblyName>DanielAHill.AspNetCore.ApiActions</AssemblyName>
-    <PackageId>DanielAHill.AspNetCore.ApiActions</PackageId>
-    <PackageTags>aspnet;aspnetcore;api;apiactions</PackageTags>
-    <PackageProjectUrl>http://www.apiactions.net</PackageProjectUrl>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Copyright>Copyright (c) 2015-2017 Daniel A Hill. All rights reserved.</Copyright>
     <PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
-    <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/danielahill/ApiActions</RepositoryUrl>
-    <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <PackageProjectUrl>https://github.com/DanielAHill/ApiActions</PackageProjectUrl>
+    <RepositoryUrl />
+    <PackageTags>aspnetcore, api, apiactions, versioning</PackageTags>
+    <Description>API Middleware for AspNet with emphasis on REST-ful capabilities, versioning, performance, and extensibility</Description>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Daniel A Hill</Authors>
+    <Company />
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DanielAHill.AspNetCore.ApiActions.Abstractions\DanielAHill.AspNetCore.ApiActions.Abstractions.csproj" />
+    <PackageReference Include="DanielAHill.Reflection" Version="1.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.4.0" />
+    <PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
-    <PackageReference Include="System.ComponentModel.Annotations" Version="4.3.0" />
-    <PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Http" Version="1.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Routing" Version="1.1.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="1.1.0" />
-    <PackageReference Include="DanielAHill.Reflection" Version="0.1.1611.2003" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net451' ">
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
+    <ProjectReference Include="..\DanielAHill.AspNetCore.ApiActions.Abstractions\DanielAHill.AspNetCore.ApiActions.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

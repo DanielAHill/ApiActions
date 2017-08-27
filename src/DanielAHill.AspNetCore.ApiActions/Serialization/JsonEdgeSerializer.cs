@@ -32,8 +32,8 @@ namespace DanielAHill.AspNetCore.ApiActions.Serialization
 
         public bool Handles(MediaTypeHeaderValue mediaType)
         {
-            return "application".Equals(mediaType.Type, StringComparison.OrdinalIgnoreCase)
-                   && ("json".Equals(mediaType.SubType, StringComparison.OrdinalIgnoreCase)
+            return "application".Equals(mediaType.Type.ToString(), StringComparison.OrdinalIgnoreCase)
+                   && ("json".Equals(mediaType.SubType.ToString(), StringComparison.OrdinalIgnoreCase)
                         || mediaType.MatchesAllSubTypes);
         }
 

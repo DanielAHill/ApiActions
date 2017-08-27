@@ -1,38 +1,26 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Copyright>Copyright (c) 2015-2016 Daniel A Hill. All rights reserved.</Copyright>
-    <AssemblyTitle>DanielAHill.AspNetCore.ApiActions.Swagger</AssemblyTitle>
-    <VersionPrefix>0.0.0.1-dev</VersionPrefix>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageTags>aspnetcore, api, apiactions, swagger, codegen, swagger2, openapi</PackageTags>
     <Authors>Daniel A Hill</Authors>
-    <TargetFrameworks>netstandard1.6;net451</TargetFrameworks>
-    <AssemblyName>DanielAHill.AspNetCore.ApiActions.Swagger</AssemblyName>
-    <PackageId>DanielAHill.AspNetCore.ApiActions.Swagger</PackageId>
-    <PackageTags>aspnet;aspnetcore;apiactions;openapi;swagger;swagger2;codegen</PackageTags>
-    <PackageProjectUrl>http://www.apiactions.net</PackageProjectUrl>
+    <Company />
+    <Description>Swagger Generation for Api Actions</Description>
+    <Copyright>Copyright (c) 2015-2017 Daniel A Hill. All rights reserved.</Copyright>
     <PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
-    <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/danielahill/ApiActions</RepositoryUrl>
-    <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <PackageProjectUrl>https://github.com/DanielAHill/ApiActions</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DanielAHill.AspNetCore.ApiActions\DanielAHill.AspNetCore.ApiActions.csproj" />
-    <ProjectReference Include="..\DanielAHill.AspNetCore.ApiActions.Abstractions\DanielAHill.AspNetCore.ApiActions.Abstractions.csproj" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Http" Version="1.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Routing" Version="1.1.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="1.1.0" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net451' ">
-    <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
+    <ProjectReference Include="..\DanielAHill.AspNetCore.ApiActions.Abstractions\DanielAHill.AspNetCore.ApiActions.Abstractions.csproj" />
+    <ProjectReference Include="..\DanielAHill.AspNetCore.ApiActions\DanielAHill.AspNetCore.ApiActions.csproj" />
   </ItemGroup>
 
 </Project>

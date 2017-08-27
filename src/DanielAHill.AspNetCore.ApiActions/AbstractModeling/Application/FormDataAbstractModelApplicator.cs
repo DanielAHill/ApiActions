@@ -52,7 +52,7 @@ namespace DanielAHill.AspNetCore.ApiActions.AbstractModeling.Application
                 ContentDispositionHeaderValue contentDispositionHeaderValue;
                 if (ContentDispositionHeaderValue.TryParse(file.ContentDisposition, out contentDispositionHeaderValue))
                 {
-                    abstractModel.Add(new AbstractModel(contentDispositionHeaderValue.Name, file));
+                    abstractModel.Add(new AbstractModel(contentDispositionHeaderValue.Name.ToString(), file));
                 }
             }
         }
