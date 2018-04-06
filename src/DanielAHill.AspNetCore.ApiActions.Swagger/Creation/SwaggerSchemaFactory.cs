@@ -28,10 +28,8 @@ namespace DanielAHill.AspNetCore.ApiActions.Swagger.Creation
 
         public SwaggerSchemaFactory(ISwaggerTypeProvider swaggerTypeConverter, ISwaggerPropertyFactory propertyFactory)
         {
-            if (swaggerTypeConverter == null) throw new ArgumentNullException(nameof(swaggerTypeConverter));
-            if (propertyFactory == null) throw new ArgumentNullException(nameof(propertyFactory));
-            _swaggerTypeConverter = swaggerTypeConverter;
-            _propertyFactory = propertyFactory;
+            _swaggerTypeConverter = swaggerTypeConverter ?? throw new ArgumentNullException(nameof(swaggerTypeConverter));
+            _propertyFactory = propertyFactory ?? throw new ArgumentNullException(nameof(propertyFactory));
         }
 
         public SwaggerSchema Create(Type type, IEnumerable<IPropertyDetails> propertyDetails)

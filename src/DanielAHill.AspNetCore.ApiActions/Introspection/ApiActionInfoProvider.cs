@@ -35,20 +35,13 @@ namespace DanielAHill.AspNetCore.ApiActions.Introspection
             IApiActionCategoryFactory tagFactory, IApiActionResponseInfoFactory responseInfoFactory,
             IApiActionDeprecationFactory deprecationFactory)
         {
-            if (summaryFactory == null) throw new ArgumentNullException(nameof(summaryFactory));
-            if (descriptionFactory == null) throw new ArgumentNullException(nameof(descriptionFactory));
-            if (requestMethodsFactory == null) throw new ArgumentNullException(nameof(requestMethodsFactory));
-            if (requestTypeFactory == null) throw new ArgumentNullException(nameof(requestTypeFactory));
-            if (tagFactory == null) throw new ArgumentNullException(nameof(tagFactory));
-            if (responseInfoFactory == null) throw new ArgumentNullException(nameof(responseInfoFactory));
-            if (deprecationFactory == null) throw new ArgumentNullException(nameof(deprecationFactory));
-            _summaryFactory = summaryFactory;
-            _descriptionFactory = descriptionFactory;
-            _requestMethodsFactory = requestMethodsFactory;
-            _requestTypeFactory = requestTypeFactory;
-            _tagFactory = tagFactory;
-            _responseInfoFactory = responseInfoFactory;
-            _deprecationFactory = deprecationFactory;
+            _summaryFactory = summaryFactory ?? throw new ArgumentNullException(nameof(summaryFactory));
+            _descriptionFactory = descriptionFactory ?? throw new ArgumentNullException(nameof(descriptionFactory));
+            _requestMethodsFactory = requestMethodsFactory ?? throw new ArgumentNullException(nameof(requestMethodsFactory));
+            _requestTypeFactory = requestTypeFactory ?? throw new ArgumentNullException(nameof(requestTypeFactory));
+            _tagFactory = tagFactory ?? throw new ArgumentNullException(nameof(tagFactory));
+            _responseInfoFactory = responseInfoFactory ?? throw new ArgumentNullException(nameof(responseInfoFactory));
+            _deprecationFactory = deprecationFactory ?? throw new ArgumentNullException(nameof(deprecationFactory));
         }
 
         public IApiActionInfo GetInfo(Type apiActionType)

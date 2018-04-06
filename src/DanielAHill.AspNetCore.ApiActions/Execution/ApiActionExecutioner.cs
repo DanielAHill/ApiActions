@@ -13,13 +13,64 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 #endregion
+
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using DanielAHill.AspNetCore.ApiActions.Responses;
+
 namespace DanielAHill.AspNetCore.ApiActions.Execution
 {
-    internal class ApiActionExecutioner : ApiActionExecutionerBase<IApiAction>, IApiActionExecutioner
+    internal class ApiActionExecutioner : IApiActionExecutioner
     {
-        public ApiActionExecutioner()
-            : base(AuthorizeAsync, PreloadDataAsync, AuthorizeDataAsync)
+        private static readonly Func<IApiAction, CancellationToken, Task>[] PreExecutionTasks = new Func<IApiAction, CancellationToken, Task>[]
         {
+            AuthorizeAsync, ValidateModelAsync, PreloadDataAsync, ValidateModelDataAsync, AuthorizeDataAsync
+        };
+
+        public async Task<ApiActionResponse> ExecuteAsync(IApiAction apiAction, CancellationToken cancellationToken)
+        {
+            // ReSharper disable once ForCanBeConvertedToForeach - array indexing is faster
+            for (var x = 0; x < PreExecutionTasks.Length; x++)
+            {
+                await PreExecutionTasks[x](apiAction, cancellationToken);
+
+                cancellationToken.ThrowIfCancellationRequested();
+                if (apiAction.ActionResponse != null)
+                {
+                    return apiAction.ActionResponse;
+                }
+            }
+
+            // ExecuteAsync
+            var response = await apiAction.ExecuteAsync(cancellationToken) ?? apiAction.ActionResponse;
+            cancellationToken.ThrowIfCancellationRequested();
+            return response ?? apiAction.ActionResponse ?? NoContentResponse.Singleton;
+        }
+
+        protected static Task AuthorizeAsync(IApiAction apiAction, CancellationToken cancellationToken)
+        {
+            return apiAction.AuthorizeAsync(cancellationToken);
+        }
+
+        protected static Task PreloadDataAsync(IApiAction apiAction, CancellationToken cancellationToken)
+        {
+            return apiAction.PreloadDataAsync(cancellationToken);
+        }
+
+        protected static Task AuthorizeDataAsync(IApiAction apiAction, CancellationToken cancellationToken)
+        {
+            return apiAction.AuthorizeDataAsync(cancellationToken);
+        }
+
+        private static Task ValidateModelDataAsync(IApiAction apiAction, CancellationToken cancellationToken)
+        {
+            return apiAction.ValidateModelDataAsync(cancellationToken);
+        }
+
+        private static Task ValidateModelAsync(IApiAction apiAction, CancellationToken cancellationToken)
+        {
+            return apiAction.ValidateModelAsync(cancellationToken);
         }
     }
 }

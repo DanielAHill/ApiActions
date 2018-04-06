@@ -35,9 +35,8 @@ namespace DanielAHill.AspNetCore.ApiActions.Responses
 
         public StringResponse(int statusCode, string data)
         {
-            if (data == null) throw new ArgumentNullException(nameof(data));
             _statusCode = statusCode;
-            _data = data;
+            _data = data ?? throw new ArgumentNullException(nameof(data));
         }
 
         public override async Task WriteAsync(HttpContext httpContext, IEdgeSerializer edgeSerializer, CancellationToken cancellationToken)

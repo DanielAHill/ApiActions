@@ -27,8 +27,7 @@ namespace DanielAHill.AspNetCore.ApiActions
         // ReSharper disable once MemberCanBeProtected.Global
         public RouteDefaultAttribute(string parameterName, object value)
         {
-            if (parameterName == null) throw new ArgumentNullException(nameof(parameterName));
-            ParameterName = parameterName;
+            ParameterName = parameterName ?? throw new ArgumentNullException(nameof(parameterName));
             Value = value;
         }
     }

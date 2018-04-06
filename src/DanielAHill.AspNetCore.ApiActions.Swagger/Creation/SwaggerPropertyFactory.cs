@@ -27,10 +27,8 @@ namespace DanielAHill.AspNetCore.ApiActions.Swagger.Creation
 
         public SwaggerPropertyFactory(ISwaggerTypeProvider swaggerTypeConverter, ISwaggerDefinitionNameProvider definitionNameProvider)
         {
-            if (swaggerTypeConverter == null) throw new ArgumentNullException(nameof(swaggerTypeConverter));
-            if (definitionNameProvider == null) throw new ArgumentNullException(nameof(definitionNameProvider));
-            _swaggerTypeConverter = swaggerTypeConverter;
-            _definitionNameProvider = definitionNameProvider;
+            _swaggerTypeConverter = swaggerTypeConverter ?? throw new ArgumentNullException(nameof(swaggerTypeConverter));
+            _definitionNameProvider = definitionNameProvider ?? throw new ArgumentNullException(nameof(definitionNameProvider));
         }
 
         public SwaggerProperty Create(IPropertyDetails propertyDetails)

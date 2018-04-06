@@ -14,7 +14,6 @@
 // limitations under the License.
 #endregion
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DanielAHill.AspNetCore.ApiActions.Introspection;
@@ -28,8 +27,7 @@ namespace DanielAHill.AspNetCore.ApiActions.Swagger.Creation
 
         public SwaggerResponseFactory(ISwaggerDefinitionNameProvider definitionNameProvider)
         {
-            if (definitionNameProvider == null) throw new ArgumentNullException(nameof(definitionNameProvider));
-            _definitionNameProvider = definitionNameProvider;
+            _definitionNameProvider = definitionNameProvider ?? throw new ArgumentNullException(nameof(definitionNameProvider));
         }
 
         public IEnumerable<SwaggerResponse> Create(IEnumerable<IApiActionResponseInfo> responseInfos)

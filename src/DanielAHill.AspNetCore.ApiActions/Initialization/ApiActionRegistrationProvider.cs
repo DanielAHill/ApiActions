@@ -22,7 +22,7 @@ namespace DanielAHill.AspNetCore.ApiActions.Initialization
     public class ApiActionRegistrationProvider : IApiActionRegistrationProvider
     {
         private readonly IApiActionRegistration[] _registrations;
-        public IReadOnlyCollection<IApiActionRegistration> Registrations {  get { return _registrations; } }
+        public IReadOnlyCollection<IApiActionRegistration> Registrations => _registrations;
 
         public ApiActionRegistrationProvider(IEnumerable<IApiActionRegistration> registrations)
         {

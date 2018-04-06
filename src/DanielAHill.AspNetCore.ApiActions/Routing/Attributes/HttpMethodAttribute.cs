@@ -30,7 +30,7 @@ namespace DanielAHill.AspNetCore.ApiActions
 
         public string Key { get; } = "_HttpMethod";
 
-        public IReadOnlyCollection<string> RequestMethods { get { return _methods; } }
+        public IReadOnlyCollection<string> RequestMethods => _methods;
 
         // ReSharper disable once MemberCanBeProtected.Global
         public HttpMethodAttribute(params string[] methods)

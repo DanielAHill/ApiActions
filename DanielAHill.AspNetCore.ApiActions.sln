@@ -5,11 +5,15 @@ VisualStudioVersion = 15.0.26823.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DanielAHill.AspNetCore.ApiActions", "src\DanielAHill.AspNetCore.ApiActions\DanielAHill.AspNetCore.ApiActions.csproj", "{99B20D7C-0FAA-4E7F-845F-E0D26BDE19DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DanielAHill.AspNetCore.ApiActions.Abstractions", "src\DanielAHill.AspNetCore.ApiActions.Abstractions\DanielAHill.AspNetCore.ApiActions.Abstractions.csproj", "{CA5434D1-F8AA-4810-875C-3544AEA3005B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DanielAHill.AspNetCore.ApiActions.Abstractions", "src\DanielAHill.AspNetCore.ApiActions.Abstractions\DanielAHill.AspNetCore.ApiActions.Abstractions.csproj", "{CA5434D1-F8AA-4810-875C-3544AEA3005B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DanielAHill.AspNetCore.ApiActions.Swagger", "src\DanielAHill.AspNetCore.ApiActions.Swagger\DanielAHill.AspNetCore.ApiActions.Swagger.csproj", "{01FE857D-56A7-4E85-9D9F-47CF7C0A8E1E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DanielAHill.AspNetCore.ApiActions.Swagger", "src\DanielAHill.AspNetCore.ApiActions.Swagger\DanielAHill.AspNetCore.ApiActions.Swagger.csproj", "{01FE857D-56A7-4E85-9D9F-47CF7C0A8E1E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiActions.Sample.Swagger", "samples\ApiActions.Sample.Swagger\ApiActions.Sample.Swagger.csproj", "{B5F81F95-DA41-4A4E-9BCB-9BD685E73177}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiActions.Sample.Swagger", "samples\ApiActions.Sample.Swagger\ApiActions.Sample.Swagger.csproj", "{B5F81F95-DA41-4A4E-9BCB-9BD685E73177}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DanielAHill.AspNetCore.ApiActions.WebSockets", "DanielAHill.AspNetCore.ApiActions.WebSockets\DanielAHill.AspNetCore.ApiActions.WebSockets.csproj", "{A54A7D9E-4110-4B48-98DA-6B0A08C16385}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DanielAHill.AspNetCore.ApiActions.WebSockets.Abstractions", "DanielAHill.AspNetCore.ApiActions.WebSockets.Abstractions\DanielAHill.AspNetCore.ApiActions.WebSockets.Abstractions.csproj", "{4CAD2AC8-A898-436D-924C-4D79FF609A5E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +37,14 @@ Global
 		{B5F81F95-DA41-4A4E-9BCB-9BD685E73177}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B5F81F95-DA41-4A4E-9BCB-9BD685E73177}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B5F81F95-DA41-4A4E-9BCB-9BD685E73177}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A54A7D9E-4110-4B48-98DA-6B0A08C16385}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A54A7D9E-4110-4B48-98DA-6B0A08C16385}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A54A7D9E-4110-4B48-98DA-6B0A08C16385}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A54A7D9E-4110-4B48-98DA-6B0A08C16385}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4CAD2AC8-A898-436D-924C-4D79FF609A5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CAD2AC8-A898-436D-924C-4D79FF609A5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CAD2AC8-A898-436D-924C-4D79FF609A5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CAD2AC8-A898-436D-924C-4D79FF609A5E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

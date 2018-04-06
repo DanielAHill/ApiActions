@@ -28,11 +28,8 @@ namespace DanielAHill.AspNetCore.ApiActions.Initialization
 
         protected GlobalApplicationFactoryInstanceWrapper(T instance, params IActionTypeFilter[] filters)
         {
-            if (instance == null) throw new ArgumentNullException(nameof(instance));
-            if (filters == null) throw new ArgumentNullException(nameof(filters));
-            
-            _instance = instance;
-            _filters = filters;
+            _instance = instance ?? throw new ArgumentNullException(nameof(instance));
+            _filters = filters ?? throw new ArgumentNullException(nameof(filters));
         }
 
         public virtual bool Matches(Type apiActionType)

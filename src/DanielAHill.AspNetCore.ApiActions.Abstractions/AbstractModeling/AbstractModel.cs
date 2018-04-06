@@ -25,17 +25,18 @@ namespace DanielAHill.AspNetCore.ApiActions.AbstractModeling
         private IDictionary<string, AbstractModel> _children;
         private List<object> _values;
 
-        private IDictionary<string, AbstractModel> Children {  get { return _children ?? (_children = new Dictionary<string, AbstractModel>());} }
-        private IList<object> ValueList { get { return _values ?? (_values = new List<object>()); } }
+        private IDictionary<string, AbstractModel> Children => _children ?? (_children = new Dictionary<string, AbstractModel>());
+        private IList<object> ValueList => _values ?? (_values = new List<object>());
 
         public string Name { get; }
-        public bool IsEmpty { get { return ChildCount == 0 && ValueCount == 0; } }
+        public bool IsEmpty => ChildCount == 0 && ValueCount == 0;
 
-        public IReadOnlyList<object> Values { get { return _values ?? (_values = new List<object>()); } }
-        public int ValueCount { get { return _values?.Count ?? 0; } }
+        public IReadOnlyList<object> Values => _values ?? (_values = new List<object>());
+
+        public int ValueCount => _values?.Count ?? 0;
         //public object FirstValue {  get { return ValueCount == 0 ? null : Values[0]; } }
 
-        public int ChildCount { get { return _children?.Count ?? 0; } }
+        public int ChildCount => _children?.Count ?? 0;
 
         public AbstractModel this[string propertyName]
         {

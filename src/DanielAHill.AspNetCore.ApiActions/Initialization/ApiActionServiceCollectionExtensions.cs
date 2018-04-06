@@ -17,7 +17,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using DanielAHill.AspNet.ApiActions;
 using DanielAHill.AspNetCore.ApiActions;
 using DanielAHill.AspNetCore.ApiActions.AbstractModeling;
 using DanielAHill.AspNetCore.ApiActions.AbstractModeling.Application;
@@ -66,7 +65,6 @@ namespace Microsoft.Extensions.DependencyInjection
             // Route Execution
             services.AddSingleton(typeof (IApiActionRouter), typeof(ApiActionRouter));
             services.AddSingleton(typeof (IApiActionExecutioner), typeof (ApiActionExecutioner));
-            services.AddSingleton(typeof (IRequestModelApiActionExecutioner), typeof (RequestModelApiActionExecutioner));
 
             // Abstract Model Application
             services.AddSingleton(typeof (IAbstractModelApplicator), typeof (QueryParameterAbstractModelApplicator));
@@ -135,7 +133,7 @@ namespace Microsoft.Extensions.DependencyInjection
                         return false;
                     }
 
-                    return ti.ImplementedInterfaces.Any(i => i == typeof(IApiAction) || i.GetTypeInfo().IsGenericType && i.GetGenericTypeDefinition() == typeof(IRequestModelApiAction));
+                    return ti.ImplementedInterfaces.Any(i => i == typeof(IApiAction) || i.GetTypeInfo().IsGenericType && i.GetGenericTypeDefinition() != typeof(AbstractModel));
                 });
 
             foreach (var type in types)

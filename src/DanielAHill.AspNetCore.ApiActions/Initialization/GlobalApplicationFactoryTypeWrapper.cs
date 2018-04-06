@@ -29,11 +29,10 @@ namespace DanielAHill.AspNetCore.ApiActions.Initialization
 
         protected GlobalApplicationFactoryTypeWrapper(Type type, params IActionTypeFilter[] filters)
         {
-            if (filters == null) throw new ArgumentNullException(nameof(filters));
             if (!typeof(T).IsAssignableFrom(type)) throw new ArgumentException($"{type} is not assignable to {typeof(T)}", nameof(type));
 
             _type = type;
-            _filters = filters;
+            _filters = filters ?? throw new ArgumentNullException(nameof(filters));
         }
 
         public virtual bool Matches(Type apiActionType)

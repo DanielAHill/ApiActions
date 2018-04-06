@@ -30,8 +30,7 @@ namespace DanielAHill.AspNetCore.ApiActions.Serialization
         public EdgeSerializerProvider(IEnumerable<IEdgeSerializer> serializers, IOptions<ApiActionConfiguration> configurationAccessor)
         {
             if (serializers == null) throw new ArgumentNullException(nameof(serializers));
-            if (configurationAccessor == null) throw new ArgumentNullException(nameof(configurationAccessor));
-            _configurationAccessor = configurationAccessor;
+            _configurationAccessor = configurationAccessor ?? throw new ArgumentNullException(nameof(configurationAccessor));
             _serializers = serializers.ToArray();
         }
 

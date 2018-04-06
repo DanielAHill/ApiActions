@@ -25,8 +25,8 @@ namespace DanielAHill.AspNetCore.ApiActions.Swagger.Specification
     {
         private readonly IList<T> _items;
 
-        public int Count { get { return _items.Count; } }
-        public bool IsReadOnly { get { return _items.IsReadOnly; } }
+        public int Count => _items.Count;
+        public bool IsReadOnly => _items.IsReadOnly;
 
         public SwaggerObjectCollectionFacade()
         {

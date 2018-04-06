@@ -23,29 +23,22 @@ namespace DanielAHill.AspNetCore.ApiActions.Execution
     internal class ApiActionRouter : IApiActionRouter
     {
         private readonly IApiActionExecutioner _apiActionExecutioner;
-        private readonly IRequestModelApiActionExecutioner _requestModelApiActionExecutioner;
         private readonly IEdgeDeserializer _edgeDeserializer;
         private readonly IEdgeSerializerProvider _edgeSerializerProvider;
         private static readonly Task CompletedTask = Task.FromResult(true);
 
         public ApiActionRouter(IEdgeDeserializer edgeDeserializer,
             IEdgeSerializerProvider edgeSerializerProvider,
-            IApiActionExecutioner apiActionExecutioner, 
-            IRequestModelApiActionExecutioner requestModelApiActionExecutioner)
+            IApiActionExecutioner apiActionExecutioner)
         {
-            if (edgeDeserializer == null) throw new ArgumentNullException(nameof(edgeDeserializer));
-            if (edgeSerializerProvider == null) throw new ArgumentNullException(nameof(edgeSerializerProvider));
-            if (apiActionExecutioner == null) throw new ArgumentNullException(nameof(apiActionExecutioner));
-            if (requestModelApiActionExecutioner == null) throw new ArgumentNullException(nameof(requestModelApiActionExecutioner));
-            _edgeDeserializer = edgeDeserializer;
-            _edgeSerializerProvider = edgeSerializerProvider;
-            _apiActionExecutioner = apiActionExecutioner;
-            _requestModelApiActionExecutioner = requestModelApiActionExecutioner;
+            _edgeDeserializer = edgeDeserializer ?? throw new ArgumentNullException(nameof(edgeDeserializer));
+            _edgeSerializerProvider = edgeSerializerProvider ?? throw new ArgumentNullException(nameof(edgeSerializerProvider));
+            _apiActionExecutioner = apiActionExecutioner ?? throw new ArgumentNullException(nameof(apiActionExecutioner));
         }
 
         public Task RouteAsync(RouteContext context)
         {
-            context.Handler = new ApiActionRouteHandler(_edgeDeserializer, _edgeSerializerProvider, _apiActionExecutioner, _requestModelApiActionExecutioner, context.RouteData).Handle;
+            context.Handler = new ApiActionRouteHandler(_edgeDeserializer, _edgeSerializerProvider, _apiActionExecutioner, context.RouteData).Handle;
             return CompletedTask;
         }
 

@@ -17,7 +17,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text.RegularExpressions;
 using DanielAHill.AspNetCore.ApiActions.Introspection;
 using DanielAHill.AspNetCore.ApiActions.Swagger.Specification;
@@ -43,15 +42,11 @@ namespace DanielAHill.AspNetCore.ApiActions.Swagger.Creation
             ISwaggerDefinitionNameProvider definitionNameProvider,
             ISwaggerSchemaFactory schemaFactory)
         {
-            if (infoProvider == null) throw new ArgumentNullException(nameof(infoProvider));
             if (optionsAccessor == null) throw new ArgumentNullException(nameof(optionsAccessor));
-            if (responseFactory == null) throw new ArgumentNullException(nameof(responseFactory));
-            if (definitionNameProvider == null) throw new ArgumentNullException(nameof(definitionNameProvider));
-            if (schemaFactory == null) throw new ArgumentNullException(nameof(schemaFactory));
-            _infoProvider = infoProvider;
-            _responseFactory = responseFactory;
-            _definitionNameProvider = definitionNameProvider;
-            _schemaFactory = schemaFactory;
+            _infoProvider = infoProvider ?? throw new ArgumentNullException(nameof(infoProvider));
+            _responseFactory = responseFactory ?? throw new ArgumentNullException(nameof(responseFactory));
+            _definitionNameProvider = definitionNameProvider ?? throw new ArgumentNullException(nameof(definitionNameProvider));
+            _schemaFactory = schemaFactory ?? throw new ArgumentNullException(nameof(schemaFactory));
 
             var options = optionsAccessor.Value;
             _defaultMethods = options.DefaultMethods ?? new [] {"GET"};

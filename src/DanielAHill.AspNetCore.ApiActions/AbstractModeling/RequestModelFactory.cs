@@ -27,10 +27,8 @@ namespace DanielAHill.AspNetCore.ApiActions.AbstractModeling
         
         public RequestModelFactory(IConverterDelegateProvider converterDelegateProvider, ILogger<RequestModelFactory> log)
         {
-            if (converterDelegateProvider == null) throw new ArgumentNullException(nameof(converterDelegateProvider));
-            if (log == null) throw new ArgumentNullException(nameof(log));
-            _converterDelegateProvider = converterDelegateProvider;
-            _log = log;
+            _converterDelegateProvider = converterDelegateProvider ?? throw new ArgumentNullException(nameof(converterDelegateProvider));
+            _log = log ?? throw new ArgumentNullException(nameof(log));
         }
 
         public T Create<T>(AbstractModel abstractModel) where T : class, new()

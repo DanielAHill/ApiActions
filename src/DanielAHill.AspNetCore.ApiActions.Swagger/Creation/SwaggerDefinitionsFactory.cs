@@ -30,14 +30,10 @@ namespace DanielAHill.AspNetCore.ApiActions.Swagger.Creation
 
         public SwaggerDefinitionsFactory(IApiActionResponseInfoFactory responseInfoFactory, ISwaggerSchemaFactory schemaFactory, ISwaggerDefinitionNameProvider definitionNameProvider, ISwaggerTypeProvider typeProvider)
         {
-            if (responseInfoFactory == null) throw new ArgumentNullException(nameof(responseInfoFactory));
-            if (schemaFactory == null) throw new ArgumentNullException(nameof(schemaFactory));
-            if (definitionNameProvider == null) throw new ArgumentNullException(nameof(definitionNameProvider));
-            if (typeProvider == null) throw new ArgumentNullException(nameof(typeProvider));
-            _responseInfoFactory = responseInfoFactory;
-            _schemaFactory = schemaFactory;
-            _definitionNameProvider = definitionNameProvider;
-            _typeProvider = typeProvider;
+            _responseInfoFactory = responseInfoFactory ?? throw new ArgumentNullException(nameof(responseInfoFactory));
+            _schemaFactory = schemaFactory ?? throw new ArgumentNullException(nameof(schemaFactory));
+            _definitionNameProvider = definitionNameProvider ?? throw new ArgumentNullException(nameof(definitionNameProvider));
+            _typeProvider = typeProvider ?? throw new ArgumentNullException(nameof(typeProvider));
         }
 
         public IReadOnlyCollection<SwaggerDefinition> Create(IReadOnlyCollection<IApiActionRegistration> registrations)

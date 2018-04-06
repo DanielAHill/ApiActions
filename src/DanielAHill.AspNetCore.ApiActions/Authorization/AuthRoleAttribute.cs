@@ -55,9 +55,8 @@ namespace DanielAHill.AspNetCore.ApiActions.Authorization
         public AuthRoleAttribute(int failureStatusCode, int notAuthenticatedStatusCode, params string[] roles)
             :base(notAuthenticatedStatusCode)
         {
-            if (roles == null) throw new ArgumentNullException(nameof(roles));
             _failureStatusCode = failureStatusCode;
-            _roles = roles;
+            _roles = roles ?? throw new ArgumentNullException(nameof(roles));
         }
 
         public override async Task<ApiActionResponse> AuthorizeAsync(HttpContext context, AbstractModel abstractModel, CancellationToken cancellationToken)

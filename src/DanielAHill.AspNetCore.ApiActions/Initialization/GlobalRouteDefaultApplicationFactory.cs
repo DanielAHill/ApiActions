@@ -29,10 +29,8 @@ namespace DanielAHill.AspNetCore.ApiActions.Initialization
 
         public GlobalRouteDefaultApplicationFactory(IReadOnlyDictionary<string, object> defaults, params IActionTypeFilter[] filters)
         {
-            if (defaults == null) throw new ArgumentNullException(nameof(defaults));
-            if (filters == null) throw new ArgumentNullException(nameof(filters));
-            _defaults = defaults;
-            _filters = filters;
+            _defaults = defaults ?? throw new ArgumentNullException(nameof(defaults));
+            _filters = filters ?? throw new ArgumentNullException(nameof(filters));
         }
 
         public bool Matches(Type apiActionType)

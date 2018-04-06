@@ -28,21 +28,15 @@ namespace DanielAHill.AspNetCore.ApiActions
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
     public class ResponseAttribute : Attribute, IHasApiActionResponseInfo
     {
-        public IReadOnlyCollection<IApiActionResponseInfo> Responses
+        public IReadOnlyCollection<IApiActionResponseInfo> Responses => new[]
         {
-            get
+            new ApiActionResponseInfo()
             {
-                return new[]
-                {
-                    new ApiActionResponseInfo()
-                    {
-                        StatusCode = StatusCode,
-                        Description = Description,
-                        ResponseData = Type
-                    }
-                };
+                StatusCode = StatusCode,
+                Description = Description,
+                ResponseData = Type
             }
-        }
+        };
 
         /// <summary>
         /// Gets or sets the Http Status Code.

@@ -41,10 +41,9 @@ namespace DanielAHill.AspNetCore.ApiActions.Responses
 
         public StreamResponse(int statusCode, Stream stream, string contentType)
         {
-            if (stream == null) throw new ArgumentNullException(nameof(stream));
             _statusCode = statusCode;
             _contentType = contentType;
-            _stream = stream;
+            _stream = stream ?? throw new ArgumentNullException(nameof(stream));
         }
 
         public override Task WriteAsync(HttpContext httpContext, IEdgeSerializer edgeSerializer, CancellationToken cancellationToken)

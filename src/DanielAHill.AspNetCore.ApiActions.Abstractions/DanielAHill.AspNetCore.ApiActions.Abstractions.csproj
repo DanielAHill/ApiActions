@@ -10,6 +10,7 @@
     <Copyright>Copyright (c) 2015-2017 Daniel A Hill. All rights reserved.</Copyright>
     <PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/DanielAHill/ApiActions</PackageProjectUrl>
+    <RootNamespace>DanielAHill.AspNetCore.ApiActions</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

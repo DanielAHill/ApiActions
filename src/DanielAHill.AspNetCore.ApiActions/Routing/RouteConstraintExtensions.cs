@@ -28,8 +28,7 @@ namespace Microsoft.AspNet.Routing
             if (routeConstraint == null) throw new ArgumentNullException(nameof(routeConstraint));
 #endif
 
-            var keyedRouteConstraint = routeConstraint as IKeyedRouteContraint;
-            return keyedRouteConstraint != null ? keyedRouteConstraint.Key : string.Concat(routeConstraint.GetType().ToString(), "_", routeConstraint.GetHashCode());
+            return routeConstraint is IKeyedRouteContraint keyedRouteConstraint ? keyedRouteConstraint.Key : string.Concat(routeConstraint.GetType().ToString(), "_", routeConstraint.GetHashCode());
         }
     }
 }

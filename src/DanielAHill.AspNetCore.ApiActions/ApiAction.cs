@@ -22,7 +22,6 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
-using DanielAHill.AspNet.ApiActions;
 using DanielAHill.AspNetCore.ApiActions.AbstractModeling;
 using DanielAHill.AspNetCore.ApiActions.Authorization;
 using DanielAHill.AspNetCore.ApiActions.Responses;
@@ -31,13 +30,15 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DanielAHill.AspNetCore.ApiActions
 {
-    public abstract class ApiAction : IApiAction
+    public abstract class ApiAction<TRequest> : IApiAction
+        where TRequest : class, new()
     {
         // ReSharper disable once MemberCanBePrivate.Global
         protected AbstractModel AbstractModel { get; private set; }
-        protected HttpRequest HttpRequest { get { return _httpContext.Request; } }
-        protected ClaimsPrincipal User { get { return _httpContext.User; } }
-        protected ConnectionInfo Connection { get { return _httpContext.Connection; } }
+        protected TRequest Data { get; private set; }
+        protected HttpRequest HttpRequest => _httpContext.Request;
+        protected ClaimsPrincipal User => _httpContext.User;
+        protected ConnectionInfo Connection => _httpContext.Connection;
 
         /// <summary>
         /// Gets the response of an action, following each execution step, if one exists
@@ -68,6 +69,15 @@ namespace DanielAHill.AspNetCore.ApiActions
             _httpContext = initializationContext.HttpContext;
             _apiActionAuthorizationProvider = _httpContext.RequestServices.GetRequiredService<IAuthFilterProvider>();
             _responseAbstractFactory = _httpContext.RequestServices.GetRequiredService<IApiActionResponseAbstractFactory>();
+
+            if (typeof(TRequest) == typeof(AbstractModel))
+            {
+                Data = (TRequest) ((object) AbstractModel);
+            }
+            else
+            {
+                Data = initializationContext.HttpContext.RequestServices.GetRequiredService<IRequestModelFactory>().Create<TRequest>(initializationContext.AbstractModel);
+            }
         }
 
         protected virtual Task AppendedInitializeAsync(IApiActionInitializationContext initializationContext, CancellationToken cancellationToken)
@@ -96,6 +106,30 @@ namespace DanielAHill.AspNetCore.ApiActions
         {
             return Task.FromResult(true);
         }
+
+        [Response(400, typeof(BadRequestDetails), "Bad Request - Input Validation Failed")]
+        public virtual Task<bool> ValidateModelAsync(CancellationToken cancellationToken)
+        {
+            if (typeof(TRequest) != typeof(AbstractModel))
+            {
+                return Task.FromResult(true);
+            }
+
+            var modelErrors = new List<ValidationResult>();
+            if (Validator.TryValidateObject(Data, new ValidationContext(Data), modelErrors) && modelErrors.Count == 0)
+            {
+                return Task.FromResult(true);
+            }
+
+            Response(modelErrors);
+
+            return Task.FromResult(false);
+        }
+
+        public virtual Task<bool> ValidateModelDataAsync(CancellationToken cancellationToken)
+        {
+            return Task.FromResult(true);
+        }
         #endregion
 
         #region AuthorizeAsync Model Access
@@ -104,6 +138,7 @@ namespace DanielAHill.AspNetCore.ApiActions
             return Task.FromResult(true);
         }
         #endregion
+
 
         #region ExecuteAsync
         public abstract Task<ApiActionResponse> ExecuteAsync(CancellationToken cancellationToken);
@@ -161,7 +196,7 @@ namespace DanielAHill.AspNetCore.ApiActions
             return Response(new StreamResponse(data, contentType));
         }
 
-        protected ApiActionResponse Respond(int statusCode, Stream data, string contentType)
+        protected ApiActionResponse Response(int statusCode, Stream data, string contentType)
         {
             return Response(new StreamResponse(statusCode, data, contentType));
         }
@@ -176,34 +211,8 @@ namespace DanielAHill.AspNetCore.ApiActions
         #endregion
     }
 
-    public abstract class ApiAction<TRequest> : ApiAction, IRequestModelApiAction
-        where TRequest : class, new()
+    public abstract class ApiAction : ApiAction<AbstractModel>
     {
-        protected TRequest Data { get; private set; }
 
-        protected internal override void InternalInitialize(IApiActionInitializationContext initializationContext)
-        {
-            base.InternalInitialize(initializationContext);
-            Data = initializationContext.HttpContext.RequestServices.GetRequiredService<IRequestModelFactory>().Create<TRequest>(initializationContext.AbstractModel);
-        }
-
-        [Response(400, typeof(BadRequestDetails), "Bad Request - Input Validation Failed")]
-        public virtual Task<bool> ValidateModelAsync(CancellationToken cancellationToken)
-        {
-            var modelErrors = new List<ValidationResult>();
-            if (Validator.TryValidateObject(Data, new ValidationContext(Data), modelErrors) && modelErrors.Count == 0)
-            {
-                return Task.FromResult(true);
-            }
-
-            Response(modelErrors);
-
-            return Task.FromResult(false);
-        }
-
-        public virtual Task<bool> ValidateModelDataAsync(CancellationToken cancellationToken)
-        {
-            return Task.FromResult(true);
-        }
     }
 }

@@ -31,26 +31,21 @@ namespace DanielAHill.AspNetCore.ApiActions.Execution
         private readonly IEdgeDeserializer _edgeDeserializer;
         private readonly IEdgeSerializerProvider _edgeSerializerProvider;
         private readonly IApiActionExecutioner _apiActionExecutioner;
-        private readonly IRequestModelApiActionExecutioner _requestModelApiActionExecutioner;
         private readonly RouteData _routeData;
 
         internal ApiActionRouteHandler(IEdgeDeserializer edgeDeserializer,
             IEdgeSerializerProvider edgeSerializerProvider,
             IApiActionExecutioner apiActionExecutioner,
-            IRequestModelApiActionExecutioner requestModelApiActionExecutioner,
             RouteData routeData)
         {
 #if DEBUG
             if (edgeDeserializer == null) throw new ArgumentNullException(nameof(edgeDeserializer));
             if (edgeSerializerProvider == null) throw new ArgumentNullException(nameof(edgeSerializerProvider));
             if (apiActionExecutioner == null) throw new ArgumentNullException(nameof(apiActionExecutioner));
-            if (requestModelApiActionExecutioner == null)
-                throw new ArgumentNullException(nameof(requestModelApiActionExecutioner));
 #endif
             _edgeDeserializer = edgeDeserializer;
             _edgeSerializerProvider = edgeSerializerProvider;
             _apiActionExecutioner = apiActionExecutioner;
-            _requestModelApiActionExecutioner = requestModelApiActionExecutioner;
             _routeData = routeData;
         }
 
@@ -91,12 +86,8 @@ namespace DanielAHill.AspNetCore.ApiActions.Execution
                 // InitializeAsync web action
                 await apiAction.InitializeAsync(new ApiActionInitializationContext(context, _routeData, abstractModel), cancellationToken);
 
-                // ExecuteAsync with appropriate executioner
-                var requestModelApiAction = apiAction as IRequestModelApiAction;
-                var executeTask = requestModelApiAction == null
-                    ? _apiActionExecutioner.ExecuteAsync(apiAction, cancellationToken)
-                    : _requestModelApiActionExecutioner.ExecuteAsync(requestModelApiAction, cancellationToken);
-                var response = await executeTask;
+                // ExecuteAsync
+                var response = await _apiActionExecutioner.ExecuteAsync(apiAction, cancellationToken);
 
                 if (response == null)
                 {

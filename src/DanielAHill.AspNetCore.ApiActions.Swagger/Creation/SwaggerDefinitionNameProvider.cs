@@ -23,8 +23,7 @@ namespace DanielAHill.AspNetCore.ApiActions.Swagger.Creation
 
         public SwaggerDefinitionNameProvider(ISwaggerTypeProvider typeProvider)
         {
-            if (typeProvider == null) throw new ArgumentNullException(nameof(typeProvider));
-            _typeProvider = typeProvider;
+            _typeProvider = typeProvider ?? throw new ArgumentNullException(nameof(typeProvider));
         }
 
         public string GetDefinitionName(Type type)

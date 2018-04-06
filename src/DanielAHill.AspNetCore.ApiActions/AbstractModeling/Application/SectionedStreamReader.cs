@@ -46,8 +46,8 @@ namespace DanielAHill.AspNetCore.ApiActions.AbstractModeling.Application
                 { 'B', '\b'}
             };
 
-        internal bool EndOfStream { get { return _reader.EndOfStream; } }
-        internal char LastDelimiter { get { return _readBuffer[0]; } }
+        internal bool EndOfStream => _reader.EndOfStream;
+        internal char LastDelimiter => _readBuffer[0];
 
         internal SectionedStreamReader(Stream stream, CancellationToken cancellationToken)
         {

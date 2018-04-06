@@ -29,9 +29,8 @@ namespace DanielAHill.AspNetCore.ApiActions.Authorization
 
         public ApiActionAuthorizerProvider(IEnumerable<IGlobalAuthFilterApplicationFactory> globalAuthorizationFilters, IServiceProvider serviceProvider)
         {
-            if (serviceProvider == null) throw new ArgumentNullException(nameof(serviceProvider));
             _globalAuthorizationFilters = globalAuthorizationFilters;
-            _serviceProvider = serviceProvider;
+            _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
         }
 
         public IAuthFilter[] Get(Type type)

@@ -33,7 +33,9 @@ namespace DanielAHill.AspNetCore.ApiActions
 
         Task InitializeAsync(IApiActionInitializationContext initializationContext, CancellationToken cancellationToken);
         Task AuthorizeAsync(CancellationToken cancellationToken);
+        Task<bool> ValidateModelAsync(CancellationToken cancellationToken);
         Task PreloadDataAsync(CancellationToken cancellationToken);
+        Task<bool> ValidateModelDataAsync(CancellationToken cancellationToken);
         Task AuthorizeDataAsync(CancellationToken cancellationToken);
         Task<ApiActionResponse> ExecuteAsync(CancellationToken cancellationToken);
     }
