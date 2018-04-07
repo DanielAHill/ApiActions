@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
 using DanielAHill.AspNetCore.ApiActions.AbstractModeling;
@@ -11,9 +10,9 @@ namespace DanielAHill.AspNetCore.ApiActions.WebSockets
     public abstract class WebSocketApiAction<TRequest> : ApiAction<TRequest>, IWebSocketApiAction
         where TRequest : class, new()
     {
-        protected IWebSocketTunnel Tunnel { get; private set; }
+        public IWebSocketTunnel Socket { get; private set; }
 
-        public bool IsWebSocket => Tunnel != null;
+        public bool IsWebSocket => Socket != null;
 
         public Guid Id { get; } = Guid.NewGuid();
 
@@ -25,7 +24,7 @@ namespace DanielAHill.AspNetCore.ApiActions.WebSockets
 
             if (initializationContext.HttpContext.Items.TryGetValue(configuration.SocketTunnelItemKey, out var uncastedTunnel))
             {
-                Tunnel = (IWebSocketTunnel) uncastedTunnel;
+                Socket = (IWebSocketTunnel) uncastedTunnel;
             }
         }
 
@@ -36,14 +35,7 @@ namespace DanielAHill.AspNetCore.ApiActions.WebSockets
             return Task.CompletedTask;
         }
 
-        public virtual Task OnCloseAsync(WebSocketCloseStatus status, string message, CancellationToken cancellationToken)
-        {
-            return Task.CompletedTask;
-        }
-
         #endregion
-
-        #region Web Socket Methods
 
         protected virtual Task SendAsync(ApiActionResponse response)
         {
@@ -52,25 +44,8 @@ namespace DanielAHill.AspNetCore.ApiActions.WebSockets
 
         protected virtual Task SendAsync(ApiActionResponse response, CancellationToken cancellationToken)
         {
-            return Tunnel.SendAsync(Id, response, cancellationToken);
+            return Socket.SendAsync(Id, response, cancellationToken);
         }
-
-        protected virtual Task CloseAsync(WebSocketCloseStatus status)
-        {
-            return CloseAsync(status, null, default(CancellationToken));
-        }
-
-        protected virtual Task CloseAsync(WebSocketCloseStatus status, string message)
-        {
-            return CloseAsync(status, message, default(CancellationToken));
-        }
-
-        protected virtual Task CloseAsync(WebSocketCloseStatus status, string message, CancellationToken cancellationToken)
-        {
-            return Tunnel.CloseAsync(status, message, cancellationToken);
-        }
-
-        #endregion
     }
 
     public abstract class WebSocketApiAction : WebSocketApiAction<AbstractModel>

@@ -39,7 +39,7 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ApiActionsServiceCollectionExtensions
     {
-        private static bool _apiActionsCoreAdded;
+        private static bool _addedCore;
 
         #region ApiActions
 
@@ -47,7 +47,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
 
-            if (_apiActionsCoreAdded)
+            if (_addedCore)
             {
                 return;
             }
@@ -93,7 +93,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddSingleton(typeof (IApiActionResponseAbstractFactory), typeof (ApiActionResponseAbstractFactory));
 
             // Record Actions are already added to prevent multiple registrations
-            _apiActionsCoreAdded = true;
+            _addedCore = true;
         }
 
         private static void AddApiActionIntrospection(this IServiceCollection services)
@@ -148,14 +148,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
                 var namespaceSection = typeInfo.FullName.Substring(0, typeInfo.FullName.Length - typeInfo.Name.Length - 1);
 
-                if (namespaceSection.Length > preparedNamespace.Length)
-                {
-                    namespaceSection = namespaceSection.Substring(preparedNamespace.Length).Replace('.', '/');
-                }
-                else
-                {
-                    namespaceSection = string.Empty;
-                }
+                namespaceSection = namespaceSection.Length > preparedNamespace.Length ? namespaceSection.Substring(preparedNamespace.Length).Replace('.', '/') : string.Empty;
 
                 var routes = typeInfo.GetCustomAttributes<UrlAttribute>()
                     .Select(ta => ta.GetUrl(namespaceSection))

@@ -13,13 +13,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 #endregion
-
-using DanielAHill.AspNetCore.ApiActions.AbstractModeling;
-
-namespace DanielAHill.AspNetCore.ApiActions
+namespace DanielAHill.AspNetCore.ApiActions.WebSockets
 {
-    public interface IApiActionInitializationContext : IApiActionRouteInitializationContext
+    internal static class RouteDataKeys
     {
-        AbstractModel AbstractModel { get; }
+        internal const string WebSocketSessionType = "WebSocketSessionType";
     }
 }

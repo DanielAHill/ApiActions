@@ -1,66 +1,53 @@
-#region Copyright
-// Copyright (c) 2016 Daniel A Hill. All rights reserved.
-// 
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-// 
-//     http://www.apache.org/licenses/LICENSE-2.0
-// 
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-#endregion
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DanielAHill.AspNetCore.ApiActions;
+using System.Reflection;
 using DanielAHill.AspNetCore.ApiActions.Execution;
 using DanielAHill.AspNetCore.ApiActions.Routing;
 using Microsoft.AspNet.Routing;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
+using Microsoft.Extensions.Logging;
 
-// ReSharper disable once CheckNamespace (Extension methods should be in namespace for type they extend)
-namespace Microsoft.AspNetCore.Builder
+namespace DanielAHill.AspNetCore.ApiActions.WebSockets.Initialization
 {
-    public static class ApiActionApplicationBuilderExtensions
+    public static class WebSocketApiActionsApplicationBuilderExtensions
     {
         private static bool _alreadyRegistered;
 
-        public static IApplicationBuilder UseApiActions(this IApplicationBuilder app)
+        public static IApplicationBuilder UseWebSocketApiActions(this IApplicationBuilder app)
         {
             if (app == null) throw new ArgumentNullException(nameof(app));
             if (_alreadyRegistered) return app;
 
             _alreadyRegistered = true;
 
+            // Ensure API Actions is registered
+            app.UseApiActions();
+
             var log = app.ApplicationServices.GetRequiredService<ILoggerFactory>().CreateLogger("ApiAction Initialization");
             var inlineConstraintResolver = app.ApplicationServices.GetRequiredService<IInlineConstraintResolver>();
             var handler = app.ApplicationServices.GetRequiredService<IApiActionRouter>();
-            var actionRegistrations = app.ApplicationServices.GetRequiredService<IApiActionRegistrationProvider>().Registrations;
+            var sessionRegistrations = app.ApplicationServices.GetRequiredService<IApiActionRegistrationProvider>().Registrations;
             var globalRouteConstraintFactories = (app.ApplicationServices.GetServices<IGlobalRouteConstraintApplicationFactory>() ?? new IGlobalRouteConstraintApplicationFactory[0]).ToArray();
             var globalRouteDefaultApplicationFactories = (app.ApplicationServices.GetServices<IGlobalRouteDefaultApplicationFactory>() ?? new IGlobalRouteDefaultApplicationFactory[0]).ToArray();
 
             var routes = new RouteCollection();
 
-            if (actionRegistrations.Count == 0)
+            if (sessionRegistrations.Count == 0)
             {
-                log.LogWarning("No ApiActions Registered. ApiActions will not be active.");
+                log.LogWarning("No WebSocketSessions Registered. WebSocketApiActions will not be active.");
                 return app;
             }
 
-            foreach (var registration in actionRegistrations)
+            foreach (var registration in sessionRegistrations)
             {
                 var typeInfo = registration.ApiActionType.GetTypeInfo();
 
                 var dataTokenDictionary = new RouteValueDictionary
                 {
-                    {RouteDataKeys.ApiActionType, registration.ApiActionType}
+                    {RouteDataKeys.WebSocketSessionType, registration.ApiActionType}
                 };
 
                 routes.Add(new Route(handler, typeInfo.FullName, registration.Route,

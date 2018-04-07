@@ -20,13 +20,11 @@ using Microsoft.AspNetCore.Routing;
 // ReSharper disable once CheckNamespace - Extension methods should be in the namespace of the type they are extending
 namespace Microsoft.AspNet.Routing
 {
-    internal static class RouteConstraintExtensions
+    public static class RouteConstraintExtensions
     {
-        internal static string GetKey(this IRouteConstraint routeConstraint)
+        public static string GetKey(this IRouteConstraint routeConstraint)
         {
-#if DEBUG
             if (routeConstraint == null) throw new ArgumentNullException(nameof(routeConstraint));
-#endif
 
             return routeConstraint is IKeyedRouteContraint keyedRouteConstraint ? keyedRouteConstraint.Key : string.Concat(routeConstraint.GetType().ToString(), "_", routeConstraint.GetHashCode());
         }

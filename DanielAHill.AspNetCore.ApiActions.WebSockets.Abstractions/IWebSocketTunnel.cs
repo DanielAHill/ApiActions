@@ -10,7 +10,7 @@ namespace DanielAHill.AspNetCore.ApiActions.WebSockets
         Task SendAsync(Guid commandId, ApiActionResponse response, CancellationToken cancellationToken);
         Task CloseAsync(WebSocketCloseStatus status, string message, CancellationToken cancellationToken);
 
-        Task SubscribeAsync(IWebSocketTunnelSubscribable item);
+        Task SubscribeAsync(IUnsubscribable item);
         Task UnsubscribeAsync(Guid id);
         Task UnsubscribeAsync(Guid id, CancellationToken cancellationToken);
     }

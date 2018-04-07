@@ -56,15 +56,7 @@ namespace DanielAHill.AspNetCore.ApiActions
         public Task InitializeAsync(IApiActionInitializationContext initializationContext, CancellationToken cancellationToken)
         {
             if (initializationContext == null) throw new ArgumentNullException(nameof(initializationContext));
-            InternalInitialize(initializationContext);
-
-            // InitializeAsync Items
-            return AppendedInitializeAsync(initializationContext, cancellationToken);
-        }
-
-        // ReSharper disable once MemberCanBeProtected.Global
-        protected internal virtual void InternalInitialize(IApiActionInitializationContext initializationContext)
-        {
+            
             AbstractModel = initializationContext.AbstractModel ?? new AbstractModel();
             _httpContext = initializationContext.HttpContext;
             _apiActionAuthorizationProvider = _httpContext.RequestServices.GetRequiredService<IAuthFilterProvider>();
@@ -78,6 +70,9 @@ namespace DanielAHill.AspNetCore.ApiActions
             {
                 Data = initializationContext.HttpContext.RequestServices.GetRequiredService<IRequestModelFactory>().Create<TRequest>(initializationContext.AbstractModel);
             }
+
+            // InitializeAsync Items
+            return AppendedInitializeAsync(initializationContext, cancellationToken);
         }
 
         protected virtual Task AppendedInitializeAsync(IApiActionInitializationContext initializationContext, CancellationToken cancellationToken)

@@ -7,7 +7,7 @@ namespace DanielAHill.AspNetCore.ApiActions.WebSockets.Execution
     {
         public override async Task<ApiActionResponse> ExecuteAsync(CancellationToken cancellationToken)
         {
-            await Tunnel.UnsubscribeAsync(Data.Id, cancellationToken);
+            await Socket.UnsubscribeAsync(Data.Id, cancellationToken);
             return Response();
         }
     }

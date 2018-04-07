@@ -5,26 +5,26 @@ using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace DanielAHill.AspNetCore.ApiActions.WebSockets.Execution
+namespace DanielAHill.AspNetCore.ApiActions.WebSockets
 {
     public class WebSocketTunnel : IWebSocketTunnel
     {
         private readonly WebSocket _webSocket;
-        private readonly IDictionary<Guid, IWebSocketTunnelSubscribable> _subscriptions;
+        private readonly IDictionary<Guid, IUnsubscribable> _subscriptions;
 
         public WebSocketTunnel(WebSocket webSocket)
         {
             _webSocket = webSocket ?? throw new ArgumentNullException(nameof(webSocket));
-            _subscriptions = new Dictionary<Guid, IWebSocketTunnelSubscribable>();
+            _subscriptions = new Dictionary<Guid, IUnsubscribable>();
         }
 
-        public Task SubscribeAsync(IWebSocketTunnelSubscribable item)
+        public Task SubscribeAsync(IUnsubscribable item)
         {
             lock (_subscriptions)
             {
                 if (_webSocket.State == WebSocketState.Closed)
                 {
-                    return item.OnCloseAsync(WebSocketCloseStatus.Empty, null, CancellationToken.None);
+                    return item.OnUnsubscribeAsync(CancellationToken.None);
                 }
 
                 if (_subscriptions.ContainsKey(item.Id))
@@ -45,7 +45,7 @@ namespace DanielAHill.AspNetCore.ApiActions.WebSockets.Execution
 
         public async Task UnsubscribeAsync(Guid id, CancellationToken cancellationToken)
         {
-            IWebSocketTunnelSubscribable subscription;
+            IUnsubscribable subscription;
 
             lock (_subscriptions)
             {
@@ -74,7 +74,7 @@ namespace DanielAHill.AspNetCore.ApiActions.WebSockets.Execution
 
             lock (_subscriptions)
             {
-                onCloseTasks = _subscriptions.Values.Select(s => s.OnCloseAsync(status, message, cancellationToken));
+                onCloseTasks = _subscriptions.Values.Select(s => s.OnUnsubscribeAsync(cancellationToken));
             }
 
             return Task.WhenAll(onCloseTasks);

@@ -14,12 +14,11 @@
 // limitations under the License.
 #endregion
 
-using DanielAHill.AspNetCore.ApiActions.AbstractModeling;
+using Microsoft.AspNetCore.Routing;
 
-namespace DanielAHill.AspNetCore.ApiActions
+namespace DanielAHill.AspNetCore.ApiActions.WebSockets.Execution
 {
-    public interface IApiActionInitializationContext : IApiActionRouteInitializationContext
+    public interface IWebSocketSessionRouter : IRouter
     {
-        AbstractModel AbstractModel { get; }
     }
 }
