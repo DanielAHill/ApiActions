@@ -10,4 +10,8 @@
     <ProjectReference Include="..\src\DanielAHill.AspNetCore.ApiActions\DanielAHill.AspNetCore.ApiActions.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Routing\Attributes\" />
+  </ItemGroup>
+
 </Project>

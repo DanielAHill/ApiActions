@@ -23,9 +23,6 @@ namespace DanielAHill.AspNetCore.ApiActions.WebSockets.Initialization
 
             _alreadyRegistered = true;
 
-            // Ensure API Actions is registered
-            app.UseApiActions();
-
             var log = app.ApplicationServices.GetRequiredService<ILoggerFactory>().CreateLogger("ApiAction Initialization");
             var inlineConstraintResolver = app.ApplicationServices.GetRequiredService<IInlineConstraintResolver>();
             var handler = app.ApplicationServices.GetRequiredService<IApiActionRouter>();
@@ -60,7 +57,8 @@ namespace DanielAHill.AspNetCore.ApiActions.WebSockets.Initialization
             app.UseRouter(routes);
             log.LogInformation($"Registered {routes.Count} Routes");
 
-            return app;
+            // Ensure API Actions is registered
+            return app.UseApiActions();
         }
 
         private static IDictionary<string, object> GetRouteConstraints(IApiActionRegistration registration,
