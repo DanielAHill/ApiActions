@@ -27,11 +27,6 @@ namespace ApiActions.AbstractModeling.Application
 
         public bool Handles(IAbstractModelApplicationRequestContext context)
         {
-            if (context.Form != null && (context.Form.Count > 0 || context.Form.Files.Count > 0))
-            {
-                return true;
-            }
-
             if (string.IsNullOrWhiteSpace(context.ContentType) ||
                 !MediaTypeHeaderValue.TryParse(context.ContentType, out var contentType))
             {

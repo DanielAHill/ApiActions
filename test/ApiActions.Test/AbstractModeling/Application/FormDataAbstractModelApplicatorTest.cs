@@ -143,35 +143,6 @@ namespace ApiActions.AbstractModeling.Application
         }
 
         [TestMethod]
-        public void HandlesIfFormDataIsPresentRegardlessofContentType()
-        {
-            var formCollection = new FormCollection(new Dictionary<string, StringValues>
-            {
-                {"foo", "bar"}
-            });
-
-            var mockContext = new Mock<IAbstractModelApplicationRequestContext>();
-            mockContext.Setup(c => c.Form).Returns(formCollection);
-
-            var applicator = new FormDataAbstractModelApplicator();
-            Assert.IsTrue(applicator.Handles(mockContext.Object));
-        }
-
-        [TestMethod]
-        public void HandlesIfFileIsPresentRegardlessofContentType()
-        {
-            var fileFormCollection =
-                new FormFileCollection {new FormFile(new MemoryStream(), 0, 25, "name", "filename.txt")};
-            var formCollection = new FormCollection(new Dictionary<string, StringValues>(), fileFormCollection);
-
-            var mockContext = new Mock<IAbstractModelApplicationRequestContext>();
-            mockContext.Setup(c => c.Form).Returns(formCollection);
-
-            var applicator = new FormDataAbstractModelApplicator();
-            Assert.IsTrue(applicator.Handles(mockContext.Object));
-        }
-
-        [TestMethod]
         public void AcceptsApplicationWwwFormUrlEncoded()
         {
             var mockContext = new Mock<IAbstractModelApplicationRequestContext>();

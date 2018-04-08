@@ -113,6 +113,14 @@ namespace ApiActions.Execution
                         // Send Detailed Response
                         await response.WriteAsync(context, edgeSerializer, cancellationToken);
                     }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                else
+                {
+                    throw;
                 }
             }
         }
