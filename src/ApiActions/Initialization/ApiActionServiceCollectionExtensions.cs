@@ -28,7 +28,6 @@ using ApiActions.Responses.Construction;
 using ApiActions.Routing;
 using ApiActions.Serialization;
 using ApiActions.Versioning;
-using ApiActions;
 using Microsoft.AspNet.Routing;
 using Microsoft.AspNetCore.Routing;
 

@@ -16,6 +16,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.Net.Http.Headers;
 
 namespace ApiActions.AbstractModeling.Application
@@ -26,6 +27,11 @@ namespace ApiActions.AbstractModeling.Application
 
         public bool Handles(IAbstractModelApplicationRequestContext context)
         {
+            if (context.Form != null && (context.Form.Count > 0 || context.Form.Files.Count > 0))
+            {
+                return true;
+            }
+
             if (string.IsNullOrWhiteSpace(context.ContentType) ||
                 !MediaTypeHeaderValue.TryParse(context.ContentType, out var contentType))
             {
@@ -43,14 +49,35 @@ namespace ApiActions.AbstractModeling.Application
 
             foreach (var key in formCollection.Keys)
             {
-                abstractModel.Add(new AbstractModel(key, formCollection[key]));
+                var newModel = new AbstractModel(key);
+
+                foreach (var value in formCollection[key])
+                {
+                    newModel.AddValue(value);
+                }
+
+                abstractModel.Add(newModel);
             }
 
-            foreach (var file in formCollection.Files)
+            foreach (var file in formCollection.Files ?? new FormFileCollection())
             {
-                if (ContentDispositionHeaderValue.TryParse(file.ContentDisposition, out var contentDispositionHeaderValue))
+                var name = file.Name;
+
+                if (name == null && ContentDispositionHeaderValue.TryParse(file.ContentDisposition, out var contentDispositionHeaderValue))
                 {
-                    abstractModel.Add(new AbstractModel(contentDispositionHeaderValue.Name.ToString(), file));
+                    name = contentDispositionHeaderValue.Name.Value;
+
+                    if (name.StartsWith("\"") && name.EndsWith("\""))
+                    {
+                        name = name.Substring(1, name.Length - 2);
+                    }
+                }
+
+                if (name != null)
+                {
+                    var newModel = new AbstractModel(name);
+                    newModel.AddObjectValue(file);
+                    abstractModel.Add(newModel);
                 }
             }
         }

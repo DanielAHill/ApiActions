@@ -14,7 +14,6 @@
 
 using System.Threading;
 using System.Threading.Tasks;
-using ApiActions.AbstractModeling.Application;
 
 namespace ApiActions.AbstractModeling.Application
 {
@@ -32,7 +31,14 @@ namespace ApiActions.AbstractModeling.Application
         {
             foreach (var parameter in context.Query)
             {
-                abstractModel.Add(new AbstractModel(parameter.Key, parameter.Value[0]));
+                var subModel = new AbstractModel(parameter.Key);
+
+                foreach (var value in parameter.Value)
+                {
+                    subModel.AddValue(value);
+                }
+
+                abstractModel.Add(subModel);
             }
 
             return Task.FromResult(true);

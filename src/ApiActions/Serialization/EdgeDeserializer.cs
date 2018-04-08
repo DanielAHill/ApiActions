@@ -19,7 +19,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using ApiActions.AbstractModeling;
 using ApiActions.AbstractModeling.Application;
-using ApiActions.AbstractModeling.Application;
 
 namespace ApiActions.Serialization
 {

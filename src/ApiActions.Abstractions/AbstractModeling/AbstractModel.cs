@@ -128,6 +128,13 @@ namespace ApiActions.AbstractModeling
             ValueList.Add(value);
         }
 
+        public void AddObjectValue(object value)
+        {
+            if (value == null) throw new ArgumentNullException(nameof(value));
+
+            ValueList.Add(value);
+        }
+
         public IEnumerator<AbstractModel> GetEnumerator()
         {
             return Children.Values.GetEnumerator();
