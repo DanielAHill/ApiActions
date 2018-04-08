@@ -35,7 +35,6 @@ namespace ApiActions.AbstractModeling
         public IReadOnlyList<object> Values => _values ?? (_values = new List<object>());
 
         public int ValueCount => _values?.Count ?? 0;
-        //public object FirstValue {  get { return ValueCount == 0 ? null : Values[0]; } }
 
         public int ChildCount => _children?.Count ?? 0;
 

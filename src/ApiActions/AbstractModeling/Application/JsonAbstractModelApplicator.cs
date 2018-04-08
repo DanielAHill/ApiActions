@@ -26,11 +26,12 @@ namespace ApiActions.AbstractModeling.Application
 
         public bool Handles(IAbstractModelApplicationRequestContext context)
         {
-            return context.ContentType != null 
+            return context.ContentType != null
                    && context.ContentType.StartsWith("application/json", StringComparison.OrdinalIgnoreCase);
         }
 
-        public async Task ApplyAsync(IAbstractModelApplicationRequestContext context, AbstractModel abstractModel, CancellationToken cancellationToken)
+        public async Task ApplyAsync(IAbstractModelApplicationRequestContext context, AbstractModel abstractModel,
+            CancellationToken cancellationToken)
         {
             InnerApply(JToken.Parse(await new StreamReader(context.Stream).ReadToEndAsync()), abstractModel);
         }
@@ -44,6 +45,7 @@ namespace ApiActions.AbstractModeling.Application
                     {
                         InnerApply(arrayValue, abstractModel);
                     }
+
                     break;
                 case JTokenType.Property:
                     var property = (JProperty) item;
@@ -53,6 +55,7 @@ namespace ApiActions.AbstractModeling.Application
                     {
                         InnerApply(child, newModel);
                     }
+
                     break;
                 case JTokenType.Boolean:
                     abstractModel.AddValue(item.Value<bool>());
@@ -68,6 +71,7 @@ namespace ApiActions.AbstractModeling.Application
                     {
                         InnerApply(child, abstractModel);
                     }
+
                     break;
                 case JTokenType.Comment:
                 case JTokenType.Constructor:

@@ -38,8 +38,10 @@ namespace ApiActions.Execution
             RouteData routeData)
         {
             _edgeDeserializer = edgeDeserializer ?? throw new ArgumentNullException(nameof(edgeDeserializer));
-            _edgeSerializerProvider = edgeSerializerProvider ?? throw new ArgumentNullException(nameof(edgeSerializerProvider));
-            _apiActionExecutioner = apiActionExecutioner ?? throw new ArgumentNullException(nameof(apiActionExecutioner));
+            _edgeSerializerProvider =
+                edgeSerializerProvider ?? throw new ArgumentNullException(nameof(edgeSerializerProvider));
+            _apiActionExecutioner =
+                apiActionExecutioner ?? throw new ArgumentNullException(nameof(apiActionExecutioner));
             _routeData = routeData;
         }
 

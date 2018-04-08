@@ -1,4 +1,17 @@
-﻿using System;
+﻿// Copyright (c) 2018-2018 Daniel A Hill. All rights reserved.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -18,7 +31,7 @@ namespace ApiActions.AbstractModeling.Application
             var data = new
             {
                 Foo = "bar",
-                Multi = new [] {"one", "two"},
+                Multi = new[] {"one", "two"},
                 Integer = 42,
                 Float = 1.23432,
                 Bool = true
@@ -26,7 +39,8 @@ namespace ApiActions.AbstractModeling.Application
 
             var mockContext = new Mock<IAbstractModelApplicationRequestContext>();
             mockContext.Setup(c => c.ContentType).Returns("application/json");
-            mockContext.Setup(c => c.Stream).Returns(new MemoryStream(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(data))));
+            mockContext.Setup(c => c.Stream)
+                .Returns(new MemoryStream(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(data))));
 
             var applicator = new JsonAbstractModelApplicator();
             var abstractModel = new AbstractModel();
@@ -49,19 +63,20 @@ namespace ApiActions.AbstractModeling.Application
             Assert.AreEqual("one", multi.Values[0]);
             Assert.AreEqual("two", multi.Values[1]);
 
-            Assert.AreEqual((long)42, abstractModel["Integer"].Values[0]);
-            Assert.AreEqual((decimal)1.23432, abstractModel["Float"].Values[0]);
+            Assert.AreEqual((long) 42, abstractModel["Integer"].Values[0]);
+            Assert.AreEqual((decimal) 1.23432, abstractModel["Float"].Values[0]);
             Assert.AreEqual(true, abstractModel["Bool"].Values[0]);
         }
 
         [TestMethod]
         public void ApplyArrayObject()
         {
-            var data = new [] { "one", "two" };
+            var data = new[] {"one", "two"};
 
             var mockContext = new Mock<IAbstractModelApplicationRequestContext>();
             mockContext.Setup(c => c.ContentType).Returns("application/json");
-            mockContext.Setup(c => c.Stream).Returns(new MemoryStream(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(data))));
+            mockContext.Setup(c => c.Stream)
+                .Returns(new MemoryStream(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(data))));
 
             var applicator = new JsonAbstractModelApplicator();
             var abstractModel = new AbstractModel();
@@ -80,16 +95,17 @@ namespace ApiActions.AbstractModeling.Application
             var data = new
             {
                 first = "firstvalue",
-                inner = new 
+                inner = new
                 {
                     Foo = "bar",
-                    Multi = new [] {"one", "two"}
+                    Multi = new[] {"one", "two"}
                 }
             };
 
             var mockContext = new Mock<IAbstractModelApplicationRequestContext>();
             mockContext.Setup(c => c.ContentType).Returns("application/json");
-            mockContext.Setup(c => c.Stream).Returns(new MemoryStream(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(data))));
+            mockContext.Setup(c => c.Stream)
+                .Returns(new MemoryStream(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(data))));
 
             var applicator = new JsonAbstractModelApplicator();
             var abstractModel = new AbstractModel();

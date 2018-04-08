@@ -19,9 +19,9 @@ using Microsoft.AspNetCore.Routing;
 // ReSharper disable once CheckNamespace - Extension methods should be in the namespace of the type they are extending
 namespace Microsoft.AspNet.Routing
 {
-    public static class RouteConstraintExtensions
+    internal static class RouteConstraintExtensions
     {
-        public static string GetKey(this IRouteConstraint routeConstraint)
+        internal static string GetKey(this IRouteConstraint routeConstraint)
         {
             if (routeConstraint == null) throw new ArgumentNullException(nameof(routeConstraint));
 

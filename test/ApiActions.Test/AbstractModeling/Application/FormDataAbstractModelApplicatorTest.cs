@@ -1,4 +1,17 @@
-﻿using System;
+﻿// Copyright (c) 2018-2018 Daniel A Hill. All rights reserved.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -27,7 +40,7 @@ namespace ApiActions.AbstractModeling.Application
             var formCollection = new FormCollection(new Dictionary<string, StringValues>
             {
                 {"foo", "bar"},
-                { "multi", new [] { "one", "two"}}
+                {"multi", new[] {"one", "two"}}
             });
 
             var mockContext = new Mock<IAbstractModelApplicationRequestContext>();
@@ -63,7 +76,7 @@ namespace ApiActions.AbstractModeling.Application
             var formCollection = new FormCollection(new Dictionary<string, StringValues>
             {
                 {"foo", "bar"},
-                { "multi", new [] { "one", "two"}}
+                {"multi", new[] {"one", "two"}}
             });
 
             var mockContext = new Mock<IAbstractModelApplicationRequestContext>();
@@ -102,7 +115,7 @@ namespace ApiActions.AbstractModeling.Application
                 {
                     Headers = new HeaderDictionary(new Dictionary<string, StringValues>
                     {
-                        {"Content-Disposition", "form-data; filename=\"filename.txt\"; name=\"name\"" }
+                        {"Content-Disposition", "form-data; filename=\"filename.txt\"; name=\"name\""}
                     })
                 }
             };
@@ -111,7 +124,7 @@ namespace ApiActions.AbstractModeling.Application
 
             var mockContext = new Mock<IAbstractModelApplicationRequestContext>();
             mockContext.Setup(c => c.Form).Returns(formCollection);
-            
+
             var applicator = new FormDataAbstractModelApplicator();
             var abstractModel = new AbstractModel();
 
@@ -126,7 +139,7 @@ namespace ApiActions.AbstractModeling.Application
             Assert.AreEqual(1, name.ValueCount);
             Assert.IsNotNull(name.Values[0]);
             Assert.IsInstanceOfType(name.Values[0], typeof(IFormFile));
-            Assert.AreEqual("filename.txt", ((IFormFile)name.Values[0]).FileName);
+            Assert.AreEqual("filename.txt", ((IFormFile) name.Values[0]).FileName);
         }
 
         [TestMethod]
@@ -147,7 +160,8 @@ namespace ApiActions.AbstractModeling.Application
         [TestMethod]
         public void HandlesIfFileIsPresentRegardlessofContentType()
         {
-            var fileFormCollection = new FormFileCollection {new FormFile(new MemoryStream(), 0, 25, "name", "filename.txt")};
+            var fileFormCollection =
+                new FormFileCollection {new FormFile(new MemoryStream(), 0, 25, "name", "filename.txt")};
             var formCollection = new FormCollection(new Dictionary<string, StringValues>(), fileFormCollection);
 
             var mockContext = new Mock<IAbstractModelApplicationRequestContext>();

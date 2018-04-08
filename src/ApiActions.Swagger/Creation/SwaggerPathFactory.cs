@@ -157,19 +157,19 @@ namespace ApiActions.Swagger.Creation
 
             if (!includesFile && supportsBody)
             {
-                    return new[]
+                return new[]
+                {
+                    new SwaggerParameter
                     {
-                        new SwaggerParameter
+                        Name = "Body",
+                        In = SwaggerRequestLocation.body,
+                        Required = true,
+                        SchemaLink = new SwaggerReferenceLink
                         {
-                            Name = "Body",
-                            In = SwaggerRequestLocation.body,
-                            Required = true,
-                            SchemaLink = new SwaggerReferenceLink
-                            {
-                                Link = "#/definitions/" + _definitionNameProvider.GetDefinitionName(info.RequestType)
-                            }
+                            Link = "#/definitions/" + _definitionNameProvider.GetDefinitionName(info.RequestType)
                         }
-                    };
+                    }
+                };
             }
 
             var location = includesFile ? SwaggerRequestLocation.formData : SwaggerRequestLocation.query;

@@ -63,7 +63,8 @@ namespace ApiActions.AbstractModeling.Application
             {
                 var name = file.Name;
 
-                if (name == null && ContentDispositionHeaderValue.TryParse(file.ContentDisposition, out var contentDispositionHeaderValue))
+                if (name == null && ContentDispositionHeaderValue.TryParse(file.ContentDisposition,
+                        out var contentDispositionHeaderValue))
                 {
                     name = contentDispositionHeaderValue.Name.Value;
 

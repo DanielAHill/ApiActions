@@ -129,6 +129,7 @@ namespace ApiActions.Versioning
                 {
                     return false;
                 }
+
                 if (item1Parts[x] < item2Parts[x])
                 {
                     return true;
@@ -152,6 +153,7 @@ namespace ApiActions.Versioning
                 {
                     return false;
                 }
+
                 if (item1Parts[x] > item2Parts[x])
                 {
                     return true;

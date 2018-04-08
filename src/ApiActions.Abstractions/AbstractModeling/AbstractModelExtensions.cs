@@ -11,7 +11,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-// ReSharper disable once RedundantUsingDirective
 
 using System;
 
@@ -28,7 +27,6 @@ namespace ApiActions.AbstractModeling
         public static bool IsAbstractModelValueType(this Type type)
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
-
             return type == typeof(string) || type.GetProperties().Length == 0;
         }
     }

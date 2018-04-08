@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// ReSharper disable once CheckNamespace - Targeting Attributes should be in the namespace of their target
 namespace ApiActions
 {
-    public class OptionalAttribute: RouteDefaultAttribute
+    public class OptionalAttribute : RouteDefaultAttribute
     {
         public OptionalAttribute(string parameterName)
             : base(parameterName, null)
-        { }
+        {
+        }
     }
 }
