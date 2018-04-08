@@ -2,6 +2,8 @@
 {
     public class WebSocketApiActionConfiguration
     {
-        public string SocketTunnelItemKey { get; set; } = "WebSocketApiActionTunnel";
+        public bool RequireSsl { get; set; }
+        public string SocketTunnelUrl { get; set; } = "/ws";
+        public string UnsubscribeUrlSuffix { get; set; } = "/unsubscribe/{id:Guid}";
     }
 }

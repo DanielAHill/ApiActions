@@ -7,11 +7,11 @@ namespace DanielAHill.AspNetCore.ApiActions.WebSockets
 {
     public interface IWebSocketTunnel
     {
-        Task SendAsync(Guid commandId, ApiActionResponse response, CancellationToken cancellationToken);
+        Task SendAsync(ApiActionResponse response, CancellationToken cancellationToken);
         Task CloseAsync(WebSocketCloseStatus status, string message, CancellationToken cancellationToken);
 
         Task SubscribeAsync(IUnsubscribable item);
-        Task UnsubscribeAsync(Guid id);
-        Task UnsubscribeAsync(Guid id, CancellationToken cancellationToken);
+        Task UnsubscribeAsync(string commandId);
+        Task UnsubscribeAsync(string commandId, CancellationToken cancellationToken);
     }
 }

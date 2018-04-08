@@ -5,13 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DanielAHill.AspNetCore.ApiActions.WebSockets.Abstractions\DanielAHill.AspNetCore.ApiActions.WebSockets.Abstractions.csproj" />
-    <ProjectReference Include="..\src\DanielAHill.AspNetCore.ApiActions.Abstractions\DanielAHill.AspNetCore.ApiActions.Abstractions.csproj" />
-    <ProjectReference Include="..\src\DanielAHill.AspNetCore.ApiActions\DanielAHill.AspNetCore.ApiActions.csproj" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Routing\Attributes\" />
+    <ProjectReference Include="..\DanielAHill.AspNetCore.ApiActions.WebSockets.Abstractions\DanielAHill.AspNetCore.ApiActions.WebSockets.Abstractions.csproj" />
+    <ProjectReference Include="..\src\DanielAHill.AspNetCore.ApiActions.Abstractions\DanielAHill.AspNetCore.ApiActions.Abstractions.csproj" />
+    <ProjectReference Include="..\src\DanielAHill.AspNetCore.ApiActions\DanielAHill.AspNetCore.ApiActions.csproj" />
   </ItemGroup>
 
 </Project>

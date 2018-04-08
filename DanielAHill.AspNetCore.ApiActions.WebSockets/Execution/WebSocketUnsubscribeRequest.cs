@@ -4,6 +4,6 @@ namespace DanielAHill.AspNetCore.ApiActions.WebSockets.Execution
 {
     public class WebSocketUnsubscribeRequest
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
     }
 }

@@ -77,8 +77,7 @@ namespace DanielAHill.AspNetCore.ApiActions.Responses
 
         private static void Add(string memberName, string errorMessage, IDictionary<string, PropertyValidationResult> convertDictionary)
         {
-            PropertyValidationResult validationResult;
-            if (!convertDictionary.TryGetValue(memberName, out validationResult))
+            if (!convertDictionary.TryGetValue(memberName, out var validationResult))
             {
                 validationResult = new PropertyValidationResult(memberName);
                 convertDictionary.Add(memberName, validationResult);

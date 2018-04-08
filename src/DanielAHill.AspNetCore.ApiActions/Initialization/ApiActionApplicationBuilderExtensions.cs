@@ -31,6 +31,7 @@ namespace Microsoft.AspNetCore.Builder
     public static class ApiActionApplicationBuilderExtensions
     {
         private static bool _alreadyRegistered;
+        internal static RouteCollection RouteCollection { get; private set; }
 
         public static IApplicationBuilder UseApiActions(this IApplicationBuilder app)
         {
@@ -46,7 +47,7 @@ namespace Microsoft.AspNetCore.Builder
             var globalRouteConstraintFactories = (app.ApplicationServices.GetServices<IGlobalRouteConstraintApplicationFactory>() ?? new IGlobalRouteConstraintApplicationFactory[0]).ToArray();
             var globalRouteDefaultApplicationFactories = (app.ApplicationServices.GetServices<IGlobalRouteDefaultApplicationFactory>() ?? new IGlobalRouteDefaultApplicationFactory[0]).ToArray();
 
-            var routes = new RouteCollection();
+            RouteCollection = new RouteCollection();
 
             if (actionRegistrations.Count == 0)
             {
@@ -63,15 +64,15 @@ namespace Microsoft.AspNetCore.Builder
                     {RouteDataKeys.ApiActionType, registration.ApiActionType}
                 };
 
-                routes.Add(new Route(handler, typeInfo.FullName, registration.Route,
+                RouteCollection.Add(new Route(handler, typeInfo.FullName, registration.Route,
                     GetRouteDefaults(registration, globalRouteDefaultApplicationFactories),
                     GetRouteConstraints(registration, globalRouteConstraintFactories, app.ApplicationServices),
                     dataTokenDictionary,
                     inlineConstraintResolver));
             }
 
-            app.UseRouter(routes);
-            log.LogInformation($"Registered {routes.Count} Routes");
+            app.UseRouter(RouteCollection);
+            log.LogInformation($"Registered {RouteCollection.Count} Routes");
 
             return app;
         }

@@ -92,6 +92,8 @@ namespace Microsoft.Extensions.DependencyInjection
             // Response Generation
             services.AddSingleton(typeof (IApiActionResponseAbstractFactory), typeof (ApiActionResponseAbstractFactory));
 
+            services.AddSingleton(typeof(IApiActionMiddlewareExecutioner), new ApiActionMiddlewareExecutioner());
+
             // Record Actions are already added to prevent multiple registrations
             _addedCore = true;
         }

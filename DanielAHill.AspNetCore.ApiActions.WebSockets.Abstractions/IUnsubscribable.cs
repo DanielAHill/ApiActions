@@ -6,7 +6,7 @@ namespace DanielAHill.AspNetCore.ApiActions.WebSockets
 {
     public interface IUnsubscribable
     {
-        Guid Id { get; }
+        string CommandId { get; }
         Task OnUnsubscribeAsync(CancellationToken cancellationToken);
     }
 }

@@ -1,31 +1,27 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using DanielAHill.AspNetCore.ApiActions.AbstractModeling;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
+using DanielAHill.AspNetCore.ApiActions.WebSockets.Protocol;
 
 namespace DanielAHill.AspNetCore.ApiActions.WebSockets
 {
     public abstract class WebSocketApiAction<TRequest> : ApiAction<TRequest>, IWebSocketApiAction
         where TRequest : class, new()
     {
-        public IWebSocketTunnel Socket { get; private set; }
+        private WebSocketTunnelHttpContext _webSocketTunnelHttpContext;
 
-        public bool IsWebSocket => Socket != null;
+        public IWebSocketTunnel Socket => _webSocketTunnelHttpContext?.Socket;
 
-        public Guid Id { get; } = Guid.NewGuid();
+        public bool IsWebSocket => _webSocketTunnelHttpContext != null;
+
+        public string CommandId { get; private set; }
 
         protected override async Task AppendedInitializeAsync(IApiActionInitializationContext initializationContext, CancellationToken cancellationToken)
         {
             await base.AppendedInitializeAsync(initializationContext, cancellationToken);
 
-            var configuration = initializationContext.HttpContext.RequestServices.GetRequiredService<IOptions<WebSocketApiActionConfiguration>>().Value;
-
-            if (initializationContext.HttpContext.Items.TryGetValue(configuration.SocketTunnelItemKey, out var uncastedTunnel))
-            {
-                Socket = (IWebSocketTunnel) uncastedTunnel;
-            }
+            _webSocketTunnelHttpContext = initializationContext.HttpContext as WebSocketTunnelHttpContext;
+            CommandId = initializationContext.HttpContext.TraceIdentifier;
         }
 
         #region Connection Events
@@ -44,7 +40,7 @@ namespace DanielAHill.AspNetCore.ApiActions.WebSockets
 
         protected virtual Task SendAsync(ApiActionResponse response, CancellationToken cancellationToken)
         {
-            return Socket.SendAsync(Id, response, cancellationToken);
+            return Socket.SendAsync(response, cancellationToken);
         }
     }
 

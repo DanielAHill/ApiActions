@@ -2,125 +2,58 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using DanielAHill.AspNetCore.ApiActions.Execution;
 using DanielAHill.AspNetCore.ApiActions.Routing;
 using Microsoft.AspNet.Routing;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace DanielAHill.AspNetCore.ApiActions.WebSockets.Initialization
 {
     public static class WebSocketApiActionsApplicationBuilderExtensions
     {
+        private static bool _requireSsl;
+        private static string _socketTunnelUrl;
         private static bool _alreadyRegistered;
 
-        public static IApplicationBuilder UseWebSocketApiActions(this IApplicationBuilder app)
+        public static IApplicationBuilder UseWebSocketApiActions(this IApplicationBuilder app, string socketTunnelUrl = null)
         {
             if (app == null) throw new ArgumentNullException(nameof(app));
-            if (_alreadyRegistered) return app;
-
-            _alreadyRegistered = true;
-
-            var log = app.ApplicationServices.GetRequiredService<ILoggerFactory>().CreateLogger("ApiAction Initialization");
-            var inlineConstraintResolver = app.ApplicationServices.GetRequiredService<IInlineConstraintResolver>();
-            var handler = app.ApplicationServices.GetRequiredService<IApiActionRouter>();
-            var sessionRegistrations = app.ApplicationServices.GetRequiredService<IApiActionRegistrationProvider>().Registrations;
-            var globalRouteConstraintFactories = (app.ApplicationServices.GetServices<IGlobalRouteConstraintApplicationFactory>() ?? new IGlobalRouteConstraintApplicationFactory[0]).ToArray();
-            var globalRouteDefaultApplicationFactories = (app.ApplicationServices.GetServices<IGlobalRouteDefaultApplicationFactory>() ?? new IGlobalRouteDefaultApplicationFactory[0]).ToArray();
-
-            var routes = new RouteCollection();
-
-            if (sessionRegistrations.Count == 0)
+            if (_alreadyRegistered)
             {
-                log.LogWarning("No WebSocketSessions Registered. WebSocketApiActions will not be active.");
                 return app;
             }
 
-            foreach (var registration in sessionRegistrations)
-            {
-                var typeInfo = registration.ApiActionType.GetTypeInfo();
+            _alreadyRegistered = true;
 
-                var dataTokenDictionary = new RouteValueDictionary
-                {
-                    {RouteDataKeys.WebSocketSessionType, registration.ApiActionType}
-                };
+            var configuration = app.ApplicationServices.GetRequiredService<IOptions<WebSocketApiActionConfiguration>>().Value;
 
-                routes.Add(new Route(handler, typeInfo.FullName, registration.Route,
-                    GetRouteDefaults(registration, globalRouteDefaultApplicationFactories),
-                    GetRouteConstraints(registration, globalRouteConstraintFactories, app.ApplicationServices),
-                    dataTokenDictionary,
-                    inlineConstraintResolver));
-            }
-
-            app.UseRouter(routes);
-            log.LogInformation($"Registered {routes.Count} Routes");
+            _requireSsl = configuration.RequireSsl;
+            _socketTunnelUrl = socketTunnelUrl ?? configuration.SocketTunnelUrl;
 
             // Ensure API Actions is registered
-            return app.UseApiActions();
+            app.UseApiActions();
+
+            app.Use(WebSocketApiActionsMiddleware);
+            
+            return app;
         }
 
-        private static IDictionary<string, object> GetRouteConstraints(IApiActionRegistration registration,
-            IReadOnlyList<IGlobalRouteConstraintApplicationFactory> applicationFactories,
-            IServiceProvider serviceProvider)
+        private static Task WebSocketApiActionsMiddleware(HttpContext context, Func<Task> next)
         {
-            var constraints = registration.Constraints as IDictionary<string, object> ?? registration.Constraints.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
-
-            // ApplyAsync Global Route Constraints
-            // ReSharper disable once ForCanBeConvertedToForeach - For loop is faster than foreach
-            for (var x = 0; x < applicationFactories.Count; x++)
+            if (context.WebSockets.IsWebSocketRequest
+                && _socketTunnelUrl.Equals(context.Request.Path, StringComparison.InvariantCultureIgnoreCase)
+                && (_requireSsl && context.Request.IsHttps || !_requireSsl))
             {
-                var factory = applicationFactories[x];
-                if (!factory.Matches(registration.ApiActionType))
-                {
-                    continue;
-                }
-
-                var constraint = factory.Get(registration.ApiActionType, serviceProvider);
-                if (constraint == null)
-                {
-                    continue;
-                }
-
-                var key = constraint.GetKey();
-                if (!constraints.ContainsKey(key))
-                {
-                    constraints.Add(key, constraint);
-                }
+                return context.RequestServices.GetRequiredService<IWebSocketSession>().ExecuteAsync(context);
             }
 
-            return constraints;
-        }
-
-        private static RouteValueDictionary GetRouteDefaults(IApiActionRegistration registration, IReadOnlyList<IGlobalRouteDefaultApplicationFactory> applicationFactories)
-        {
-            var routeDefaults = new RouteValueDictionary();
-            if (registration.Defaults != null)
-            {
-                foreach (var kvp in registration.Defaults)
-                {
-                    routeDefaults.Add(kvp.Key, kvp.Value);
-                }
-            }
-
-            // ApplyAsync Global Route Defaults
-            // ReSharper disable once ForCanBeConvertedToForeach - For loop is faster than foreach
-            for (var x = 0; x < applicationFactories.Count; x++)
-            {
-                var factory = applicationFactories[x];
-                if (!factory.Matches(registration.ApiActionType))
-                {
-                    continue;
-                }
-
-                foreach (var kvp in factory.Get(registration.ApiActionType).Where(kvp => !routeDefaults.ContainsKey(kvp.Key)))
-                {
-                    routeDefaults.Add(kvp.Key, kvp.Value);
-                }
-            }
-
-            return routeDefaults;
+            return next();
         }
     }
 }
