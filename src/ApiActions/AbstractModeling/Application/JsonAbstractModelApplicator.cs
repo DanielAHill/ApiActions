@@ -16,6 +16,7 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
 namespace ApiActions.AbstractModeling.Application
 {
@@ -25,118 +26,67 @@ namespace ApiActions.AbstractModeling.Application
 
         public bool Handles(IAbstractModelApplicationRequestContext context)
         {
-            return context.ContentType != null &&
-                   context.ContentType.StartsWith("application/json", StringComparison.OrdinalIgnoreCase);
+            return context.ContentType != null 
+                   && context.ContentType.StartsWith("application/json", StringComparison.OrdinalIgnoreCase);
         }
 
-        private static readonly char[] ObjectStartChar = {'{'};
-
-        public async Task ApplyAsync(IAbstractModelApplicationRequestContext context, AbstractModel abstractModel,
-            CancellationToken cancellationToken)
+        public async Task ApplyAsync(IAbstractModelApplicationRequestContext context, AbstractModel abstractModel, CancellationToken cancellationToken)
         {
-            var reader = new SectionedStreamReader(context.Stream, cancellationToken);
-
-            var section = await reader.ReadSection(ObjectStartChar);
-
-            if (!string.IsNullOrEmpty(section))
-            {
-                throw new InvalidDataException("Expected start of '{'");
-            }
-
-            if (!reader.EndOfStream)
-            {
-                await ApplyClassAsync(reader, abstractModel);
-            }
+            InnerApply(JToken.Parse(await new StreamReader(context.Stream).ReadToEndAsync()), abstractModel);
         }
 
-        private static async Task ApplyClassAsync(SectionedStreamReader reader, AbstractModel abstractModel)
+        private static void InnerApply(JToken item, AbstractModel abstractModel)
         {
-            do
+            switch (item.Type)
             {
-                await ApplyPropertyAsync(reader, abstractModel);
-            } while (!reader.EndOfStream && reader.LastDelimiter != '}');
-        }
-
-        private static readonly char[] PostPropertyNameChars = {'"', ':', '}', ','};
-        private static readonly char[] Quote = {'"'};
-        private static readonly char[] Colon = {':'};
-        private static readonly char[] ValueChars = {'"', ',', '[', ']', '{', '}'};
-
-        private static async Task ApplyPropertyAsync(SectionedStreamReader reader, AbstractModel abstractModel)
-        {
-            // Read Property Name
-            var name = await reader.ReadSection(PostPropertyNameChars);
-
-            if (reader.EndOfStream && string.IsNullOrEmpty(name))
-            {
-                // Natural end of stream
-                return;
-            }
-
-            switch (reader.LastDelimiter)
-            {
-                case '}':
-                    // End of object detected
-                    return;
-                case ',':
-                    // Left-over (or empty) comma from previous property
-                    if (!string.IsNullOrEmpty(name))
+                case JTokenType.Array:
+                    foreach (var arrayValue in item.Values())
                     {
-                        throw new InvalidDataException($"Expected ':' but got '${name},'");
+                        InnerApply(arrayValue, abstractModel);
                     }
-
-                    return;
-                case '"' when string.IsNullOrEmpty(name):
-                    name = await reader.ReadSection(Quote, false);
-                    await reader.ReadSection(Colon);
                     break;
-            }
-
-            if (reader.LastDelimiter != ':')
-            {
-                throw new InvalidDataException($"Expected ':' but got '{reader.LastDelimiter}'");
-            }
-
-            var abstractProperty = new AbstractModel(name);
-
-            // Read Value
-            await ApplyValue(reader, abstractProperty, false);
-
-            abstractModel.Add(abstractProperty);
-        }
-
-        private static async Task ApplyValue(SectionedStreamReader reader, AbstractModel abstractModel, bool isArray)
-        {
-            var value = await reader.ReadSection(ValueChars);
-
-            switch (reader.LastDelimiter)
-            {
-                case '"':
-                    value = await reader.ReadSection(Quote, false);
-                    break;
-                case '[':
-                    do
+                case JTokenType.Property:
+                    var property = (JProperty) item;
+                    var newModel = new AbstractModel(property.Name);
+                    abstractModel.Add(newModel);
+                    foreach (var child in item.Children())
                     {
-                        await ApplyValue(reader, abstractModel, true);
-                    } while (!reader.EndOfStream && reader.LastDelimiter != ']');
-
-                    break;
-                case '{':
-                    var workingModel = abstractModel;
-
-                    if (isArray)
-                    {
-                        workingModel = new AbstractModel();
-                        abstractModel.AddValue(workingModel);
+                        InnerApply(child, newModel);
                     }
-
-                    await ApplyClassAsync(reader, workingModel);
                     break;
-            }
-
-            if (!string.IsNullOrEmpty(value))
-            {
-                abstractModel.AddValue(value);
+                case JTokenType.Bytes:
+                    abstractModel.AddValue(item.Value<byte[]>());
+                    break;
+                case JTokenType.Boolean:
+                    abstractModel.AddValue(item.Value<bool>());
+                    break;
+                case JTokenType.Guid:
+                    abstractModel.AddValue(item.Value<Guid>());
+                    break;
+                case JTokenType.Date:
+                    abstractModel.AddValue(item.Value<DateTime>());
+                    break;
+                case JTokenType.Integer:
+                    abstractModel.AddValue(item.Value<long>());
+                    break;
+                case JTokenType.Float:
+                    abstractModel.AddValue(item.Value<decimal>());
+                    break;
+                case JTokenType.TimeSpan:
+                    abstractModel.AddValue(item.Value<TimeSpan>());
+                    break;
+                case JTokenType.Object:
+                    foreach (var child in item.Children())
+                    {
+                        InnerApply(child, abstractModel);
+                    }
+                    break;
+                case JTokenType.Comment:
+                case JTokenType.Constructor:
+                    break;
+                default:
+                    abstractModel.AddValue(item.Value<string>());
+                    break;
             }
         }
     }

@@ -226,6 +226,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractModeling\Application\FormDataAbstractModelApplicatorTest.cs" />
+    <Compile Include="AbstractModeling\Application\JsonAbstractModelApplicatorTest.cs" />
     <Compile Include="AbstractModeling\Application\QueryParameterAbstractModelApplicatorTest.cs" />
     <Compile Include="AbstractModeling\Application\RouteDataAbstractModelApplicatorTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
