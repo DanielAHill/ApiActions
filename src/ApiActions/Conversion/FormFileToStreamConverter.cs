@@ -50,12 +50,7 @@ namespace ApiActions.Conversion
 
         public object Convert(object source, Type destinationType)
         {
-            if (source == null)
-            {
-                return null;
-            }
-
-            return ApiActionVersion.Parse(source.ToString());
+            return source == null ? null : ApiActionVersion.Parse(source.ToString());
         }
     }
 }

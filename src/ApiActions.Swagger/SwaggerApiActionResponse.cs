@@ -31,10 +31,9 @@ namespace ApiActions.Swagger
         internal SwaggerApiActionResponse(SwaggerBase root)
         {
 #if DEBUG
-            if (root == null) throw new ArgumentNullException(nameof(root));
 #endif
 
-            _root = root;
+            _root = root ?? throw new ArgumentNullException(nameof(root));
         }
 
         public override Task WriteAsync(HttpContext httpContext, IEdgeSerializer edgeSerializer,
@@ -64,8 +63,7 @@ namespace ApiActions.Swagger
             }
 
             // Perform custom serialization, if supported
-            var customSerializable = item as ICustomSwaggerJsonSerializable;
-            if (customSerializable != null)
+            if (item is ICustomSwaggerJsonSerializable customSerializable)
             {
                 customSerializable.SerializeJson(builder, Serialize, recursionsLeft - 1);
                 return;

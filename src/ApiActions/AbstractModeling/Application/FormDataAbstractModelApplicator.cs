@@ -15,7 +15,6 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using ApiActions.AbstractModeling.Application;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Net.Http.Headers;
 
@@ -27,10 +26,8 @@ namespace ApiActions.AbstractModeling.Application
 
         public bool Handles(IAbstractModelApplicationRequestContext context)
         {
-            MediaTypeHeaderValue contentType;
-
             if (string.IsNullOrWhiteSpace(context.ContentType) ||
-                !MediaTypeHeaderValue.TryParse(context.ContentType, out contentType))
+                !MediaTypeHeaderValue.TryParse(context.ContentType, out var contentType))
             {
                 return false;
             }
@@ -51,8 +48,7 @@ namespace ApiActions.AbstractModeling.Application
 
             foreach (var file in formCollection.Files)
             {
-                ContentDispositionHeaderValue contentDispositionHeaderValue;
-                if (ContentDispositionHeaderValue.TryParse(file.ContentDisposition, out contentDispositionHeaderValue))
+                if (ContentDispositionHeaderValue.TryParse(file.ContentDisposition, out var contentDispositionHeaderValue))
                 {
                     abstractModel.Add(new AbstractModel(contentDispositionHeaderValue.Name.ToString(), file));
                 }

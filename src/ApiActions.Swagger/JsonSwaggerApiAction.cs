@@ -112,7 +112,7 @@ namespace ApiActions.Swagger
 
             if (_options.ExternalDocumentationDescription != null || _options.ExternalDocumentationUrl != null)
             {
-                root.ExternalDocs = new SwaggerExternalDocumentation()
+                root.ExternalDocs = new SwaggerExternalDocumentation
                 {
                     Description = _options.ExternalDocumentationDescription,
                     Url = _options.ExternalDocumentationUrl

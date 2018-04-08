@@ -64,7 +64,7 @@ namespace ApiActions.Versioning
 
         public int CompareTo(ApiActionVersion other)
         {
-            if (this.Equals(other))
+            if (Equals(other))
             {
                 return 0;
             }

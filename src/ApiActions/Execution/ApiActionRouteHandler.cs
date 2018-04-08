@@ -37,14 +37,9 @@ namespace ApiActions.Execution
             IApiActionExecutioner apiActionExecutioner,
             RouteData routeData)
         {
-#if DEBUG
-            if (edgeDeserializer == null) throw new ArgumentNullException(nameof(edgeDeserializer));
-            if (edgeSerializerProvider == null) throw new ArgumentNullException(nameof(edgeSerializerProvider));
-            if (apiActionExecutioner == null) throw new ArgumentNullException(nameof(apiActionExecutioner));
-#endif
-            _edgeDeserializer = edgeDeserializer;
-            _edgeSerializerProvider = edgeSerializerProvider;
-            _apiActionExecutioner = apiActionExecutioner;
+            _edgeDeserializer = edgeDeserializer ?? throw new ArgumentNullException(nameof(edgeDeserializer));
+            _edgeSerializerProvider = edgeSerializerProvider ?? throw new ArgumentNullException(nameof(edgeSerializerProvider));
+            _apiActionExecutioner = apiActionExecutioner ?? throw new ArgumentNullException(nameof(apiActionExecutioner));
             _routeData = routeData;
         }
 

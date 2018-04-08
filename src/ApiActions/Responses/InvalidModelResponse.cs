@@ -65,7 +65,7 @@ namespace ApiActions.Responses
                 }
             }
 
-            return new BadRequestDetails()
+            return new BadRequestDetails
             {
                 Errors = globalErrors.Any() ? globalErrors : null,
                 Inputs = convertDictionary.Values.Any() ? convertDictionary.Values.ToList() : null

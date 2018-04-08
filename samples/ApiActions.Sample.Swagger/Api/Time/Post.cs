@@ -56,7 +56,7 @@ namespace ApiActions.Sample.Swagger.Api.Time
         [Response(200, typeof(ResponseModel))]
         public override Task<ApiActionResponse> ExecuteAsync(CancellationToken cancellationToken)
         {
-            return Response(new ResponseModel()
+            return Response(new ResponseModel
             {
                 CurrentUtc = DateTime.UtcNow,
                 Current = TimeZoneInfo.ConvertTime(DateTime.UtcNow, _timeZone),

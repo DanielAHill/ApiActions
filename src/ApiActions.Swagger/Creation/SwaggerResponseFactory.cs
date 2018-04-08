@@ -37,10 +37,10 @@ namespace ApiActions.Swagger.Creation
 
         private SwaggerResponse Create(IApiActionResponseInfo responseInfo)
         {
-            var response = new SwaggerResponse()
+            var response = new SwaggerResponse
             {
                 Code = responseInfo.StatusCode.ToString(),
-                Description = responseInfo.Description,
+                Description = responseInfo.Description
             };
 
             if (responseInfo.ResponseData == null)
@@ -53,12 +53,11 @@ namespace ApiActions.Swagger.Creation
 
             if (typeDetails.IsCollection)
             {
-                response.Reference = new SwaggerSchemaReferenceLink() {Type = SwaggerType.Array, Link = link};
+                response.Reference = new SwaggerSchemaReferenceLink {Type = SwaggerType.Array, Link = link};
             }
             else
             {
                 response.Reference = new SwaggerReferenceLink {Link = link};
-                ;
             }
 
             return response;

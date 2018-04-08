@@ -49,12 +49,7 @@ namespace ApiActions.Swagger.Creation
                 return SwaggerType.Array;
             }
 
-            if (typeDetails.IsValue)
-            {
-                return SwaggerType.String;
-            }
-
-            return SwaggerType.Object;
+            return typeDetails.IsValue ? SwaggerType.String : SwaggerType.Object;
         }
 
         public Type GetTypeToDocument(Type type)

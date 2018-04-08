@@ -22,7 +22,6 @@ namespace ApiActions.Execution
     internal class ApiActionExecutioner : IApiActionExecutioner
     {
         private static readonly Func<IApiAction, CancellationToken, Task>[] PreExecutionTasks =
-            new Func<IApiAction, CancellationToken, Task>[]
             {
                 AuthorizeAsync, ValidateModelAsync, PreloadDataAsync, ValidateModelDataAsync, AuthorizeDataAsync
             };

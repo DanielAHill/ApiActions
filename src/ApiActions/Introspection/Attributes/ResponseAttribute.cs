@@ -23,13 +23,13 @@ namespace ApiActions
     /// Describes a potential response to executing ApiAction with the goal of providing helpful information to consuming clients.
     /// </summary>
     /// <remarks>Information provided may be used by code-gen clients to generate code</remarks>
-    /// <seealso cref="System.Attribute" />
+    /// <seealso cref="T:System.Attribute" />
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
     public class ResponseAttribute : Attribute, IHasApiActionResponseInfo
     {
         public IReadOnlyCollection<IApiActionResponseInfo> Responses => new[]
         {
-            new ApiActionResponseInfo()
+            new ApiActionResponseInfo
             {
                 StatusCode = StatusCode,
                 Description = Description,

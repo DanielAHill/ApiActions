@@ -32,7 +32,7 @@ namespace ApiActions.AbstractModeling.Application
         private const char Delimiter = '\\';
         private const char UnicodeHexPrefix = 'u';
 
-        private static readonly IReadOnlyDictionary<char, char> DelimitedValueMapping = new Dictionary<char, char>()
+        private static readonly IReadOnlyDictionary<char, char> DelimitedValueMapping = new Dictionary<char, char>
         {
             {'r', '\r'},
             {'R', '\r'},
@@ -79,8 +79,7 @@ namespace ApiActions.AbstractModeling.Application
 
                     c = _readBuffer[0];
 
-                    char replacementChar;
-                    if (DelimitedValueMapping.TryGetValue(c, out replacementChar))
+                    if (DelimitedValueMapping.TryGetValue(c, out var replacementChar))
                     {
                         c = replacementChar;
                     }

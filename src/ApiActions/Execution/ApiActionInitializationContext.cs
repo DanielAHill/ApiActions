@@ -30,13 +30,10 @@ namespace ApiActions.Execution
         internal ApiActionInitializationContext(HttpContext httpContext, RouteData routeData,
             AbstractModel abstractModel)
         {
-#if DEBUG
-            if (httpContext == null) throw new ArgumentNullException(nameof(httpContext));
             if (routeData == null) throw new ArgumentNullException(nameof(routeData));
-            if (abstractModel == null) throw new ArgumentNullException(nameof(abstractModel));
-#endif
-            HttpContext = httpContext;
-            AbstractModel = abstractModel;
+
+            HttpContext = httpContext ?? throw new ArgumentNullException(nameof(httpContext));
+            AbstractModel = abstractModel ?? throw new ArgumentNullException(nameof(abstractModel));
             RouteDataTokens = routeData.DataTokens;
             RouteValues = routeData.Values;
         }

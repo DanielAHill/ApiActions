@@ -74,27 +74,23 @@ namespace ApiActions.AbstractModeling.Application
                 return;
             }
 
-            if (reader.LastDelimiter == '}')
+            switch (reader.LastDelimiter)
             {
-                // End of object detected
-                return;
-            }
+                case '}':
+                    // End of object detected
+                    return;
+                case ',':
+                    // Left-over (or empty) comma from previous property
+                    if (!string.IsNullOrEmpty(name))
+                    {
+                        throw new InvalidDataException($"Expected ':' but got '${name},'");
+                    }
 
-            if (reader.LastDelimiter == ',')
-            {
-                // Left-over (or empty) comma from previous property
-                if (!string.IsNullOrEmpty(name))
-                {
-                    throw new InvalidDataException($"Expected ':' but got '${name},'");
-                }
-
-                return;
-            }
-
-            if (reader.LastDelimiter == '"' && string.IsNullOrEmpty(name))
-            {
-                name = await reader.ReadSection(Quote, false);
-                await reader.ReadSection(Colon);
+                    return;
+                case '"' when string.IsNullOrEmpty(name):
+                    name = await reader.ReadSection(Quote, false);
+                    await reader.ReadSection(Colon);
+                    break;
             }
 
             if (reader.LastDelimiter != ':')
@@ -114,28 +110,29 @@ namespace ApiActions.AbstractModeling.Application
         {
             var value = await reader.ReadSection(ValueChars);
 
-            if (reader.LastDelimiter == '"')
+            switch (reader.LastDelimiter)
             {
-                value = await reader.ReadSection(Quote, false);
-            }
-            else if (reader.LastDelimiter == '[')
-            {
-                do
-                {
-                    await ApplyValue(reader, abstractModel, true);
-                } while (!reader.EndOfStream && reader.LastDelimiter != ']');
-            }
-            else if (reader.LastDelimiter == '{')
-            {
-                var workingModel = abstractModel;
+                case '"':
+                    value = await reader.ReadSection(Quote, false);
+                    break;
+                case '[':
+                    do
+                    {
+                        await ApplyValue(reader, abstractModel, true);
+                    } while (!reader.EndOfStream && reader.LastDelimiter != ']');
 
-                if (isArray)
-                {
-                    workingModel = new AbstractModel();
-                    abstractModel.AddValue(workingModel);
-                }
+                    break;
+                case '{':
+                    var workingModel = abstractModel;
 
-                await ApplyClassAsync(reader, workingModel);
+                    if (isArray)
+                    {
+                        workingModel = new AbstractModel();
+                        abstractModel.AddValue(workingModel);
+                    }
+
+                    await ApplyClassAsync(reader, workingModel);
+                    break;
             }
 
             if (!string.IsNullOrEmpty(value))

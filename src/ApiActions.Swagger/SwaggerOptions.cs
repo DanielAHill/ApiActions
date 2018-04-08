@@ -43,6 +43,6 @@ namespace ApiActions.Swagger
         public string ExternalDocumentationDescription { get; set; }
         public string ExternalDocumentationUrl { get; set; }
 
-        public string[] DefaultMethods { get; set; } = new string[] {"GET"};
+        public string[] DefaultMethods { get; set; } = {"GET"};
     }
 }

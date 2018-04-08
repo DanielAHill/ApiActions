@@ -39,6 +39,7 @@ namespace ApiActions
         protected ClaimsPrincipal User => _httpContext.User;
         protected ConnectionInfo Connection => _httpContext.Connection;
 
+        /// <inheritdoc />
         /// <summary>
         /// Gets the response of an action, following each execution step, if one exists
         /// </summary>
@@ -185,7 +186,7 @@ namespace ApiActions
 
         protected ApiActionResponse Response<T>(HttpStatusCode statusCode, T data)
         {
-            return Response<T>((int) statusCode, data);
+            return Response((int) statusCode, data);
         }
 
         // ReSharper disable once MemberCanBePrivate.Global

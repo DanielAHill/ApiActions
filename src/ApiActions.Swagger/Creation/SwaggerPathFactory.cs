@@ -125,11 +125,11 @@ namespace ApiActions.Swagger.Creation
 
             foreach (var property in propertyDetails)
             {
-                var parameter = new SwaggerParameter()
+                var parameter = new SwaggerParameter
                 {
                     Name = property.Name,
                     Schema = _schemaFactory.Create(property.PropertyType,
-                        property.PropertyType.GetTypeDetails().PropertyWriters),
+                        property.PropertyType.GetTypeDetails().PropertyWriters)
                     // TODO: Add Description
                     // TODO: Add Required
                 };
@@ -157,32 +157,25 @@ namespace ApiActions.Swagger.Creation
 
             if (!includesFile && supportsBody)
             {
-                //if (routeParameterNames.Count == 0)
-                {
                     return new[]
                     {
-                        new SwaggerParameter()
+                        new SwaggerParameter
                         {
                             Name = "Body",
                             In = SwaggerRequestLocation.body,
                             Required = true,
-                            SchemaLink = new SwaggerReferenceLink()
+                            SchemaLink = new SwaggerReferenceLink
                             {
                                 Link = "#/definitions/" + _definitionNameProvider.GetDefinitionName(info.RequestType)
                             }
                         }
                     };
-                }
-
-                //throw new NotImplementedException();
             }
-            else
+
+            var location = includesFile ? SwaggerRequestLocation.formData : SwaggerRequestLocation.query;
+            foreach (var param in nonRouteParameters)
             {
-                var location = includesFile ? SwaggerRequestLocation.formData : SwaggerRequestLocation.query;
-                foreach (var param in nonRouteParameters)
-                {
-                    param.In = location;
-                }
+                param.In = location;
             }
 
             var parameters = nonRouteParameters.Concat(routeParameters).ToArray();
@@ -196,8 +189,7 @@ namespace ApiActions.Swagger.Creation
 
             foreach (var path in paths)
             {
-                SwaggerPath existingPath;
-                if (combineDictionary.TryGetValue(path.Path, out existingPath))
+                if (combineDictionary.TryGetValue(path.Path, out var existingPath))
                 {
                     // Duplicate Detected
                     Combine(existingPath, path);

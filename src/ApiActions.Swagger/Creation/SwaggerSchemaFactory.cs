@@ -41,7 +41,7 @@ namespace ApiActions.Swagger.Creation
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
 
-            var schema = new SwaggerSchema()
+            var schema = new SwaggerSchema
             {
                 Title = type.Name,
                 Type = _swaggerTypeConverter.GetSwaggerType(type)

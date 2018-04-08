@@ -138,12 +138,7 @@ namespace ApiActions.Responses.Construction
                 return ExceptionResponseDelegates;
             }
 
-            if (typeof(object).IsAssignableFrom(scopedType))
-            {
-                return ObjectResponseDelegates;
-            }
-
-            return null;
+            return typeof(object).IsAssignableFrom(scopedType) ? ObjectResponseDelegates : null;
         }
     }
 }

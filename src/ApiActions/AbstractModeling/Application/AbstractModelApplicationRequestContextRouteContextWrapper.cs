@@ -48,12 +48,8 @@ namespace ApiActions.AbstractModeling.Application
 
         internal AbstractModelApplicationRequestContextRouteContextWrapper(HttpContext httpContext, RouteData routeData)
         {
-#if DEBUG
-            if (httpContext == null) throw new ArgumentNullException(nameof(httpContext));
-            if (routeData == null) throw new ArgumentNullException(nameof(routeData));
-#endif
-            _httpContext = httpContext;
-            RouteData = routeData;
+            _httpContext = httpContext ?? throw new ArgumentNullException(nameof(httpContext));
+            RouteData = routeData ?? throw new ArgumentNullException(nameof(routeData));
         }
     }
 }

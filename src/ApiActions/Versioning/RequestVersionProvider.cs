@@ -53,8 +53,7 @@ namespace ApiActions.Versioning
             if (context == null) throw new ArgumentNullException(nameof(context));
             if (routeValues == null) throw new ArgumentNullException(nameof(routeValues));
 
-            object requestCachedVersion;
-            context.Items.TryGetValue(RequestCacheKey, out requestCachedVersion);
+            context.Items.TryGetValue(RequestCacheKey, out var requestCachedVersion);
 
             var version = requestCachedVersion as ApiActionVersion;
 

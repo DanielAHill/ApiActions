@@ -27,15 +27,10 @@ namespace ApiActions.Initialization
         internal ApiActionRegistration(Type type, string route, IReadOnlyDictionary<string, object> constraints,
             IReadOnlyDictionary<string, object> defaults)
         {
-#if DEBUG
-            if (route == null) throw new ArgumentNullException(nameof(route));
-            if (constraints == null) throw new ArgumentNullException(nameof(constraints));
-            if (defaults == null) throw new ArgumentNullException(nameof(defaults));
-#endif
             ApiActionType = type;
-            Route = route;
-            Constraints = constraints;
-            Defaults = defaults;
+            Route = route ?? throw new ArgumentNullException(nameof(route));
+            Constraints = constraints ?? throw new ArgumentNullException(nameof(constraints));
+            Defaults = defaults ?? throw new ArgumentNullException(nameof(defaults));
         }
 
         public override string ToString()

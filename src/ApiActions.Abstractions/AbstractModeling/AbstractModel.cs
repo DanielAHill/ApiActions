@@ -43,8 +43,7 @@ namespace ApiActions.AbstractModeling
         {
             get
             {
-                AbstractModel property;
-                Children.TryGetValue(propertyName.ToLowerInvariant(), out property);
+                Children.TryGetValue(propertyName.ToLowerInvariant(), out var property);
                 return property;
             }
         }
@@ -73,8 +72,7 @@ namespace ApiActions.AbstractModeling
         {
             if (child == null) throw new ArgumentNullException(nameof(child));
 
-            AbstractModel existingChild;
-            if (Children.TryGetValue(child.Name, out existingChild))
+            if (Children.TryGetValue(child.Name, out var existingChild))
             {
                 // Merge
                 if (existingChild.ChildCount > 0)

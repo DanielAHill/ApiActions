@@ -44,33 +44,28 @@ namespace ApiActions.Swagger.Creation
 
             var swaggerType = _swaggerTypeConverter.GetSwaggerType(propertyDetails.PropertyType);
 
-            if (swaggerType == SwaggerType.Object)
+            switch (swaggerType)
             {
-                typeQueue.Enqueue(propertyDetails.PropertyType);
-                return new ReferencedSwaggerProperty()
-                {
-                    Name = propertyDetails.Name,
-                    Reference = _definitionNameProvider.GetDefinitionName(propertyDetails.PropertyType)
-                };
+                case SwaggerType.Object:
+                    typeQueue.Enqueue(propertyDetails.PropertyType);
+                    return new ReferencedSwaggerProperty
+                    {
+                        Name = propertyDetails.Name,
+                        Reference = _definitionNameProvider.GetDefinitionName(propertyDetails.PropertyType)
+                    };
+                case SwaggerType.Array:
+                    var propertyType = _swaggerTypeConverter.GetTypeToDocument(propertyDetails.PropertyType);
+
+                    typeQueue?.Enqueue(propertyType);
+
+                    return new ArraySwaggerProperty
+                    {
+                        Name = propertyDetails.Name,
+                        Reference = _definitionNameProvider.GetDefinitionName(propertyType)
+                    };
             }
 
-            if (swaggerType == SwaggerType.Array)
-            {
-                var propertyType = _swaggerTypeConverter.GetTypeToDocument(propertyDetails.PropertyType);
-
-                if (typeQueue != null)
-                {
-                    typeQueue.Enqueue(propertyType);
-                }
-
-                return new ArraySwaggerProperty()
-                {
-                    Name = propertyDetails.Name,
-                    Reference = _definitionNameProvider.GetDefinitionName(propertyType)
-                };
-            }
-
-            return new TypedSwaggerProperty() {Name = propertyDetails.Name, Type = swaggerType};
+            return new TypedSwaggerProperty {Name = propertyDetails.Name, Type = swaggerType};
         }
     }
 }

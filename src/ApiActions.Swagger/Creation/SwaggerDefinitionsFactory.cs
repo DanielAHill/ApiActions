@@ -56,7 +56,7 @@ namespace ApiActions.Swagger.Creation
 
                 if (!resultsLookup.ContainsKey(name))
                 {
-                    resultsLookup.Add(name, new SwaggerDefinition()
+                    resultsLookup.Add(name, new SwaggerDefinition
                     {
                         Name = name,
                         Schema = _schemaFactory.Create(type, type.GetTypeDetails().PropertyReaders, typeQueue)
