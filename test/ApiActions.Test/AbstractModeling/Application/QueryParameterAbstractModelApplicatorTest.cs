@@ -27,7 +27,7 @@ namespace ApiActions.AbstractModeling.Application
         [TestMethod]
         public void ApplyAbstractModel()
         {
-            var queryCollection = new QueryCollection(new Dictionary<string, StringValues>()
+            var queryCollection = new QueryCollection(new Dictionary<string, StringValues>
             {
                 {"prop1", "prop1stringvalue"},
                 {"prop2", "2"}
@@ -59,7 +59,7 @@ namespace ApiActions.AbstractModeling.Application
         [TestMethod]
         public void SupportMultipleValues()
         {
-            var queryCollection = new QueryCollection(new Dictionary<string, StringValues>()
+            var queryCollection = new QueryCollection(new Dictionary<string, StringValues>
             {
                 {"multi", new[] {"one", "two"}}
             });
