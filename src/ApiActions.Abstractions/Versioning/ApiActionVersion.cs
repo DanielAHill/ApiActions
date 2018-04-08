@@ -23,7 +23,7 @@ namespace ApiActions.Versioning
 
         public ApiActionVersion(params int[] parts)
         {
-            if (parts == null) throw new ArgumentNullException(nameof(parts));
+            if (parts == null || parts.Length == 0) throw new ArgumentNullException(nameof(parts));
 
             if (parts.Any(p => p < 0))
             {
@@ -55,7 +55,17 @@ namespace ApiActions.Versioning
 
         public override int GetHashCode()
         {
-            return _parts?.GetHashCode() ?? 0;
+            unchecked
+            {
+                var hash = 17;
+
+                for (var i = 0; i < _parts.Length; i++)
+                {
+                    hash = 31 * hash + _parts[i].GetHashCode();
+                }
+
+                return hash;
+            }
         }
 
         #endregion
@@ -84,7 +94,6 @@ namespace ApiActions.Versioning
         public static ApiActionVersion Parse(string value)
         {
             if (value == null) throw new ArgumentNullException(nameof(value));
-
             return new ApiActionVersion(value.Split('.').Select(int.Parse).ToArray());
         }
 
@@ -120,6 +129,10 @@ namespace ApiActions.Versioning
                 {
                     return false;
                 }
+                if (item1Parts[x] < item2Parts[x])
+                {
+                    return true;
+                }
             }
 
             return item1Parts.Length < item2Parts.Length;
@@ -139,6 +152,10 @@ namespace ApiActions.Versioning
                 {
                     return false;
                 }
+                if (item1Parts[x] > item2Parts[x])
+                {
+                    return true;
+                }
             }
 
             return item1Parts.Length > item2Parts.Length;
@@ -149,28 +166,7 @@ namespace ApiActions.Versioning
             if (item1 == null) throw new ArgumentNullException(nameof(item1));
             if (item2 == null) throw new ArgumentNullException(nameof(item2));
 
-            var item1Parts = item1._parts;
-            var item2Parts = item2._parts;
-
-            if (item2Parts.Length < item1Parts.Length)
-            {
-                return false;
-            }
-
-            for (var x = 0; x < item1Parts.Length; x++)
-            {
-                if (item1Parts[x] > item2Parts[x])
-                {
-                    return false;
-                }
-
-                if (item1Parts[x] < item2Parts[x])
-                {
-                    return true;
-                }
-            }
-
-            return true;
+            return item1 < item2 || item1 == item2;
         }
 
         public static bool operator >=(ApiActionVersion item1, ApiActionVersion item2)
@@ -178,28 +174,7 @@ namespace ApiActions.Versioning
             if (item1 == null) throw new ArgumentNullException(nameof(item1));
             if (item2 == null) throw new ArgumentNullException(nameof(item2));
 
-            var item1Parts = item1._parts;
-            var item2Parts = item2._parts;
-
-            if (item2Parts.Length > item1Parts.Length)
-            {
-                return false;
-            }
-
-            for (var x = 0; x < item2Parts.Length; x++)
-            {
-                if (item1Parts[x] < item2Parts[x])
-                {
-                    return false;
-                }
-
-                if (item1Parts[x] > item2Parts[x])
-                {
-                    return true;
-                }
-            }
-
-            return true;
+            return item1 > item2 || item1 == item2;
         }
 
         public static bool operator ==(ApiActionVersion item1, ApiActionVersion item2)

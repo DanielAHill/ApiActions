@@ -230,6 +230,7 @@
     <Compile Include="AbstractModeling\Application\QueryParameterAbstractModelApplicatorTest.cs" />
     <Compile Include="AbstractModeling\Application\RouteDataAbstractModelApplicatorTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Versioning\ApiActionVersionTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

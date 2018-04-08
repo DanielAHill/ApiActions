@@ -54,26 +54,14 @@ namespace ApiActions.AbstractModeling.Application
                         InnerApply(child, newModel);
                     }
                     break;
-                case JTokenType.Bytes:
-                    abstractModel.AddValue(item.Value<byte[]>());
-                    break;
                 case JTokenType.Boolean:
                     abstractModel.AddValue(item.Value<bool>());
-                    break;
-                case JTokenType.Guid:
-                    abstractModel.AddValue(item.Value<Guid>());
-                    break;
-                case JTokenType.Date:
-                    abstractModel.AddValue(item.Value<DateTime>());
                     break;
                 case JTokenType.Integer:
                     abstractModel.AddValue(item.Value<long>());
                     break;
                 case JTokenType.Float:
                     abstractModel.AddValue(item.Value<decimal>());
-                    break;
-                case JTokenType.TimeSpan:
-                    abstractModel.AddValue(item.Value<TimeSpan>());
                     break;
                 case JTokenType.Object:
                     foreach (var child in item.Children())

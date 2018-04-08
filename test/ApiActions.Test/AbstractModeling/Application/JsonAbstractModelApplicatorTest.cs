@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -17,7 +18,10 @@ namespace ApiActions.AbstractModeling.Application
             var data = new
             {
                 Foo = "bar",
-                Multi = new [] {"one", "two"}
+                Multi = new [] {"one", "two"},
+                Integer = 42,
+                Float = 1.23432,
+                Bool = true
             };
 
             var mockContext = new Mock<IAbstractModelApplicationRequestContext>();
@@ -30,7 +34,7 @@ namespace ApiActions.AbstractModeling.Application
             applicator.ApplyAsync(mockContext.Object, abstractModel, CancellationToken.None).Wait();
 
             Assert.AreEqual(0, abstractModel.ValueCount);
-            Assert.AreEqual(2, abstractModel.ChildCount);
+            Assert.AreEqual(5, abstractModel.ChildCount);
 
             var foo = abstractModel["foo"];
             Assert.IsNotNull(foo);
@@ -44,6 +48,10 @@ namespace ApiActions.AbstractModeling.Application
             Assert.AreEqual(2, multi.ValueCount);
             Assert.AreEqual("one", multi.Values[0]);
             Assert.AreEqual("two", multi.Values[1]);
+
+            Assert.AreEqual((long)42, abstractModel["Integer"].Values[0]);
+            Assert.AreEqual((decimal)1.23432, abstractModel["Float"].Values[0]);
+            Assert.AreEqual(true, abstractModel["Bool"].Values[0]);
         }
 
         [TestMethod]
