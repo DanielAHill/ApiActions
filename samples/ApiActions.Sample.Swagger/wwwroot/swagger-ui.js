@@ -23500,7 +23500,7 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
     var pre;
     var code;
     if (!content) {
-      code = $('<code />').text('no content');
+      code = $('<code/>').text('no content');
       pre = $('<pre class="json" />').append(code);
 
       // JSON
@@ -23549,22 +23549,22 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
       } catch (_error) {
         json = 'can\'t parse JSON.  Raw result:\n\n' + content;
       }
-      code = $('<code />').text(json);
+      code = $('<code/>').text(json);
       pre = $('<pre class="json" />').append(code);
 
       // XML
     } else if (contentType === 'application/xml' || /\+xml$/.test(contentType)) {
-      code = $('<code />').text(this.formatXml(content));
+      code = $('<code/>').text(this.formatXml(content));
       pre = $('<pre class="xml" />').append(code);
 
       // HTML
     } else if (contentType === 'text/html') {
-      code = $('<code />').html(_.escape(content));
+      code = $('<code/>').html(_.escape(content));
       pre = $('<pre class="xml" />').append(code);
 
       // Plain Text
     } else if (/text\/plain/.test(contentType)) {
-      code = $('<code />').text(content);
+      code = $('<code/>').text(content);
       pre = $('<pre class="plain" />').append(code);
 
       // Image
@@ -23582,7 +23582,7 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
 
       // Anything else (CORS)
     } else {
-      code = $('<code />').text(content);
+      code = $('<code/>').text(content);
       pre = $('<pre class="json" />').append(code);
     }
     var response_body = pre;

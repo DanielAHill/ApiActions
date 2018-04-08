@@ -9,26 +9,26 @@ API Middleware for AspNet with emphasis on REST-ful capabilities, versioning, pe
 ## Feature Overview
  - Ability to version API for continuous delivery and/or rolling versions
  - Easily support RESTful API contracts
- - Encourage consice, organized, easy to find/read code
+ - Encourage concise, organized, easy to find/read code
  - Encourage enhanced security implementations
  - Supports both .NET 4.51+ and DNX/ASP.NET Core 1.0
 
 ## Installation
-Installing API Actions to your Visual Studio project via NuGet (hosted on [NuGet.org](https://www.nuget.org/)) is easy. You can search for `DanielAHill.AspNet.WebActions` in **NuGet Package Manager** or type the following in the **NuGet Command Window**:
+Installing API Actions to your Visual Studio project via NuGet (hosted on [NuGet.org](https://www.nuget.org/)) is easy. You can search for `ApiActions` in **NuGet Package Manager** or type the following in the **NuGet Command Window**:
 
-    nuget install DanielAHill.AspNet.ApiActions
+    nuget install ApiActions
 
 ## Initializing WebActions
 In order for ApiActions to function properly, registration steps are required for both ASP.NET's dependency injection infrastructure as well as an OWIN middleware.
 
 All initialization takes place in the web project's `Startup.cs` class.
 
-### Registering Web Actions in Dependency Injection
+### Registering Api Actions in Dependency Injection
 The API Actions middleware resolves both ApiAction implementations from the ASP.NET's dependency injection infrastructure. The following `Startup.cs` code registers all of the ApiAction implementations with DI. API Actions from multiple assemblies can be registered, but at one registration is required.
 
     public void ConfigureServices(IServiceCollection services)
     {
-        // Add Web actions for web assembly
+        // Add Api actions for web assembly
         services.AddWebActions(typeof (Startup).GetTypeInfo().Assembly);
     }
 

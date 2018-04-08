@@ -1,5 +1,4 @@
-﻿#region Copyright
-// Copyright (c) 2016 Daniel A Hill. All rights reserved.
+﻿// Copyright (c) 2017-2018 Daniel A Hill. All rights reserved.
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,11 +11,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-#endregion
+
 using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using DanielAHill.AspNetCore.ApiActions;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,7 +23,8 @@ namespace ApiActions.Sample.Swagger.Api.Time
 {
     [Post]
     [Summary("Displays information about requested time zone")]
-    [Description("Demonstrates how to validate request data, following basic validation of format by overriding the ValidateModelDataAsync method.")]
+    [Description(
+        "Demonstrates how to validate request data, following basic validation of format by overriding the ValidateModelDataAsync method.")]
     [Category(SwaggerCategories.Validation)]
     public class Post : ApiAction<Post.RequestModel>
     {
@@ -34,14 +33,15 @@ namespace ApiActions.Sample.Swagger.Api.Time
         public override Task<bool> ValidateModelDataAsync(CancellationToken cancellationToken)
         {
             _timeZone = TimeZoneInfo.GetSystemTimeZones()
-                    .FirstOrDefault(tz => tz.Id.Equals(Data.TimeZone, StringComparison.OrdinalIgnoreCase)
-                                          || tz.StandardName.Equals(Data.TimeZone, StringComparison.OrdinalIgnoreCase)
-                                          || tz.DaylightName.Equals(Data.TimeZone, StringComparison.OrdinalIgnoreCase)
-                                          || tz.BaseUtcOffset.ToString().Equals(Data.TimeZone, StringComparison.OrdinalIgnoreCase));
+                .FirstOrDefault(tz => tz.Id.Equals(Data.TimeZone, StringComparison.OrdinalIgnoreCase)
+                                      || tz.StandardName.Equals(Data.TimeZone, StringComparison.OrdinalIgnoreCase)
+                                      || tz.DaylightName.Equals(Data.TimeZone, StringComparison.OrdinalIgnoreCase)
+                                      || tz.BaseUtcOffset.ToString().Equals(Data.TimeZone,
+                                          StringComparison.OrdinalIgnoreCase));
 
             if (_timeZone == null)
             {
-                Response(new []
+                Response(new[]
                 {
                     new ValidationResult($"Time Zone Not Found. Try: {TimeZoneInfo.Local.Id}",
                         new[] {"TimeZone"})
@@ -66,8 +66,7 @@ namespace ApiActions.Sample.Swagger.Api.Time
 
         public class RequestModel
         {
-            [Required]
-            public string TimeZone { get; set; }
+            [Required] public string TimeZone { get; set; }
         }
 
         public class ResponseModel

@@ -9,13 +9,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.6" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\DanielAHill.AspNetCore.ApiActions.Abstractions\DanielAHill.AspNetCore.ApiActions.Abstractions.csproj" />
-    <ProjectReference Include="..\..\src\DanielAHill.AspNetCore.ApiActions.Swagger\DanielAHill.AspNetCore.ApiActions.Swagger.csproj" />
-    <ProjectReference Include="..\..\src\DanielAHill.AspNetCore.ApiActions\DanielAHill.AspNetCore.ApiActions.csproj" />
+    <ProjectReference Include="..\..\src\ApiActions.Abstractions\ApiActions.Abstractions.csproj" />
+    <ProjectReference Include="..\..\src\ApiActions.Swagger\ApiActions.Swagger.csproj" />
+    <ProjectReference Include="..\..\src\ApiActions\ApiActions.csproj" />
   </ItemGroup>
 
 </Project>
