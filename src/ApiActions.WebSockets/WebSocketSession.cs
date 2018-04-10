@@ -73,15 +73,20 @@ namespace ApiActions.WebSockets
                 {
                     var request = await ReadNextRequestAsync(context.RequestAborted);
 
-                    // Get request context
-                    var requestHttpContext = new WebSocketTunnelHttpContext(_socketContext, request, SendAsync,
-                        CloseAsync, UnsubscribeAsync, SubscribeAsync);
+                    using (var serviceScope = context.RequestServices.CreateScope())
+                    {
+                        // Get request context
+                        var requestHttpContext = new WebSocketTunnelHttpContext(_socketContext, request, SendAsync, CloseAsync, UnsubscribeAsync, SubscribeAsync)
+                        {
+                            RequestServices = serviceScope.ServiceProvider
+                        };
 
-                    // Call pipeline with request context
-                    await apiActionMiddlewareExecutioner.ExecuteAsync(requestHttpContext);
+                        // Call pipeline with request context
+                        await apiActionMiddlewareExecutioner.ExecuteAsync(requestHttpContext);
 
-                    // Write Response
-                    await SendAsync(requestHttpContext, requestHttpContext.RequestAborted);
+                        // Write Response
+                        await SendAsync(requestHttpContext, requestHttpContext.RequestAborted);
+                    }
                 }
             }
             finally

@@ -65,7 +65,6 @@ namespace ApiActions.WebSockets.Protocol
 
             User = socketContext.User;
             Items = socketContext.Items;
-            RequestServices = socketContext.RequestServices;
             RequestAborted = socketContext.RequestAborted;
             TraceIdentifier = _request.CommandId;
             Session = socketContext.Session;
