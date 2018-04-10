@@ -38,17 +38,15 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ApiActionsServiceCollectionExtensions
     {
-        private static bool _addedCore;
-
         #region ApiActions
 
-        private static void AddApiActionsCore(this IServiceCollection services)
+        private static IServiceCollection AddApiActionsCore(this IServiceCollection services)
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
 
-            if (_addedCore)
-            {
-                return;
+            if (services.Any(s => s.ServiceType == typeof(IApiActionMiddlewareExecutioner)))
+            {   // Core already registered, do not register again
+                return services;
             }
 
             // Add Routing
@@ -93,8 +91,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddSingleton(typeof(IApiActionMiddlewareExecutioner), new ApiActionMiddlewareExecutioner());
 
-            // Record Actions are already added to prevent multiple registrations
-            _addedCore = true;
+            return services;
         }
 
         private static void AddApiActionIntrospection(this IServiceCollection services)

@@ -54,15 +54,19 @@ namespace ApiActions.Test.EndToEnd
 
             var entryDelegate = appBuilder.Build();
 
-            var context = new DefaultHttpContext(featureCollection)
+            using (var serviceScope = appBuilder.ApplicationServices.CreateScope())
             {
-                RequestServices = appBuilder.ApplicationServices
-            };
+                var context = new DefaultHttpContext(featureCollection)
+                {
+                    RequestServices = serviceScope.ServiceProvider
+                };
 
-            entryDelegate(context).Wait();
-            context.Response.Body.Position = 0;
+                entryDelegate(context).Wait();
 
-            return context;
+                context.Response.Body.Position = 0;
+
+                return context;
+            }
         }
     }
 }

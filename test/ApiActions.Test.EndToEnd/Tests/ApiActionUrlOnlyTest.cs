@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,6 +31,41 @@ namespace ApiActions.Test.EndToEnd.Tests
                 a => { a.UseApiActions(); });
 
             var context = app.Execute(new HttpRequestFeature {Method = "GET", Path = "/ApiActions/UrlOnly/NoFilter"});
+
+            Write(context.Response);
+
+            Assert.AreEqual(200, context.Response.StatusCode);
+        }
+
+        [TestMethod]
+        public void UrlSuffixApiAction()
+        {
+            var app = CreateApp(
+                s => { s.AddApiActions(this.GetType().Assembly); },
+                a => { a.UseApiActions(); });
+
+            var context =
+                app.Execute(new HttpRequestFeature {Method = "GET", Path = "/ApiActions/UrlOnly/NoFilter/SuffixAdded"});
+
+            Write(context.Response);
+
+            Assert.AreEqual(200, context.Response.StatusCode);
+        }
+
+        [TestMethod]
+        public void UrlSuffixDataApiAction()
+        {
+            var app = CreateApp(
+                s => { s.AddApiActions(this.GetType().Assembly); },
+                a => { a.UseApiActions(); });
+
+            var urlData = Guid.NewGuid().ToString();
+
+            var context = app.Execute(new HttpRequestFeature
+            {
+                Method = "GET",
+                Path = "/ApiActions/UrlOnly/NoFilter/SuffixData/" + urlData
+            });
 
             Write(context.Response);
 

@@ -29,15 +29,18 @@ namespace Microsoft.AspNetCore.Builder
 {
     public static class ApiActionApplicationBuilderExtensions
     {
-        private static bool _alreadyRegistered;
         internal static RouteCollection RouteCollection { get; private set; }
 
         public static IApplicationBuilder UseApiActions(this IApplicationBuilder app)
         {
             if (app == null) throw new ArgumentNullException(nameof(app));
-            if (_alreadyRegistered) return app;
 
-            _alreadyRegistered = true;
+            if (app.Properties.ContainsKey("ApiActionsRegistered"))
+            {
+                return app;
+            }
+
+            app.Properties.Add("ApiActionsRegistered", true);
 
             var log = app.ApplicationServices.GetRequiredService<ILoggerFactory>()
                 .CreateLogger("ApiAction Initialization");

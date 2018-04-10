@@ -38,6 +38,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DanielAHill.Reflection, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DanielAHill.Reflection.1.0.0\lib\netstandard2.0\DanielAHill.Reflection.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AspNetCore, Version=2.0.2.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.AspNetCore.2.0.2\lib\netstandard2.0\Microsoft.AspNetCore.dll</HintPath>
     </Reference>
@@ -221,6 +224,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiActions\UrlOnly\NoFilter\NoFilterApiActionSuffixDataAdded.cs" />
+    <Compile Include="ApiActions\UrlOnly\NoFilter\NoFilterApiActionSuffixAdded.cs" />
     <Compile Include="ApiActions\UrlOnly\NoFilter\NoFilterApiAction.cs" />
     <Compile Include="ApiActionsEndToEndTest.cs" />
     <Compile Include="MockApp.cs" />
