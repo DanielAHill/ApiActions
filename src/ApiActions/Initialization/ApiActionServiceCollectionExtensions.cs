@@ -45,7 +45,8 @@ namespace Microsoft.Extensions.DependencyInjection
             if (services == null) throw new ArgumentNullException(nameof(services));
 
             if (services.Any(s => s.ServiceType == typeof(IApiActionMiddlewareExecutioner)))
-            {   // Core already registered, do not register again
+            {
+                // Core already registered, do not register again
                 return services;
             }
 
@@ -80,6 +81,7 @@ namespace Microsoft.Extensions.DependencyInjection
             // Versioning
             services.AddSingleton(typeof(IRequestVersionProvider), typeof(RequestVersionProvider));
             services.AddSingleton(typeof(IRequestVersionParser), typeof(RouteRequestVersionParser));
+            services.AddSingleton(typeof(IRequestVersionParser), typeof(QueryStringVersionParser));
 
             // Type Converters
             services.AddSingleton(typeof(IConverterDelegateProvider), typeof(ConverterDelegateProvider));

@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,74 +20,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace ApiActions.Test.EndToEnd.Tests
 {
     [TestClass]
-    public class ApiActionUrlOnlyTest : ApiActionsEndToEndTest
+    public class ApiActionMinVersionTest : ApiActionsEndToEndTest
     {
         [TestMethod]
-        public void NoFilterApiAction()
-        {
-            var app = CreateApp(
-                s => { s.AddApiActions(this.GetType().Assembly); },
-                a => { a.UseApiActions(); });
-
-            var context = app.Execute(new HttpRequestFeature {Method = "GET", Path = "/ApiActions/UrlOnly/NoFilter"});
-
-            Write(context.Response);
-
-            Assert.AreEqual(200, context.Response.StatusCode);
-        }
-
-        [TestMethod]
-        public void UrlSuffixApiAction()
-        {
-            var app = CreateApp(
-                s => { s.AddApiActions(this.GetType().Assembly); },
-                a => { a.UseApiActions(); });
-
-            var context =
-                app.Execute(new HttpRequestFeature {Method = "GET", Path = "/ApiActions/UrlOnly/NoFilter/SuffixAdded"});
-
-            Write(context.Response);
-
-            Assert.AreEqual(200, context.Response.StatusCode);
-        }
-
-        [TestMethod]
-        public void UrlSuffixDataApiAction()
-        {
-            var app = CreateApp(
-                s => { s.AddApiActions(this.GetType().Assembly); },
-                a => { a.UseApiActions(); });
-
-            var urlData = Guid.NewGuid().ToString();
-
-            var context = app.Execute(new HttpRequestFeature
-            {
-                Method = "GET",
-                Path = "/ApiActions/UrlOnly/NoFilter/SuffixData/" + urlData
-            });
-
-            Write(context.Response);
-
-            Assert.AreEqual(200, context.Response.StatusCode);
-        }
-
-        [TestMethod]
-        public void UrlReplaced()
-        {
-            var app = CreateApp(
-                s => { s.AddApiActions(this.GetType().Assembly); },
-                a => { a.UseApiActions(); });
-
-            var context =
-                app.Execute(new HttpRequestFeature {Method = "GET", Path = "/completely/replaced/url/no/filter"});
-
-            Write(context.Response);
-
-            Assert.AreEqual(200, context.Response.StatusCode);
-        }
-
-        [TestMethod]
-        public void UrlReplacedIncludeNamespace()
+        public void SameVersionMatches()
         {
             var app = CreateApp(
                 s => { s.AddApiActions(this.GetType().Assembly); },
@@ -97,8 +32,62 @@ namespace ApiActions.Test.EndToEnd.Tests
             var context = app.Execute(new HttpRequestFeature
             {
                 Method = "GET",
-                Path = "/completely/replaced/ApiActions/UrlOnly/NoFilter/include/namespace"
+                Path = "/ApiActions/Versioned/MinVersion",
+                QueryString = "version=2.0"
             });
+
+            Write(context.Response);
+
+            Assert.AreEqual(200, context.Response.StatusCode);
+        }
+
+        [TestMethod]
+        public void GreaterVersionMatches()
+        {
+            var app = CreateApp(
+                s => { s.AddApiActions(this.GetType().Assembly); },
+                a => { a.UseApiActions(); });
+
+            var context = app.Execute(new HttpRequestFeature
+            {
+                Method = "GET",
+                Path = "/ApiActions/Versioned/MinVersion",
+                QueryString = "version=2.1"
+            });
+
+            Write(context.Response);
+
+            Assert.AreEqual(200, context.Response.StatusCode);
+        }
+
+        [TestMethod]
+        public void LesserVersionDoesNotMatch()
+        {
+            var app = CreateApp(
+                s => { s.AddApiActions(this.GetType().Assembly); },
+                a => { a.UseApiActions(); });
+
+            var context = app.Execute(new HttpRequestFeature
+            {
+                Method = "GET",
+                Path = "/ApiActions/Versioned/MinVersion",
+                QueryString = "version=1.1"
+            });
+
+            Write(context.Response);
+
+            Assert.AreEqual(404, context.Response.StatusCode);
+        }
+
+        [TestMethod]
+        public void UnversionedMatches()
+        {
+            var app = CreateApp(
+                s => { s.AddApiActions(this.GetType().Assembly); },
+                a => { a.UseApiActions(); });
+
+            var context =
+                app.Execute(new HttpRequestFeature {Method = "GET", Path = "/ApiActions/Versioned/MinVersion"});
 
             Write(context.Response);
 

@@ -17,13 +17,10 @@ namespace ApiActions
     public class ApiActionConfiguration
     {
         public int AbstractModelMaxDepth { get; set; } = 25;
-
         public string DefaultRequestVersion { get; set; } = null;
-
         public string VersionRouteValueKey { get; set; } = "ApiActionVersion";
-
+        public string QueryStringVerionKey { get; set; } = "Version";
         public string AcceptAllHeaderDefaultMediaType { get; set; } = "application/json";
-
         public string AcceptsHeaderNotMatchedDefaultMediaType { get; set; } = "application/json";
 
 #if DEBUG

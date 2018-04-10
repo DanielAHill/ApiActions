@@ -76,7 +76,8 @@ namespace ApiActions.WebSockets
                     using (var serviceScope = context.RequestServices.CreateScope())
                     {
                         // Get request context
-                        var requestHttpContext = new WebSocketTunnelHttpContext(_socketContext, request, SendAsync, CloseAsync, UnsubscribeAsync, SubscribeAsync)
+                        var requestHttpContext = new WebSocketTunnelHttpContext(_socketContext, request, SendAsync,
+                            CloseAsync, UnsubscribeAsync, SubscribeAsync)
                         {
                             RequestServices = serviceScope.ServiceProvider
                         };

@@ -1,4 +1,4 @@
-// Copyright (c) 2017-2018 Daniel A Hill. All rights reserved.
+// Copyright (c) 2018-2018 Daniel A Hill. All rights reserved.
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,32 +14,27 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 
 namespace ApiActions.Versioning
 {
-    public class RouteRequestVersionParser : IRequestVersionParser
+    public class QueryStringVersionParser : IRequestVersionParser
     {
         private readonly string _versionKey;
 
-        public RouteRequestVersionParser(IOptions<ApiActionConfiguration> configurationAccessor)
+        public QueryStringVersionParser(IOptions<ApiActionConfiguration> configurationAccessor)
         {
-            _versionKey = configurationAccessor.Value.VersionRouteValueKey;
+            _versionKey = configurationAccessor.Value.QueryStringVerionKey;
         }
 
         public string Parse(HttpContext context, IDictionary<string, object> routeValues)
         {
-            // ReSharper disable once LoopCanBeConvertedToQuery (makes code unreadible)
-            foreach (var kvp in routeValues)
-            {
-                if (kvp.Key.Equals(_versionKey, StringComparison.OrdinalIgnoreCase) && kvp.Value != null)
-                {
-                    return kvp.Value.ToString();
-                }
-            }
-
-            return null;
+            var queryParameter =
+                context.Request.Query.FirstOrDefault(q =>
+                    q.Key.Equals(_versionKey, StringComparison.OrdinalIgnoreCase));
+            return queryParameter.Value.Count == 1 ? queryParameter.Value[0] : null;
         }
     }
 }

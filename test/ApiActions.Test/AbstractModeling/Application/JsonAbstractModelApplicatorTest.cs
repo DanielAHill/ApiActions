@@ -110,8 +110,11 @@ namespace ApiActions.AbstractModeling.Application
             var applicator = new JsonAbstractModelApplicator();
             var abstractModel = new AbstractModel();
 
+            Assert.IsTrue(abstractModel.IsEmpty);
+
             applicator.ApplyAsync(mockContext.Object, abstractModel, CancellationToken.None).Wait();
 
+            Assert.IsFalse(abstractModel.IsEmpty);
             Assert.AreEqual(0, abstractModel.ValueCount);
             Assert.AreEqual(2, abstractModel.ChildCount);
 

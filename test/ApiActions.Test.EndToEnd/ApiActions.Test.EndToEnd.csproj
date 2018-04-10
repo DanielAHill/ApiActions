@@ -224,12 +224,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiActions\UrlOnly\NoFilter\NoFilterApiAction.cs" />
+    <Compile Include="ApiActions\UrlOnly\NoFilter\NoFilterApiActionUrlReplacedIncludeNamespace.cs" />
+    <Compile Include="ApiActions\UrlOnly\NoFilter\NoFilterApiActionUrlReplaced.cs" />
     <Compile Include="ApiActions\UrlOnly\NoFilter\NoFilterApiActionSuffixDataAdded.cs" />
     <Compile Include="ApiActions\UrlOnly\NoFilter\NoFilterApiActionSuffixAdded.cs" />
-    <Compile Include="ApiActions\UrlOnly\NoFilter\NoFilterApiAction.cs" />
+    <Compile Include="ApiActions\Versioned\MinVersion\Verion20.cs" />
     <Compile Include="ApiActionsEndToEndTest.cs" />
     <Compile Include="MockApp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tests\ApiActionMinVersionTest.cs" />
     <Compile Include="Tests\ApiActionUrlOnlyTest.cs" />
   </ItemGroup>
   <ItemGroup>
