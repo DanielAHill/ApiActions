@@ -174,17 +174,4 @@ namespace ApiActions.WebSockets
         {
         }
     }
-
-    public class SocketSimulateSendItem
-    {
-        public int CurrentDataIndex { get; set; }
-        public byte[] Data { get; set; }
-        public WebSocketMessageType MessageType { get; set; }
-        public WebSocketCloseStatus? CloseStatus { get; set; }
-
-        public string GetDataAsString()
-        {
-            return Encoding.UTF8.GetString(Data);
-        }
-    }
 }

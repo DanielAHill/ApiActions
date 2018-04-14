@@ -12,18 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
+using System.Net.WebSockets;
 
-namespace ApiActions.WebSockets.Protocol
+namespace ApiActions.WebSockets
 {
-    public interface IWebSocketHttpRequest
+    public class SocketSimulateSendItem
     {
-        string CommandId { get; }
-        string Method { get; }
-        string Path { get; }
-        string QueryString { get; }
-        IDictionary<string, string[]> Headers { get; }
-        string ContentType { get; }
-        byte[] Content { get; }
+        public int CurrentDataIndex { get; set; }
+        public byte[] Data { get; set; }
+        public WebSocketMessageType MessageType { get; set; }
+        public WebSocketCloseStatus? CloseStatus { get; set; }
     }
 }

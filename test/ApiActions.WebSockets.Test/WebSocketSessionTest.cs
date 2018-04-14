@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System;
-using System.Collections.Generic;
 using System.Net.WebSockets;
 using System.Text;
 using ApiActions.Test.EndToEnd;
@@ -165,7 +164,8 @@ namespace ApiActions.WebSockets
 
             Assert.IsNotNull(response);
 
-            var parsedResponse = JsonConvert.DeserializeObject<JsonWebSocketHttpResponse>(Encoding.UTF8.GetString(response.Data));
+            var parsedResponse =
+                JsonConvert.DeserializeObject<JsonWebSocketHttpResponse>(Encoding.UTF8.GetString(response.Data));
 
             Assert.IsNotNull(parsedResponse);
             Assert.AreEqual(request.Id, parsedResponse.Id);

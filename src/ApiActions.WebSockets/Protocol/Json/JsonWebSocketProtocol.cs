@@ -18,8 +18,6 @@ using System.Linq;
 using System.Net.WebSockets;
 using System.Text;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
-using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
 
 namespace ApiActions.WebSockets.Protocol.Json

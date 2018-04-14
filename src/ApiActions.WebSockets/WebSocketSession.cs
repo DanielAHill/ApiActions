@@ -88,7 +88,8 @@ namespace ApiActions.WebSockets
                     {
                         using (var serviceScope = context.RequestServices.CreateScope())
                         {
-                            var httpContext = CreateTunnelledHttpRequest(context, request, serviceScope.ServiceProvider);
+                            var httpContext =
+                                CreateTunnelledHttpRequest(context, request, serviceScope.ServiceProvider);
 
                             // Call pipeline with request context
                             await apiActionMiddlewareExecutioner.ExecuteAsync(httpContext);
@@ -207,7 +208,6 @@ namespace ApiActions.WebSockets
                     }
 
                     memStream.Write(buffer, 0, result.Count);
-
                 } while (!result.EndOfMessage);
 
                 if (!_protocol.SupportsMessageType(result.MessageType))

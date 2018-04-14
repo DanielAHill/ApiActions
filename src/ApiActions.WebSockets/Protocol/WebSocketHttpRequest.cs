@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Http;
 
 namespace ApiActions.WebSockets.Protocol
 {
