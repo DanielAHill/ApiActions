@@ -135,9 +135,7 @@ namespace Microsoft.Extensions.DependencyInjection
                         return false;
                     }
 
-                    return ti.ImplementedInterfaces.Any(i =>
-                        i == typeof(IApiAction) || i.GetTypeInfo().IsGenericType &&
-                        i.GetGenericTypeDefinition() != typeof(AbstractModel));
+                    return typeof(IApiAction).IsAssignableFrom(ti);
                 });
 
             foreach (var type in types)

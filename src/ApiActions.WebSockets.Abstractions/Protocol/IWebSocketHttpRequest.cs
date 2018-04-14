@@ -22,7 +22,7 @@ namespace ApiActions.WebSockets.Protocol
         string CommandId { get; }
         string Method { get; }
         string Path { get; }
-        IQueryCollection Query { get; }
+        string QueryString { get; }
         IDictionary<string, string[]> Headers { get; }
         string ContentType { get; }
         byte[] Content { get; }

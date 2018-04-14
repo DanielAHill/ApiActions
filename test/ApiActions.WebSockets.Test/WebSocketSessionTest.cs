@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Collections.Generic;
 using System.Net.WebSockets;
 using System.Text;
 using ApiActions.Test.EndToEnd;
@@ -51,6 +52,43 @@ namespace ApiActions.WebSockets
                 });
 
                 Assert.AreEqual(200, response.Code);
+                Assert.AreEqual("application/json", response.ContentType);
+                Assert.IsNotNull(response.Content);
+                Assert.IsTrue(response.Content.Contains("This is my text"));
+            });
+        }
+
+        [TestMethod]
+        public void CallMultipleApiActions()
+        {
+            RunWebSocketScenario(ws =>
+            {
+                var response = SimulateCall(ws, new JsonWebSocketHttpRequest
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Method = "POST",
+                    Path = "/echo",
+                    Content = JsonConvert.SerializeObject(new {Text = "This is my text"}),
+                    ContentType = "application/json"
+                });
+
+                Assert.AreEqual(200, response.Code);
+                Assert.AreEqual("application/json", response.ContentType);
+                Assert.IsNotNull(response.Content);
+                Assert.IsTrue(response.Content.Contains("This is my text"));
+
+                response = SimulateCall(ws, new JsonWebSocketHttpRequest
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Method = "GET",
+                    Path = "/echo",
+                    QueryString = "text=query-text"
+                });
+
+                Assert.AreEqual(200, response.Code);
+                Assert.AreEqual("application/json", response.ContentType);
+                Assert.IsNotNull(response.Content);
+                Assert.IsTrue(response.Content.Contains("query-text"));
             });
         }
 
@@ -92,7 +130,7 @@ namespace ApiActions.WebSockets
 
             var app = CreateApp(s =>
                 {
-                    s.AddApiActions(GetType().Assembly);
+                    s.AddApiActions(GetType().Assembly, "ApiActions.WebSockets");
                     s.AddApiActionsWebSockets();
                 },
                 a => { a.UseWebSocketApiActions(); });
@@ -127,8 +165,7 @@ namespace ApiActions.WebSockets
 
             Assert.IsNotNull(response);
 
-            var parsedResponse =
-                JsonConvert.DeserializeObject<JsonWebSocketHttpResponse>(Encoding.UTF8.GetString(response.Data));
+            var parsedResponse = JsonConvert.DeserializeObject<JsonWebSocketHttpResponse>(Encoding.UTF8.GetString(response.Data));
 
             Assert.IsNotNull(parsedResponse);
             Assert.AreEqual(request.Id, parsedResponse.Id);

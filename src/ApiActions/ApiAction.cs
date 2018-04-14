@@ -115,7 +115,7 @@ namespace ApiActions
         [Response(400, typeof(BadRequestDetails), "Bad Request - Input Validation Failed")]
         public virtual Task<bool> ValidateModelAsync(CancellationToken cancellationToken)
         {
-            if (typeof(TRequest) != typeof(AbstractModel))
+            if (typeof(TRequest) == typeof(AbstractModel))
             {
                 return Task.FromResult(true);
             }

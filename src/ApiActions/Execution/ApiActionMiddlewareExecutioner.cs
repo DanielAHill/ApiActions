@@ -16,6 +16,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -23,6 +24,8 @@ namespace ApiActions.Execution
 {
     internal class ApiActionMiddlewareExecutioner : IApiActionMiddlewareExecutioner
     {
+        internal RouteCollection EntryRouteCollection { get; set; }
+
         public Task ExecuteAsync(HttpContext context)
         {
             return ExecuteAsync(context, NotFoundRequestDelegateAsync);
@@ -31,8 +34,14 @@ namespace ApiActions.Execution
         public Task ExecuteAsync(HttpContext context, RequestDelegate next)
         {
             if (context == null) throw new ArgumentNullException(nameof(context));
+
+            if (EntryRouteCollection == null)
+            {
+                throw new InvalidOperationException("Entry route collection not set");
+            }
+
             return new RouterMiddleware(next, context.RequestServices.GetRequiredService<ILoggerFactory>(),
-                ApiActionApplicationBuilderExtensions.RouteCollection).Invoke(context);
+                EntryRouteCollection).Invoke(context);
         }
 
         private static Task NotFoundRequestDelegateAsync(HttpContext context)

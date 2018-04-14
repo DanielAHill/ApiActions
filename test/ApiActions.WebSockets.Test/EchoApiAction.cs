@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Build.Framework;
 
 namespace ApiActions.WebSockets
 {
@@ -28,7 +28,8 @@ namespace ApiActions.WebSockets
 
         public class Request
         {
-            [Required] public string Text { get; set; }
+            [Required]
+            public string Text { get; set; }
         }
     }
 }

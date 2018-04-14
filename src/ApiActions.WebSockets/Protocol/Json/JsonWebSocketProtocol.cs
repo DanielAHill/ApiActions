@@ -40,7 +40,8 @@ namespace ApiActions.WebSockets.Protocol.Json
                 CommandId = parsed.Id,
                 ContentType = parsed.ContentType,
                 Method = parsed.Method,
-                Path = parsed.Path
+                Path = parsed.Path,
+                QueryString = parsed.QueryString
             };
 
             if (parsed.Content != null)
@@ -52,13 +53,7 @@ namespace ApiActions.WebSockets.Protocol.Json
             {
                 request.Headers =
                     new Dictionary<string, string[]>(
-                        parsed.QueryParameters.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.Split(';')));
-            }
-
-            if (parsed.QueryParameters != null && parsed.QueryParameters.Count > 0)
-            {
-                request.Query = new QueryCollection(parsed.QueryParameters.ToDictionary(kvp => kvp.Key,
-                    kvp => new StringValues(kvp.Value.Split(';'))));
+                        parsed.Headers.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.Split(';')));
             }
 
             return request;

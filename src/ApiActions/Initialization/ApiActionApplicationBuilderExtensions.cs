@@ -29,8 +29,6 @@ namespace Microsoft.AspNetCore.Builder
 {
     public static class ApiActionApplicationBuilderExtensions
     {
-        internal static RouteCollection RouteCollection { get; private set; }
-
         public static IApplicationBuilder UseApiActions(this IApplicationBuilder app)
         {
             if (app == null) throw new ArgumentNullException(nameof(app));
@@ -55,7 +53,13 @@ namespace Microsoft.AspNetCore.Builder
             (app.ApplicationServices.GetServices<IGlobalRouteDefaultApplicationFactory>() ??
              new IGlobalRouteDefaultApplicationFactory[0]).ToArray();
 
-            RouteCollection = new RouteCollection();
+            var routeCollection = new RouteCollection();
+
+            if (app.ApplicationServices.GetService(typeof(IApiActionMiddlewareExecutioner)) is
+                ApiActionMiddlewareExecutioner apiActionMiddlewareExcutioner)
+            {
+                apiActionMiddlewareExcutioner.EntryRouteCollection = routeCollection;
+            }
 
             if (actionRegistrations.Count == 0)
             {
@@ -72,15 +76,15 @@ namespace Microsoft.AspNetCore.Builder
                     {RouteDataKeys.ApiActionType, registration.ApiActionType}
                 };
 
-                RouteCollection.Add(new Route(handler, typeInfo.FullName, registration.Route,
+                routeCollection.Add(new Route(handler, typeInfo.FullName, registration.Route,
                     GetRouteDefaults(registration, globalRouteDefaultApplicationFactories),
                     GetRouteConstraints(registration, globalRouteConstraintFactories, app.ApplicationServices),
                     dataTokenDictionary,
                     inlineConstraintResolver));
             }
 
-            app.UseRouter(RouteCollection);
-            log.LogInformation($"Registered {RouteCollection.Count} Routes");
+            app.UseRouter(routeCollection);
+            log.LogInformation($"Registered {routeCollection.Count} Routes");
 
             return app;
         }

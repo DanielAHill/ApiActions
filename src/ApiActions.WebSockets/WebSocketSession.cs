@@ -88,14 +88,18 @@ namespace ApiActions.WebSockets
                     {
                         using (var serviceScope = context.RequestServices.CreateScope())
                         {
-                            var requestHttpContext =
-                                CreateTunnelledHttpRequest(context, request, serviceScope.ServiceProvider);
+                            var httpContext = CreateTunnelledHttpRequest(context, request, serviceScope.ServiceProvider);
 
                             // Call pipeline with request context
-                            await apiActionMiddlewareExecutioner.ExecuteAsync(requestHttpContext);
+                            await apiActionMiddlewareExecutioner.ExecuteAsync(httpContext);
+
+                            if (httpContext.Response.Body.CanSeek)
+                            {
+                                httpContext.Response.Body.Seek(0, SeekOrigin.Begin);
+                            }
 
                             // Write Response
-                            await SendAsync(requestHttpContext, requestHttpContext.RequestAborted);
+                            await SendAsync(httpContext, httpContext.RequestAborted);
                         }
                     }
                     catch (Exception ex)
@@ -133,8 +137,8 @@ namespace ApiActions.WebSockets
                 PathBase = webSocketConnectionHttpContext.Request.PathBase,
                 Protocol = "HTTP 1.1",
                 RawTarget = "Not supported in web socket tunnel",
-                QueryString = request.Query?.ToString(),
-                Body = new MemoryStream(request.Content),
+                QueryString = request.QueryString,
+                Body = new MemoryStream(request.Content ?? new byte[0]),
                 Headers = new HeaderDictionary()
             };
 
@@ -203,7 +207,7 @@ namespace ApiActions.WebSockets
                     }
 
                     memStream.Write(buffer, 0, result.Count);
-                    memStream.Position = 0;
+
                 } while (!result.EndOfMessage);
 
                 if (!_protocol.SupportsMessageType(result.MessageType))
