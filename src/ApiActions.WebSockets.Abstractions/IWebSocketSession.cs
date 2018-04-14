@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2018-2018 Daniel A Hill. All rights reserved.
+﻿// Copyright (c) 2018 Daniel A Hill. All rights reserved.
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
@@ -19,6 +20,6 @@ namespace ApiActions.WebSockets
 {
     public interface IWebSocketSession
     {
-        Task ExecuteAsync(HttpContext context);
+        Task ExecuteAsync(HttpContext context, IServiceProvider applicationServices);
     }
 }

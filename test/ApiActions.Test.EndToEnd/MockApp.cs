@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2018-2018 Daniel A Hill. All rights reserved.
+﻿// Copyright (c) 2018 Daniel A Hill. All rights reserved.
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,6 +14,7 @@
 
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Builder.Internal;
 using Microsoft.AspNetCore.Http;
@@ -34,7 +35,16 @@ namespace ApiActions.Test.EndToEnd
             _applicationBuilderAction = applicationBuilderAction;
         }
 
-        public HttpContext Execute(HttpRequestFeature requestFeature)
+        public HttpContext Execute(HttpRequestFeature requestFeature,
+            Action<FeatureCollection> featureCollectionAction = null)
+        {
+            var task = ExecuteAsync(requestFeature, featureCollectionAction);
+            task.Wait();
+            return task.Result;
+        }
+
+        public async Task<HttpContext> ExecuteAsync(HttpRequestFeature requestFeature,
+            Action<FeatureCollection> featureCollectionAction = null)
         {
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddLogging();
@@ -49,6 +59,8 @@ namespace ApiActions.Test.EndToEnd
                 Headers = new HeaderDictionary()
             });
 
+            featureCollectionAction?.Invoke(featureCollection);
+
             var appBuilder = new ApplicationBuilder(serviceCollection.BuildServiceProvider(), featureCollection);
             _applicationBuilderAction?.Invoke(appBuilder);
 
@@ -61,7 +73,7 @@ namespace ApiActions.Test.EndToEnd
                     RequestServices = serviceScope.ServiceProvider
                 };
 
-                entryDelegate(context).Wait();
+                await entryDelegate(context);
 
                 context.Response.Body.Position = 0;
 

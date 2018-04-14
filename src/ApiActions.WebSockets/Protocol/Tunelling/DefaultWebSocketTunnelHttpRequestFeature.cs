@@ -12,19 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
+using System.IO;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 
-namespace ApiActions.WebSockets.Protocol
+namespace ApiActions.WebSockets.Protocol.Tunelling
 {
-    public interface IWebSocketHttpRequest
+    public class DefaultWebSocketTunnelHttpRequestFeature : IHttpRequestFeature
     {
-        string CommandId { get; }
-        string Method { get; }
-        string Path { get; }
-        IQueryCollection Query { get; }
-        IDictionary<string, string[]> Headers { get; }
-        string ContentType { get; }
-        byte[] Content { get; }
+        public string Protocol { get; set; }
+        public string Scheme { get; set; }
+        public string Method { get; set; }
+        public string PathBase { get; set; }
+        public string Path { get; set; }
+        public string QueryString { get; set; }
+        public string RawTarget { get; set; }
+        public IHeaderDictionary Headers { get; set; }
+        public Stream Body { get; set; }
     }
 }

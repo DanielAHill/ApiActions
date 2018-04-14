@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2018-2018 Daniel A Hill. All rights reserved.
+﻿// Copyright (c) 2018 Daniel A Hill. All rights reserved.
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ namespace ApiActions.WebSockets.Initialization
         private static bool _requireSsl;
         private static string _socketTunnelUrl;
         private static bool _alreadyRegistered;
+        private static IServiceProvider _applicationServices;
 
         public static IApplicationBuilder UseWebSocketApiActions(this IApplicationBuilder app,
             string socketTunnelUrl = null)
@@ -43,6 +44,7 @@ namespace ApiActions.WebSockets.Initialization
 
             _requireSsl = configuration.RequireSsl;
             _socketTunnelUrl = socketTunnelUrl ?? configuration.SocketTunnelUrl;
+            _applicationServices = app.ApplicationServices;
 
             // Ensure API Actions is registered
             app.UseApiActions();
@@ -58,7 +60,8 @@ namespace ApiActions.WebSockets.Initialization
                 && _socketTunnelUrl.Equals(context.Request.Path, StringComparison.InvariantCultureIgnoreCase)
                 && (_requireSsl && context.Request.IsHttps || !_requireSsl))
             {
-                return context.RequestServices.GetRequiredService<IWebSocketSession>().ExecuteAsync(context);
+                return context.RequestServices.GetRequiredService<IWebSocketSession>()
+                    .ExecuteAsync(context, _applicationServices);
             }
 
             return next();

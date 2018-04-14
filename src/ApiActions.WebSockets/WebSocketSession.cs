@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2018-2018 Daniel A Hill. All rights reserved.
+﻿// Copyright (c) 2018 Daniel A Hill. All rights reserved.
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,8 +23,11 @@ using System.Threading.Tasks;
 using ApiActions.Execution;
 using ApiActions.Serialization;
 using ApiActions.WebSockets.Protocol;
+using ApiActions.WebSockets.Protocol.Tunelling;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Primitives;
 
 namespace ApiActions.WebSockets
 {
@@ -39,8 +42,11 @@ namespace ApiActions.WebSockets
 
         private readonly SemaphoreSlim _writeSemaphore = new SemaphoreSlim(1, 1);
 
-        public virtual async Task ExecuteAsync(HttpContext context)
+        public virtual async Task ExecuteAsync(HttpContext context, IServiceProvider applicationServices)
         {
+            if (context == null) throw new ArgumentNullException(nameof(context));
+            if (applicationServices == null) throw new ArgumentNullException(nameof(applicationServices));
+
             await InitializeAsync(context, context.RequestAborted);
 
             if (!await AuthorizeAsync(context))
@@ -73,20 +79,31 @@ namespace ApiActions.WebSockets
                 {
                     var request = await ReadNextRequestAsync(context.RequestAborted);
 
-                    using (var serviceScope = context.RequestServices.CreateScope())
+                    if (request == null)
                     {
-                        // Get request context
-                        var requestHttpContext = new WebSocketTunnelHttpContext(_socketContext, request, SendAsync,
-                            CloseAsync, UnsubscribeAsync, SubscribeAsync)
+                        continue;
+                    }
+
+                    try
+                    {
+                        using (var serviceScope = context.RequestServices.CreateScope())
                         {
-                            RequestServices = serviceScope.ServiceProvider
-                        };
+                            var requestHttpContext =
+                                CreateTunnelledHttpRequest(context, request, serviceScope.ServiceProvider);
 
-                        // Call pipeline with request context
-                        await apiActionMiddlewareExecutioner.ExecuteAsync(requestHttpContext);
+                            // Call pipeline with request context
+                            await apiActionMiddlewareExecutioner.ExecuteAsync(requestHttpContext);
 
-                        // Write Response
-                        await SendAsync(requestHttpContext, requestHttpContext.RequestAborted);
+                            // Write Response
+                            await SendAsync(requestHttpContext, requestHttpContext.RequestAborted);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        if (!await OnErrorAsync(request, ex))
+                        {
+                            throw;
+                        }
                     }
                 }
             }
@@ -98,6 +115,62 @@ namespace ApiActions.WebSockets
                     await CloseAsync(WebSocketCloseStatus.InternalServerError, null, CancellationToken.None);
                 }
             }
+        }
+
+        protected virtual Task<bool> OnErrorAsync(IWebSocketHttpRequest request, Exception ex)
+        {
+            return Task.FromResult(false);
+        }
+
+        protected virtual IHttpRequestFeature CreateTunnelHttpRequestFeature(HttpContext webSocketConnectionHttpContext,
+            IWebSocketHttpRequest request)
+        {
+            var requestFeature = new DefaultWebSocketTunnelHttpRequestFeature
+            {
+                Scheme = webSocketConnectionHttpContext.Request.IsHttps ? "https" : "http",
+                Method = request.Method,
+                Path = request.Path,
+                PathBase = webSocketConnectionHttpContext.Request.PathBase,
+                Protocol = "HTTP 1.1",
+                RawTarget = "Not supported in web socket tunnel",
+                QueryString = request.Query?.ToString(),
+                Body = new MemoryStream(request.Content),
+                Headers = new HeaderDictionary()
+            };
+
+            if (request.ContentType != null)
+            {
+                requestFeature.Headers.Add("Content-Type", new StringValues(request.ContentType));
+            }
+
+            if (request.Headers != null)
+            {
+                foreach (var kvp in request.Headers)
+                {
+                    requestFeature.Headers.Add(kvp.Key, new StringValues(kvp.Value));
+                }
+            }
+
+            return requestFeature;
+        }
+
+        protected virtual WebSocketTunnelHttpContext CreateTunnelledHttpRequest(
+            HttpContext webSocketConnectionHttpContext, IWebSocketHttpRequest request, IServiceProvider serviceProvider)
+        {
+            var context = new WebSocketTunnelHttpContext();
+            context.Features.Set<IHttpRequestFeature>(CreateTunnelHttpRequestFeature(webSocketConnectionHttpContext,
+                request));
+            context.Features.Set<IHttpRequestLifetimeFeature>(
+                new HttpRequestLifetimeFeature {RequestAborted = webSocketConnectionHttpContext.RequestAborted});
+            context.Features.Set<IHttpContextAccessor>(new HttpContextAccessor {HttpContext = context});
+            context.Features.Set<IHttpConnectionFeature>(webSocketConnectionHttpContext.Features
+                .Get<IHttpConnectionFeature>());
+
+            context.User = webSocketConnectionHttpContext.User;
+            context.TraceIdentifier = request.CommandId;
+            context.RequestServices = serviceProvider;
+
+            return context;
         }
 
         protected virtual Task InitializeAsync(HttpContext context, CancellationToken cancellationToken)
@@ -130,6 +203,7 @@ namespace ApiActions.WebSockets
                     }
 
                     memStream.Write(buffer, 0, result.Count);
+                    memStream.Position = 0;
                 } while (!result.EndOfMessage);
 
                 if (!_protocol.SupportsMessageType(result.MessageType))

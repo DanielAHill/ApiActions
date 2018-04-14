@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2018-2018 Daniel A Hill. All rights reserved.
+﻿// Copyright (c) 2018 Daniel A Hill. All rights reserved.
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,14 +15,13 @@
 using System.Threading;
 using System.Threading.Tasks;
 using ApiActions.AbstractModeling;
-using ApiActions.WebSockets.Protocol;
 
 namespace ApiActions.WebSockets
 {
     public abstract class WebSocketApiAction<TRequest> : ApiAction<TRequest>, IWebSocketApiAction
         where TRequest : class, new()
     {
-        private WebSocketTunnelHttpContext _webSocketTunnelHttpContext;
+        private IHasWebSocketTunnel _webSocketTunnelHttpContext;
 
         public IWebSocketTunnel Socket => _webSocketTunnelHttpContext?.Socket;
 
@@ -35,7 +34,7 @@ namespace ApiActions.WebSockets
         {
             await base.AppendedInitializeAsync(initializationContext, cancellationToken);
 
-            _webSocketTunnelHttpContext = initializationContext.HttpContext as WebSocketTunnelHttpContext;
+            _webSocketTunnelHttpContext = initializationContext.HttpContext as IHasWebSocketTunnel;
             CommandId = initializationContext.HttpContext.TraceIdentifier;
         }
 

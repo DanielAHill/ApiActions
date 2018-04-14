@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2018-2018 Daniel A Hill. All rights reserved.
+﻿// Copyright (c) 2018 Daniel A Hill. All rights reserved.
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,22 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
-using System.Net.WebSockets;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
-namespace ApiActions.WebSockets.Protocol
+namespace ApiActions.WebSockets.Protocol.Tunelling
 {
-    public class WebSocketTunnelWebSocketManager : WebSocketManager
+    public class WebSocketTunnelHttpContext : DefaultHttpContext
     {
-        public override bool IsWebSocketRequest => false;
-        public override IList<string> WebSocketRequestedProtocols => new string[0];
+        private WebSocketTunnelHttpResponse _httpResponse;
 
-        public override Task<WebSocket> AcceptWebSocketAsync(string subProtocol)
-        {
-            throw new InvalidOperationException("Request is not a web socket");
-        }
+        public override HttpResponse Response =>
+            _httpResponse ?? (_httpResponse = new WebSocketTunnelHttpResponse(this));
     }
 }

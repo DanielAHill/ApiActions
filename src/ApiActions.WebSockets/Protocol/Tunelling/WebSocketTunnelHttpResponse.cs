@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2018-2018 Daniel A Hill. All rights reserved.
+﻿// Copyright (c) 2018 Daniel A Hill. All rights reserved.
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.Extensions.ObjectPool;
 
-namespace ApiActions.WebSockets.Protocol
+namespace ApiActions.WebSockets.Protocol.Tunelling
 {
     public class WebSocketTunnelHttpResponse : HttpResponse
     {

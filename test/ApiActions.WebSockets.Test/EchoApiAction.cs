@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2018-2018 Daniel A Hill. All rights reserved.
+﻿// Copyright (c) 2018 Daniel A Hill. All rights reserved.
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,9 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace ApiActions.WebSockets.Execution
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Build.Framework;
+
+namespace ApiActions.WebSockets
 {
-    public class WebSocketRoute
+    [Url("echo")]
+    public class EchoApiAction : ApiAction<EchoApiAction.Request>
     {
+        public override Task<ApiActionResponse> ExecuteAsync(CancellationToken cancellationToken)
+        {
+            return Response(Data);
+        }
+
+        public class Request
+        {
+            [Required] public string Text { get; set; }
+        }
     }
 }
