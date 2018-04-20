@@ -59,7 +59,7 @@ Write-Host $RegExReplace
 # Apply the version to the assembly property files
 $files = gci $Env:BUILD_SOURCESDIRECTORY -recurse -include "*" | 
     ?{ $_.PSIsContainer } | 
-    foreach { gci -Path $_.FullName -Recurse -include project.json }
+    foreach { gci -Path $_.FullName -Recurse -include *.csproj }
 if($files)
 {
     Write-Verbose "Will apply $NewVersion to $($files.count) files."
