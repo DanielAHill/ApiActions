@@ -16,7 +16,7 @@
 
 # Regular expression pattern to find the version in the build number 
 # and then apply it to the assemblies
-$VersionRegex = '"0\.0\.0\.1-dev"'
+$VersionRegex = '"0\.0\.0\.1"'
 
 # If this script is not running on a build server, remind user to 
 # set environment variables so that this script can be debugged

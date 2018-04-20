@@ -11,6 +11,7 @@
     <PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/DanielAHill/ApiActions</PackageProjectUrl>
     <RootNamespace>ApiActions</RootNamespace>
+    <Version>0.0.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
