@@ -25,7 +25,7 @@ namespace ApiActions.WebSockets.Protocol.Tunelling
         private readonly IWebSocketSession _session;
         private WebSocketTunnelHttpResponse _httpResponse;
         public override HttpResponse Response => _httpResponse ?? (_httpResponse = new WebSocketTunnelHttpResponse(this));
-        public IWebSocketTunnel Socket => throw new System.NotImplementedException();
+        public IWebSocketTunnel Socket => this;
 
         public WebSocketTunnelHttpContext(IWebSocketSession session)
         {

@@ -239,8 +239,7 @@ namespace ApiActions.WebSockets
             {
                 await _writeSemaphore.WaitAsync(cancellationToken);
                 hasLock = true;
-                await _webSocket.SendAsync(new ArraySegment<byte>(response.Data), response.Type, true,
-                    cancellationToken);
+                await _webSocket.SendAsync(new ArraySegment<byte>(response.Data), response.Type, true, cancellationToken);
             }
             finally
             {
