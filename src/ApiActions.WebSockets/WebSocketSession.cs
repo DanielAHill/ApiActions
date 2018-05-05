@@ -227,6 +227,7 @@ namespace ApiActions.WebSockets
             var edgeSerializer = httpContext.RequestServices.GetRequiredService<IEdgeSerializerProvider>()
                 .Get(httpContext);
             await response.WriteAsync(httpContext, edgeSerializer, cancellationToken);
+            httpContext.Response.Body.Position = 0;
             await SendAsync(httpContext, cancellationToken);
         }
 
