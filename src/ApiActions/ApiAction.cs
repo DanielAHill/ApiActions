@@ -178,8 +178,7 @@ namespace ApiActions
 
             if (response == null)
             {
-                throw new InvalidOperationException(
-                    $"No responses could be generated for type {typeof(T)}. Please explicitly state inherited type using generic parameter or register custom IApiActionResponseFactory into dependency injection.");
+                throw new InvalidOperationException($"No responses could be generated for type {typeof(T)}. Please explicitly state inherited type using generic parameter or register custom IApiActionResponseFactory into dependency injection.");
             }
 
             return Response(response);
