@@ -159,10 +159,9 @@ namespace ApiActions.WebSockets
             return requestFeature;
         }
 
-        protected virtual WebSocketTunnelHttpContext CreateTunnelledHttpRequest(
-            HttpContext webSocketConnectionHttpContext, IWebSocketHttpRequest request, IServiceProvider serviceProvider)
+        protected virtual WebSocketTunnelHttpContext CreateTunnelledHttpRequest(HttpContext webSocketConnectionHttpContext, IWebSocketHttpRequest request, IServiceProvider serviceProvider)
         {
-            var context = new WebSocketTunnelHttpContext();
+            var context = new WebSocketTunnelHttpContext(this);
             context.Features.Set<IHttpRequestFeature>(CreateTunnelHttpRequestFeature(webSocketConnectionHttpContext,
                 request));
             context.Features.Set<IHttpRequestLifetimeFeature>(
@@ -222,7 +221,7 @@ namespace ApiActions.WebSockets
             }
         }
 
-        protected async Task SendAsync(HttpContext httpContext, ApiActionResponse response,
+        public async Task SendAsync(HttpContext httpContext, ApiActionResponse response,
             CancellationToken cancellationToken)
         {
             var edgeSerializer = httpContext.RequestServices.GetRequiredService<IEdgeSerializerProvider>()
@@ -252,7 +251,7 @@ namespace ApiActions.WebSockets
             }
         }
 
-        protected virtual async Task CloseAsync(WebSocketCloseStatus status, string message,
+        public virtual async Task CloseAsync(WebSocketCloseStatus status, string message,
             CancellationToken cancellationToken)
         {
             await Task.WhenAll(_webSocket.CloseAsync(status, message, cancellationToken),
@@ -273,7 +272,7 @@ namespace ApiActions.WebSockets
             return Task.WhenAll(onCloseTasks);
         }
 
-        protected virtual Task SubscribeAsync(IUnsubscribable item)
+        public virtual Task SubscribeAsync(IUnsubscribable item)
         {
             lock (_subscriptions)
             {
@@ -293,7 +292,7 @@ namespace ApiActions.WebSockets
             return Task.CompletedTask;
         }
 
-        protected virtual Task UnsubscribeAsync(string commandId)
+        public virtual Task UnsubscribeAsync(string commandId)
         {
             return UnsubscribeAsync(commandId, CancellationToken.None);
         }

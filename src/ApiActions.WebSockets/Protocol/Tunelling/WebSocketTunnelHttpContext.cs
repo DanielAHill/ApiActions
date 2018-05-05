@@ -12,15 +12,65 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Net.WebSockets;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace ApiActions.WebSockets.Protocol.Tunelling
 {
-    public class WebSocketTunnelHttpContext : DefaultHttpContext
+    public class WebSocketTunnelHttpContext : DefaultHttpContext, IHasWebSocketTunnel, IWebSocketTunnel
     {
+        private readonly IWebSocketSession _session;
         private WebSocketTunnelHttpResponse _httpResponse;
+        public override HttpResponse Response => _httpResponse ?? (_httpResponse = new WebSocketTunnelHttpResponse(this));
+        public IWebSocketTunnel Socket => throw new System.NotImplementedException();
 
-        public override HttpResponse Response =>
-            _httpResponse ?? (_httpResponse = new WebSocketTunnelHttpResponse(this));
+        public WebSocketTunnelHttpContext(IWebSocketSession session)
+        {
+            _session = session ?? throw new System.ArgumentNullException(nameof(session));
+        }
+
+        Task IWebSocketTunnel.CloseAsync(WebSocketCloseStatus status, string message, CancellationToken cancellationToken)
+        {
+            return _session.CloseAsync(status, message, cancellationToken);
+        }
+
+        Task IWebSocketTunnel.SendAsync(ApiActionResponse response, CancellationToken cancellationToken)
+        {
+            return _session.SendAsync(CloneWithNoResponse(), response, cancellationToken);
+        }
+
+        Task IWebSocketTunnel.SubscribeAsync(IUnsubscribable item)
+        {
+            return _session.SubscribeAsync(item);
+        }
+
+        Task IWebSocketTunnel.UnsubscribeAsync(string commandId)
+        {
+            return _session.UnsubscribeAsync(commandId);
+        }
+
+        Task IWebSocketTunnel.UnsubscribeAsync(string commandId, CancellationToken cancellationToken)
+        {
+            return _session.UnsubscribeAsync(commandId, cancellationToken);
+        }
+
+        public virtual WebSocketTunnelHttpContext CloneWithNoResponse()
+        {
+            var context = new WebSocketTunnelHttpContext(_session);
+
+            context.Features.Set(Features.Get<IHttpRequestFeature>());
+            context.Features.Set(Features.Get<IHttpRequestLifetimeFeature>());
+            context.Features.Set(Features.Get<IHttpContextAccessor>());
+            context.Features.Set(Features.Get<IHttpConnectionFeature>());
+
+            context.User = User;
+            context.TraceIdentifier = TraceIdentifier;
+            context.RequestServices = RequestServices;
+
+            return context;
+        }
     }
 }

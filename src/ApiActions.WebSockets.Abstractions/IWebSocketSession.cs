@@ -13,6 +13,8 @@
 // limitations under the License.
 
 using System;
+using System.Net.WebSockets;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
@@ -21,5 +23,10 @@ namespace ApiActions.WebSockets
     public interface IWebSocketSession
     {
         Task ExecuteAsync(HttpContext context, IServiceProvider applicationServices);
+        Task CloseAsync(WebSocketCloseStatus status, string message, CancellationToken cancellationToken);
+        Task SubscribeAsync(IUnsubscribable item);
+        Task UnsubscribeAsync(string commandId);
+        Task UnsubscribeAsync(string commandId, CancellationToken cancellationToken);
+        Task SendAsync(HttpContext httpContext, ApiActionResponse response, CancellationToken cancellationToken);
     }
 }
