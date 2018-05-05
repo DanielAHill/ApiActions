@@ -23,10 +23,9 @@ namespace ApiActions.WebSockets
     public interface IWebSocketSession
     {
         Task ExecuteAsync(HttpContext context, IServiceProvider applicationServices);
-        Task CloseAsync(WebSocketCloseStatus status, string message, CancellationToken cancellationToken);
+        Task CloseAsync(WebSocketCloseStatus status, string message, CancellationToken cancellationToken = default(CancellationToken));
         Task SubscribeAsync(IUnsubscribable item);
-        Task UnsubscribeAsync(string commandId);
-        Task UnsubscribeAsync(string commandId, CancellationToken cancellationToken);
-        Task SendAsync(HttpContext httpContext, ApiActionResponse response, CancellationToken cancellationToken);
+        Task UnsubscribeAsync(string commandId, CancellationToken cancellationToken = default(CancellationToken));
+        Task SendAsync(HttpContext httpContext, ApiActionResponse response, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

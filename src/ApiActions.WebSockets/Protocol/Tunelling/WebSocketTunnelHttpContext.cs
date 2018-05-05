@@ -47,11 +47,6 @@ namespace ApiActions.WebSockets.Protocol.Tunelling
             return _session.SubscribeAsync(item);
         }
 
-        Task IWebSocketTunnel.UnsubscribeAsync(string commandId)
-        {
-            return _session.UnsubscribeAsync(commandId);
-        }
-
         Task IWebSocketTunnel.UnsubscribeAsync(string commandId, CancellationToken cancellationToken)
         {
             return _session.UnsubscribeAsync(commandId, cancellationToken);

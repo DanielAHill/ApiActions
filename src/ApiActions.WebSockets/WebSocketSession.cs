@@ -292,11 +292,6 @@ namespace ApiActions.WebSockets
             return Task.CompletedTask;
         }
 
-        public virtual Task UnsubscribeAsync(string commandId)
-        {
-            return UnsubscribeAsync(commandId, CancellationToken.None);
-        }
-
         public virtual async Task UnsubscribeAsync(string commandId, CancellationToken cancellationToken)
         {
             IUnsubscribable subscription;

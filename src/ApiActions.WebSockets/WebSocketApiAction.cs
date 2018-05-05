@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
 using ApiActions.AbstractModeling;
@@ -55,6 +56,21 @@ namespace ApiActions.WebSockets
         protected virtual Task SendAsync(ApiActionResponse response, CancellationToken cancellationToken)
         {
             return Socket.SendAsync(response, cancellationToken);
+        }
+
+        protected virtual Task CloseAsync(WebSocketCloseStatus status, string message, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return Socket.CloseAsync(status, message, cancellationToken);
+        }
+
+        protected virtual Task SubscribeAsync()
+        {
+            return Socket.SubscribeAsync(this);
+        }
+
+        protected virtual Task UnsubscribeAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return Socket.UnsubscribeAsync(CommandId, cancellationToken);
         }
     }
 

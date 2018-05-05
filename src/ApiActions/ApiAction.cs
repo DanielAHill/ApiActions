@@ -38,6 +38,7 @@ namespace ApiActions
         protected HttpRequest HttpRequest => _httpContext.Request;
         protected ClaimsPrincipal User => _httpContext.User;
         protected ConnectionInfo Connection => _httpContext.Connection;
+        protected CancellationToken RequestAborted => _httpContext.RequestAborted;
 
         /// <inheritdoc />
         /// <summary>
