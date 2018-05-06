@@ -21,8 +21,7 @@ namespace ApiActions.WebSockets.Initialization
 {
     public static class WebSocketApiActionsApplicationBuilderExtensions
     {
-        public static IApplicationBuilder UseWebSocketApiActions(this IApplicationBuilder app,
-            string socketTunnelUrl = null)
+        public static IApplicationBuilder UseWebSocketApiActions(this IApplicationBuilder app, string socketTunnelUrl = null)
         {
             if (app == null) throw new ArgumentNullException(nameof(app));
             if (app.Properties.ContainsKey("WebSocketApiActionsRegistered"))

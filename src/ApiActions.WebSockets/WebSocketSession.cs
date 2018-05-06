@@ -265,7 +265,7 @@ namespace ApiActions.WebSockets
 
             lock (_subscriptions)
             {
-                onCloseTasks = _subscriptions.Values.Select(s => s.OnUnsubscribeAsync(cancellationToken));
+                onCloseTasks = _subscriptions.Values.Select(s => s.OnUnsubscribeAsync(cancellationToken)).ToList();
                 _subscriptions.Clear();
             }
 

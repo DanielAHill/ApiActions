@@ -17,6 +17,8 @@ using System.Threading.Tasks;
 
 namespace ApiActions.WebSockets.Execution
 {
+    [Delete]
+    [WebSocket]
     public class UnsubscribeApiAction : WebSocketApiAction<WebSocketUnsubscribeRequest>
     {
         public override async Task<ApiActionResponse> ExecuteAsync(CancellationToken cancellationToken)

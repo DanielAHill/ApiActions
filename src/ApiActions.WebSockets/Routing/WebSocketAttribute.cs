@@ -12,12 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace ApiActions.WebSockets
+using System;
+using ApiActions.Routing;
+using ApiActions.WebSockets.Protocol.Tunelling;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
+
+// ReSharper disable once CheckNamespace
+namespace ApiActions
 {
-    public class WebSocketApiActionConfiguration
+    public class WebSocketAttribute : Attribute, IKeyedRouteContraint
     {
-        public bool RequireSsl { get; set; }
-        public string SocketTunnelUrl { get; set; } = "/ws";
-        public string UnsubscribeUrl { get; set; } = "/ws/{id}";
+        public string Key => "_WebSocketOnly";
+
+        public bool Match(HttpContext httpContext, IRouter route, string routeKey, RouteValueDictionary values, RouteDirection routeDirection)
+        {
+            return httpContext is WebSocketTunnelHttpContext;
+        }
     }
 }

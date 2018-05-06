@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using ApiActions.WebSockets.Execution;
 using ApiActions.WebSockets.Protocol;
 using ApiActions.WebSockets.Protocol.Json;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,6 +40,7 @@ namespace ApiActions.WebSockets.Initialization
 
             services.AddTransient(typeof(IWebSocketSession), webSocketSessionType);
             services.AddSingleton(typeof(IWebSocketProtocol), typeof(JsonWebSocketProtocol));
+            services.AddSingleton(typeof(IApiActionRegistration), typeof(UnsubscribeApiActionRegistration));
 
             return services;
         }
