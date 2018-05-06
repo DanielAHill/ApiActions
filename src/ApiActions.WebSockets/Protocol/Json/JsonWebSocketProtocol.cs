@@ -59,12 +59,14 @@ namespace ApiActions.WebSockets.Protocol.Json
 
         public IWebSocketHttpResponse CreateResponse(string commandId, HttpResponse response)
         {
+            var content = response.Body.Length == 0 ? null : new StreamReader(response.Body).ReadToEnd();
+
             var jsonResponse = new JsonWebSocketHttpResponse
             {
                 Id = commandId,
                 Code = response.StatusCode,
                 ContentType = response.ContentType,
-                Content = new StreamReader(response.Body).ReadToEnd()
+                Content = content
             };
 
             return new WebSocketHttpResponse
