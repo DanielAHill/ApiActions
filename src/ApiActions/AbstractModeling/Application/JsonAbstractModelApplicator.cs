@@ -45,7 +45,6 @@ namespace ApiActions.AbstractModeling.Application
                     {
                         InnerApply(arrayValue, abstractModel);
                     }
-
                     break;
                 case JTokenType.Property:
                     var property = (JProperty) item;
@@ -55,7 +54,6 @@ namespace ApiActions.AbstractModeling.Application
                     {
                         InnerApply(child, newModel);
                     }
-
                     break;
                 case JTokenType.Boolean:
                     abstractModel.AddValue(item.Value<bool>());
@@ -71,13 +69,16 @@ namespace ApiActions.AbstractModeling.Application
                     {
                         InnerApply(child, abstractModel);
                     }
-
                     break;
                 case JTokenType.Comment:
                 case JTokenType.Constructor:
                     break;
                 default:
-                    abstractModel.AddValue(item.Value<string>());
+                    var value = item.Value<string>();
+                    if (value != null)
+                    {
+                        abstractModel.AddValue(value);
+                    }
                     break;
             }
         }
